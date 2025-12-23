@@ -5,5 +5,6 @@ public class Main {
         System.out.println("POS System Starting NOW...");
         System.out.println("MERRY CHRISTMAS");
         System.out.println("edit");
+        System.out.println("AYOKO NA");
     }
 }
