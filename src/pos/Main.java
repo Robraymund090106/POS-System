@@ -7,5 +7,6 @@ public class Main {
         System.out.println("edit");
         System.out.println("AYOKO NA");
         System.out.println("ETO NA");
+        System.out.println("RAHHHHH");
     }
 }
