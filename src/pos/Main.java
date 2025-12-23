@@ -6,5 +6,6 @@ public class Main {
         System.out.println("MERRY CHRISTMAS");
         System.out.println("edit");
         System.out.println("AYOKO NA");
+        System.out.println("ETO NA");
     }
 }
