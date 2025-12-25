@@ -8,5 +8,6 @@ public class Main {
         System.out.println("AYOKO NA");
         System.out.println("ETO NA");
         System.out.println("RAHHHHH");
+        System.out.println("TRY TRY KARINA");
     }
 }
