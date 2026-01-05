@@ -1,87 +1,55 @@
 package pos.auth;
 
-public class User {
-    private int id;
-    private String username;
-    private String password;
-    private String role;
-    private String fullname;
-    private String email;
-    
-    public User(int id, String username, String password, String role, String fullname, String email) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.fullname = fullname;
-        this.email = email;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class User extends JFrame {
+
+    public User() {
+        setTitle("PILI KA !!");
+        setSize(800, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new GridLayout(1, 2));
+
+        add(createRolePanel("ADMIN", new Color(10, 30, 80)));
+        add(createRolePanel("STAFF", new Color(212, 175, 55)));
+
+        setVisible(true);
     }
 
+    private JPanel createRolePanel(String role, Color bgColor) {
+        JPanel panel = new JPanel();
+        panel.setBackground(bgColor);
+        panel.setLayout(new GridBagLayout());
 
-    // Getters and Setters
+        JLabel label = new JLabel(role);
+        label.setFont(new Font("Arial", Font.BOLD, 40));
+        label.setForeground(Color.WHITE);
 
-    public int getId() { return id;}
+        panel.add(label);
 
-    public String getUsername() { return username; }
+        panel.addMouseListener(new MouseAdapter() {
 
-    public String getPassword() { return password; }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dispose();              
+                new LoginFrame(role);   
+            }
 
-    public String getRole() { return role; }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
 
-    public String getFullname() { return fullname; }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                panel.setCursor(Cursor.getDefaultCursor());
+            }
+        });
 
-    public String getEmail() { return email; }
-
-    public void setPassword(String password) { this.password = password; }
-
-    public void setEmail(String email) { this.email = email; }
-
-    public void setFullname(String fullname) { this.fullname = fullname; }
-
-    public void setRole(String role) { this.role = role; }
-
-    public void setUsername(String username) { this.username = username; }
-
-    public void setId(int id) { this.id = id; }
-
-    //Methods
-
-    public boolean authenticate(String password) {
-        return this.password.equals(password);
+        return panel;
     }
-
-    public boolean isAdmin() {
-        return "admin".equalsIgnoreCase(this.role);
-    }
-
-    public boolean isCashier() {
-        return "cashier".equalsIgnoreCase(this.role);
-    }
-
-    public boolean isManager() {
-        return "manager".equalsIgnoreCase(this.role);
-    }
-
-    public void displayUserInfo() {
-        System.out.println("User ID: " + id);
-        System.out.println("Username: " + username);
-        System.out.println("Full Name: " + fullname);
-        System.out.println("Email: " + email);
-        System.out.println("Role: " + role);
-    }
-
-
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", role='" + role + '\'' +
-                ", fullname='" + fullname + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
-
-
 }
+

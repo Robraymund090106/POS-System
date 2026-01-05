@@ -1,14 +1,9 @@
 package pos;
 
+import pos.auth.*;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("POS System Starting NOW...");
-        System.out.println("MERRY CHRISTMAS");
-        System.out.println("edit");
-        System.out.println("AYOKO NA");
-        System.out.println("ETO NA");
-        System.out.println("RAHHHHH");
-        System.out.println("TRY TRY KARINA");
-        System.out.println("FINAL FINAL NA TO");
+   new User ();
     }
 }
