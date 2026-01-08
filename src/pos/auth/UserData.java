@@ -23,6 +23,7 @@ public class UserData {
     public int getId() { return id; }
     public String getUsername() { return username; }
     public String getRole() { return role; }
+    public String getFullName() { return fullName; }
     public boolean isActive() { return isActive; }
 
     // Helper method for the UI to check permissions
