@@ -27,12 +27,12 @@ public class DatabaseManager {
 
     // this method creates the tables for the database ensuring na lahat tayo have the same structure
     public static void initializeDatabase() {
-    // We use try-with-resources to ensure the connection and statement close properly
+
     try (Connection conn = connect()) {
         if (conn != null) {
             Statement stmt = conn.createStatement();
             
-            // This query creates the table with ALL columns matching your User class
+        
             String sql = "CREATE TABLE IF NOT EXISTS User (" +
                          "userId INTEGER PRIMARY KEY AUTOINCREMENT, " +
                          "username TEXT NOT NULL UNIQUE, " +
@@ -44,7 +44,7 @@ public class DatabaseManager {
             
             stmt.execute(sql);
             
-            // OPTIONAL: Add a default admin if the table is empty
+            
             String addAdmin = "INSERT OR IGNORE INTO User (username, password, role, email, age) " +
                               "VALUES ('admin', 'admin123', 'ADMIN', 'admin@pos.com', 25)";
             stmt.execute(addAdmin);
