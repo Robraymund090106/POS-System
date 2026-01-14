@@ -4,10 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import main.backend.*;
+import main.model.*;
+import main.database.*;
 
 public class LoginFrame extends JFrame {
-
-    
+    private DatabaseManager dbManager;
 
     public LoginFrame(){
 
@@ -93,6 +94,28 @@ public class LoginFrame extends JFrame {
         login.setBackground(Color.BLACK);
         login.setForeground(Color.WHITE);
         login.setFocusPainted(false);
+        login.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String userText = username.getText();
+                String passText = new String(password.getPassword());
+
+                if (dbManager.existsByUsername(userText)) {
+
+                    if(dbManager.checkPassword(userText, passText)){
+                        JOptionPane.showMessageDialog(null, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                        new MainDashboard();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Invalid password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid username ", "Login Failed", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
         add(login);
 
         setVisible(true);

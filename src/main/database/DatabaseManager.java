@@ -1,9 +1,16 @@
 package main.database;
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import javax.management.Query;
+
+import main.model.User;
 
 public class DatabaseManager {
 
@@ -51,5 +58,48 @@ public class DatabaseManager {
             System.err.println("Database Init Error: " + e.getMessage());
         }
     }   
+
+    public static boolean existsByUsername(String username) {
+    String sql = "SELECT COUNT(*) FROM User WHERE username = ?";
+    
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, username);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+
+            return rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        System.err.println("Existence check error: " + e.getMessage());
+    }
+    return false;
+    }
+
+    
+
+    public static boolean checkPassword(String username, String password) {
+
+        String sql = "SELECT password FROM User WHERE username = ?";
+
+        try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+        
+                return storedPassword.equals(password);
+            }
+        } catch (SQLException e) {
+            System.err.println("Password check error: " + e.getMessage());
+        }
+                return false; 
+    }
 
 }
