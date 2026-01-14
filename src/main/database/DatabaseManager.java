@@ -1,14 +1,11 @@
 package main.database;
 
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import javax.management.Query;
 
 import main.model.User;
 
@@ -101,5 +98,54 @@ public class DatabaseManager {
         }
                 return false; 
     }
+
+    public static boolean addUser(User user) {
+    String sql = "INSERT INTO User (username, password, email, role, isActive, age) VALUES (?, ?, ?, ?, ?, ?)";
+
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setString(1, user.getUsername());
+        pstmt.setString(2, user.getPassword());
+        pstmt.setString(3, user.getEmail());
+        pstmt.setString(4, user.getRole());
+        pstmt.setInt(5, user.isActive() ? 1 : 0); // Convert boolean to SQLite 0/1
+        pstmt.setInt(6, user.getAge());
+
+        pstmt.executeUpdate();
+        return true;
+    } catch (SQLException e) {
+        System.err.println("Error adding user: " + e.getMessage());
+        return false;
+    }
+}
+
+    public static User findByUsername(String username) {
+    
+    String sql = "SELECT * FROM User WHERE username = ?";
+    
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        
+        pstmt.setString(1, username);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            return new User(
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("email"),
+                rs.getString("role"),
+                rs.getInt("isActive") == 1,
+                rs.getInt("userId"),
+                rs.getInt("age")
+            );
+        }
+    } catch (SQLException e) {
+        System.err.println("Error finding user: " + e.getMessage());
+    }
+    return null; 
+}
 
 }

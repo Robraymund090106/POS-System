@@ -6,9 +6,10 @@ import javax.swing.*;
 import main.backend.*;
 import main.model.*;
 import main.database.*;
+import main.Main;
+
 
 public class LoginFrame extends JFrame {
-    private DatabaseManager dbManager;
 
     public LoginFrame(){
 
@@ -99,12 +100,19 @@ public class LoginFrame extends JFrame {
                 String userText = username.getText();
                 String passText = new String(password.getPassword());
 
-                if (dbManager.existsByUsername(userText)) {
+                
 
-                    if(dbManager.checkPassword(userText, passText)){
+                if (DatabaseManager.existsByUsername(userText)) {
+
+                    if (DatabaseManager.checkPassword(userText, passText)) {
+
+                        User loggedInUser = DatabaseManager.findByUsername(userText);
+
+                        Main.currentUser = loggedInUser;
+
                         JOptionPane.showMessageDialog(null, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
-                        new MainDashboard();
+                        new MainDashboard(Main.currentUser);
                     } else {
                         JOptionPane.showMessageDialog(null, "Invalid password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
                     }

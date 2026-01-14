@@ -1,7 +1,5 @@
 package main.backend;
 
-import main.model.User;
-
 public class LoginLogic {
     public static boolean validateCredentials(String username, String password) {
         // Placeholder logic for validating credentials
