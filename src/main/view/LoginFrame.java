@@ -12,12 +12,12 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         setTitle("POS System");
-        // LOGIC: Set to Maximized Full Screen
+        
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(true);
 
-        // 1. Full screen bg
+        // Full screen bg
         JPanel backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
