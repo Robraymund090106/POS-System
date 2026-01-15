@@ -113,15 +113,24 @@ public class LoginFrame extends JFrame {
                 if (DatabaseManager.existsByUsername(userText)) {
                     if (DatabaseManager.checkPassword(userText, passText)) {
                         User loggedInUser = DatabaseManager.findByUsername(userText);
+                        if(loggedInUser.isActive() == false) {
+                            JOptionPane.showMessageDialog(null, "Your account is inactive. Please contact the administrator.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+                            password.setText("");
+                            username.setText("");
+                            return; 
+                        }
                         Main.currentUser = loggedInUser;
                         JOptionPane.showMessageDialog(null, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                         new MainDashboard(Main.currentUser);
                     } else {
                         JOptionPane.showMessageDialog(null, "Invalid password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+                        password.setText("");
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid username ", "Login Failed", JOptionPane.ERROR_MESSAGE);
+                    username.setText("");
+                    password.setText("");
                 }
             }
         });
