@@ -22,7 +22,7 @@ public class LoginFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon bgIcon = new ImageIcon("c:\\Users\\karin\\Downloads\\Email (3).png");
+                ImageIcon bgIcon = new ImageIcon("c:\\Users\\Ryan Que\\Downloads\\Email.png");
               
                 g.drawImage(bgIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
@@ -83,12 +83,22 @@ public class LoginFrame extends JFrame {
         backgroundPanel.add(showPass);
 
         JButton login = new JButton("Login");
-        login.setSize(250, 60);
+        login.setSize(150, 60);
         login.setFont(new Font("Arial", Font.BOLD, 20));
         login.setBackground(Color.BLACK);
         login.setForeground(Color.WHITE);
         login.setFocusPainted(false);
-        
+
+        JButton regist = new JButton("Register");
+        regist.setSize(150, 60);
+        regist.setFont(new Font("Arial", Font.BOLD, 20));
+        regist.setBackground(Color.BLACK);
+        regist.setForeground(Color.WHITE);
+        regist.setFocusPainted(false);
+        backgroundPanel.add(login);
+        backgroundPanel.add(regist); 
+
+
         login.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String userText = username.getText();
@@ -122,18 +132,19 @@ public class LoginFrame extends JFrame {
                 int centerY = (h / 2) - 100; 
 
                 // nu logo center position 
-                logoLabel.setLocation(centerX - 90, centerY - 250);
-                title.setLocation(centerX - 250, centerY - 60);
-                subtitle.setLocation(centerX - 250, centerY - 10);
+                logoLabel.setLocation(centerX - 90, centerY - 220);
+                title.setLocation(centerX - 250, centerY - 10);
+                subtitle.setLocation(centerX - 250, centerY - -70);
                 
-                userLabel.setLocation(centerX - 200, centerY + 40);
-                username.setLocation(centerX - 200, centerY + 75);
+                userLabel.setLocation(centerX - 200, centerY + 120);
+                username.setLocation(centerX - 200, centerY + 150);
                 
-                passLabel.setLocation(centerX - 200, centerY + 135);
-                password.setLocation(centerX - 200, centerY + 170);
+                passLabel.setLocation(centerX - 200, centerY + 210);
+                password.setLocation(centerX - 200, centerY + 240);
                 
-                showPass.setLocation(centerX - 200, centerY + 225);
-                login.setLocation(centerX - 125, centerY + 270);
+                showPass.setLocation(centerX - 200, centerY + 290);
+                login.setLocation(centerX - 5, centerY + 350);
+                regist.setLocation(centerX - 165, centerY + 350);
             }
         });
 
