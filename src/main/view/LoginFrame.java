@@ -98,6 +98,13 @@ public class LoginFrame extends JFrame {
         backgroundPanel.add(login);
         backgroundPanel.add(regist); 
 
+        regist.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose(); 
+                new RegisterFrame(); 
+            }
+        });
+
 
         login.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

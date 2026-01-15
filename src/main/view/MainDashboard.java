@@ -35,6 +35,8 @@ public class MainDashboard extends JFrame {
        
         this.setContentPane(mainContainer);
 
+        
+
        
 
         setLocationRelativeTo(null); 
