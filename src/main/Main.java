@@ -1,7 +1,7 @@
 package main;
-import main.view.*;
 import main.database.*;
 import main.model.*;
+import main.view.*;
 
 
 public class Main {
@@ -16,3 +16,4 @@ public class Main {
 
     }
 }
+
