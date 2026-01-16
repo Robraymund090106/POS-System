@@ -89,16 +89,16 @@ public class LoginFrame extends JFrame {
         login.setForeground(Color.WHITE);
         login.setFocusPainted(false);
 
-        JButton regist = new JButton("Register");
-        regist.setSize(150, 60);
-        regist.setFont(new Font("Arial", Font.BOLD, 20));
-        regist.setBackground(Color.BLACK);
-        regist.setForeground(Color.WHITE);
-        regist.setFocusPainted(false);
+        JButton sgnup = new JButton("Sign Up");
+        sgnup.setSize(150, 60);
+        sgnup.setFont(new Font("Arial", Font.BOLD, 20));
+        sgnup.setBackground(Color.BLACK);
+        sgnup.setForeground(Color.WHITE);
+        sgnup.setFocusPainted(false);
         backgroundPanel.add(login);
-        backgroundPanel.add(regist); 
+        backgroundPanel.add(sgnup); 
 
-        regist.addActionListener(new ActionListener() {
+        sgnup.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose(); 
                 new RegisterFrame(); 
@@ -160,7 +160,7 @@ public class LoginFrame extends JFrame {
                 
                 showPass.setLocation(centerX - 200, centerY + 290);
                 login.setLocation(centerX - 5, centerY + 350);
-                regist.setLocation(centerX - 165, centerY + 350);
+                sgnup.setLocation(centerX - 165, centerY + 350);
             }
         });
 
