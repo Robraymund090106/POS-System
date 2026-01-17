@@ -38,6 +38,7 @@ public class DatabaseManager {
                          "username TEXT NOT NULL UNIQUE, " +
                          "password TEXT NOT NULL, " +
                          "fullName TEXT, " +
+                         "gender TEXT, " +
                          "email TEXT, " +
                          "role TEXT, " +
                          "isActive INTEGER DEFAULT 1, " +
@@ -46,8 +47,8 @@ public class DatabaseManager {
             stmt.execute(sql);
             
             
-            String addAdmin = "INSERT OR IGNORE INTO User (username, password, fullname, role, email, age) " +
-                              "VALUES ('admin', 'admin123', 'Rob Raymundo', 'ADMIN', 'admin@pos.com', 25)";
+            String addAdmin = "INSERT OR IGNORE INTO User (username, password, fullname, gender, role, email, age) " +
+                              "VALUES ('admin', 'admin123', 'Rob Raymundo', 'Male', 'ADMIN', 'admin@pos.com', 25)";
             stmt.execute(addAdmin);
             
             System.out.println("Database checked/created successfully.");
@@ -101,7 +102,7 @@ public class DatabaseManager {
     }
 
     public static boolean addUser(User user) {
-    String sql = "INSERT INTO User (username, password, fullName, email, role, isActive, age) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO User (username, password, fullName, gender, email, role, isActive, age) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     try (Connection conn = connect();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -109,6 +110,7 @@ public class DatabaseManager {
         pstmt.setString(1, user.getUsername());
         pstmt.setString(2, user.getPassword());
         pstmt.setString(3, user.getFullname());
+        pstmt.setString(4, user.getgender());
         pstmt.setString(4, user.getEmail());
         pstmt.setString(5, user.getRole());
         pstmt.setInt(6, user.isActive() ? 1 : 0); // Convert boolean to SQLite 0/1
@@ -138,6 +140,7 @@ public class DatabaseManager {
                 rs.getString("username"),
                 rs.getString("password"),
                 rs.getString("fullname"),
+                rs.getString("gender"),
                 rs.getString("email"),
                 rs.getString("role"),
                 rs.getInt("isActive") == 1,
