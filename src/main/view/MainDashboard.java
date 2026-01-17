@@ -52,7 +52,7 @@ public class MainDashboard extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 // ACTION HERE when button clicked 
-                System.out.println("Original size icon clicked!");
+
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -81,8 +81,8 @@ public class MainDashboard extends JFrame {
     public void mousePressed(MouseEvent e) {
 
         // ADD ACTION HEREEE
-        System.out.println("Second icon clicked!");
-    }
+       
+    } 
     @Override
     public void mouseEntered(MouseEvent e) {
       
