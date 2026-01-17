@@ -20,7 +20,17 @@ public class RegisterFrame extends JFrame {
 
     public RegisterFrame() {
 
-        JLabel label = new JLabel("Registration Frame");
+        JPanel backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon bgIcon = new ImageIcon("c:\\Users\\Ryan Que\\Downloads\\Email.png");
+              
+                g.drawImage(bgIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        JLabel label = new JLabel("Sign Up");
 
         label.setFont(new Font("Arial", Font.BOLD, 45)); 
         
@@ -36,9 +46,16 @@ public class RegisterFrame extends JFrame {
             @Override
             public void componentResized(ComponentEvent e) {
                 // Handle resizing if needed
-                label.setBounds(570, 20, getWidth() - 100, 100);
+                int w = backgroundPanel.getWidth();
+                int h = backgroundPanel.getHeight();
+                int centerX = w / 2;
+                
+                
+                int centerY = (h / 2) - 100; 
+                label.setLocation(centerX, centerY);
             }
         });
     }
     
 }
+
