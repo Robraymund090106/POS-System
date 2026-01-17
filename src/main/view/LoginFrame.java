@@ -22,7 +22,7 @@ public class LoginFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon bgIcon = new ImageIcon("c:\\Users\\Ryan Que\\Downloads\\Email.png");
+                ImageIcon bgIcon = new ImageIcon("src\\main\\image\\Email.png");
               
                 g.drawImage(bgIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
@@ -32,7 +32,7 @@ public class LoginFrame extends JFrame {
         this.setContentPane(backgroundPanel); 
 
 
-        ImageIcon originalIcon = new ImageIcon("C:\\Users\\Ryan Que\\Downloads\\nu_logo.png");
+        ImageIcon originalIcon = new ImageIcon("src\\main\\image\\nu_logo.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
         logoLabel.setSize(180, 180);
