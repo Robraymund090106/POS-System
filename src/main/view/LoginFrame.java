@@ -113,7 +113,7 @@ public class LoginFrame extends JFrame {
                 if (DatabaseManager.existsByUsername(userText)) {
                     if (DatabaseManager.checkPassword(userText, passText)) {
                         User loggedInUser = DatabaseManager.findByUsername(userText);
-                        if(loggedInUser.isActive() == false) {
+                        if(!loggedInUser.isActive()) {
                             JOptionPane.showMessageDialog(null, "Your account is inactive. Please contact the administrator.", "Login Failed", JOptionPane.ERROR_MESSAGE);
                             password.setText("");
                             username.setText("");

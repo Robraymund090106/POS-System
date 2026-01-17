@@ -53,4 +53,26 @@ public class emailvalidator {
 
         return true;
     }
+    public static boolean isValidName(String name){
+        if (name == null || name.length() < 2 || name.length() > 30) return false;
+
+        for(char ch : name.trim().toCharArray()){
+            if (!Character.isLetter(ch) && ch != ' '){
+            JOptionPane.showMessageDialog(null, "name can only contain letters and spaces", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean samePassword(String password1, String password2){
+        if(!password1.equals(password2)){
+            JOptionPane.showMessageDialog(null, "unequal password and confirm password", "Error", JOptionPane.ERROR_MESSAGE);
+
+            return false;
+        }
+
+        return true;
+
+    }
 }

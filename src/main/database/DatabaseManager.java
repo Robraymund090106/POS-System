@@ -39,6 +39,7 @@ public class DatabaseManager {
                          "password TEXT NOT NULL, " +
                          "fullName TEXT, " +
                          "gender TEXT, " +
+                         "birthday TEXT, " +
                          "email TEXT, " +
                          "role TEXT, " +
                          "isActive INTEGER DEFAULT 1, " +
@@ -47,8 +48,8 @@ public class DatabaseManager {
             stmt.execute(sql);
             
             
-            String addAdmin = "INSERT OR IGNORE INTO User (username, password, fullname, gender, role, email, age) " +
-                              "VALUES ('admin', 'admin123', 'Rob Raymundo', 'Male', 'ADMIN', 'admin@pos.com', 25)";
+            String addAdmin = "INSERT OR IGNORE INTO User (username, password, fullname, gender, birthday, role, email, age) " +
+                              "VALUES ('admin', 'admin123', 'Rob Raymundo', 'Male', 'September 1 2006', 'ADMIN', 'admin@pos.com', 25)";
             stmt.execute(addAdmin);
             
             System.out.println("Database checked/created successfully.");
@@ -102,7 +103,7 @@ public class DatabaseManager {
     }
 
     public static boolean addUser(User user) {
-    String sql = "INSERT INTO User (username, password, fullName, gender, email, role, isActive, age) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO User (username, password, fullName, gender, birthday, email, role, isActive, age) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     try (Connection conn = connect();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -111,14 +112,15 @@ public class DatabaseManager {
         pstmt.setString(2, user.getPassword());
         pstmt.setString(3, user.getFullname());
         pstmt.setString(4, user.getgender());
-        pstmt.setString(4, user.getEmail());
-        pstmt.setString(5, user.getRole());
+        pstmt.setString(5, user.getBday());
+        pstmt.setString(6, user.getEmail());
+        pstmt.setString(7, user.getRole());
         if (user.getRole().equalsIgnoreCase("STAFF")) {
-            pstmt.setInt(7, 0); 
+            pstmt.setInt(8, 0); 
         } else {
-            pstmt.setInt(7, user.isActive() ? 1 : 0);
+            pstmt.setInt(8, user.isActive() ? 1 : 0);
         }
-        pstmt.setInt(7, user.getAge());
+        pstmt.setInt(9, user.getAge());
 
         pstmt.executeUpdate();
         return true;
@@ -145,6 +147,7 @@ public class DatabaseManager {
                 rs.getString("password"),
                 rs.getString("fullname"),
                 rs.getString("gender"),
+                rs.getString("bday"),
                 rs.getString("email"),
                 rs.getString("role"),
                 rs.getInt("isActive") == 1,

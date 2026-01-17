@@ -5,17 +5,19 @@ public class User {
     private String password;
     private String Fullname;
     private String gender;
+    private String bday;
     private String email;
     private String role;
     private boolean isActive;
     private int userId;
     private int age;
 
-    public User(String username, String password, String Fullname, String gender, String email, String role, boolean isActive, int userId, int age) {
+    public User(String username, String password, String Fullname, String gender,String bday, String email, String role, boolean isActive, int userId, int age) {
         this.username = username;
         this.password = password;
         this.Fullname = Fullname;
         this.gender = gender;
+        this.bday = bday;
         this.email = email;
         this.role = role;
         this.isActive = isActive;
@@ -45,6 +47,15 @@ public class User {
 
     public String getgender(){
         return gender;
+    }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    public String getBday() {
+        return bday;
+    }
+    public void setBday(String bday) {
+        this.bday = bday;
     }
     public String getEmail() {
         return email;

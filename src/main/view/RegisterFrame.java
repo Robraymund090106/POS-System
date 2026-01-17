@@ -4,26 +4,22 @@ import javax.swing.*;
 
 import main.backend.PasswordLimit;
 import main.backend.UsernameLimit;
+import main.backend.emailvalidator;
+import main.database.DatabaseManager;
+import main.model.User;
 
 import java.awt.*;
 import java.awt.event.*;
 
 public class RegisterFrame extends JFrame {
 
-    private JLabel Username;
-    private JTextField txtUsername;
-    private JLabel Password;
-    private JPasswordField txtPassword;
-    private JLabel ConfirmPassword;
-    private JPasswordField txtConfirmPassword;
-    private JLabel Email;
-    private JTextField txtEmail;
 
     private JLabel monthLabel, dayLabel, yearLabel;
     private JComboBox<String> monthCombo, dayCombo, yearCombo;
 
     private JLabel genderLabel;
     private JRadioButton maleCheckBox, femaleCheckBox;
+    private emailvalidator vl = new emailvalidator();
 
     public RegisterFrame() {
 
@@ -94,6 +90,21 @@ public class RegisterFrame extends JFrame {
         psswordLabel.setSize(150, 30);
         psswordLabel.setFont(new Font("Arial ", Font.BOLD, 20));
         backgroundPanel.add(psswordLabel);
+
+        JButton passwordInfoBtn = new JButton("?");
+        passwordInfoBtn.setSize(60, 30);
+        passwordInfoBtn.setFont(new Font("Arial", Font.BOLD, 16));
+        passwordInfoBtn.setFocusPainted(false);
+        passwordInfoBtn.addActionListener(e -> {
+            String requirements = "Password Requirements:\n\n" +
+                                 "• 8-20 characters long\n" +
+                                 "• At least 1 Uppercase letter (A-Z)\n" +
+                                 "• At least 1 Lowercase letter (a-z)\n" +
+                                 "• At least 1 Digit (0-9)\n" +
+                                 "• At least 1 Special character (!@#$%^&*)-+)";
+            JOptionPane.showMessageDialog(null, requirements, "Password Requirements", JOptionPane.INFORMATION_MESSAGE);
+        });
+        backgroundPanel.add(passwordInfoBtn);
 
         JPasswordField psswordField = new JPasswordField();
         psswordField.setSize(200, 50);
@@ -210,6 +221,73 @@ public class RegisterFrame extends JFrame {
         cnfm.setBackground(Color.BLACK);
         cnfm.setForeground(Color.WHITE);
         cnfm.setFocusPainted(false);
+        cnfm.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                String firstName = fname.getText();
+                String lastName = lname.getText();
+                String user = username.getText();
+                String password = new String(psswordField.getPassword());
+                String confirmPassword = new String(cnpassword.getPassword());
+                String month = (String) monthCombo.getSelectedItem();
+                String email = "email@email.com";
+                String day = (String) dayCombo.getSelectedItem();
+                String year = (String) yearCombo.getSelectedItem();
+                String gender = maleCheckBox.isSelected() ? "Male" : (femaleCheckBox.isSelected() ? "Female" : "");
+                String birthday = month + " " + day + " " + year;
+
+                if(emailvalidator.isValidUsername(user) && emailvalidator.isValidPassword(password) && emailvalidator.isValidName(firstName) && emailvalidator.isValidName(lastName) && emailvalidator.samePassword(password, confirmPassword)){
+                    String fullName = firstName + " " + lastName;
+                    User newUser = new User(user, password, fullName, gender, birthday, "email@email.com", "STAFF", false, 0, 0);
+                    if (gender.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Please select a gender.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    
+                    if(DatabaseManager.addUser(newUser)){
+                        JOptionPane.showMessageDialog(null, "Registration successful! Wait for an Admin to activate your account", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                        new LoginFrame();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Registration failed! Username may already exist.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                
+                } else if(!emailvalidator.isValidUsername(user) && emailvalidator.isValidPassword(password) && emailvalidator.isValidName(firstName) && emailvalidator.isValidName(lastName) && emailvalidator.samePassword(password, confirmPassword)){
+                        JOptionPane.showMessageDialog(null, "Registration failed! Username is Invalid", "Error", JOptionPane.ERROR_MESSAGE);
+                        username.setText("");
+
+                } else if(emailvalidator.isValidUsername(user) && !emailvalidator.isValidPassword(password) && emailvalidator.isValidName(firstName) && emailvalidator.isValidName(lastName) && emailvalidator.samePassword(password, confirmPassword)){
+                        JOptionPane.showMessageDialog(null, "Registration failed! Password is Invalid", "Error", JOptionPane.ERROR_MESSAGE);
+                        psswordField.setText("");
+                        cnpassword.setText("");
+
+                } else if(emailvalidator.isValidUsername(user) && emailvalidator.isValidPassword(password) && !emailvalidator.isValidName(firstName) && emailvalidator.isValidName(lastName) && emailvalidator.samePassword(password, confirmPassword)){
+                        JOptionPane.showMessageDialog(null, "Registration failed! First Name is Invalid", "Error", JOptionPane.ERROR_MESSAGE);
+                        fname.setText("");
+
+                } else if(emailvalidator.isValidUsername(user) && emailvalidator.isValidPassword(password) && emailvalidator.isValidName(firstName) && !emailvalidator.isValidName(lastName) && emailvalidator.samePassword(password, confirmPassword)){
+                        JOptionPane.showMessageDialog(null, "Registration failed! Last Name is Invalid", "Error", JOptionPane.ERROR_MESSAGE);
+                        lname.setText("");
+
+                } else if(emailvalidator.isValidUsername(user) && emailvalidator.isValidPassword(password) && emailvalidator.isValidName(firstName) && emailvalidator.isValidName(lastName) && !emailvalidator.samePassword(password, confirmPassword)){
+                        JOptionPane.showMessageDialog(null, "Registration failed! Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
+                        psswordField.setText("");
+                        cnpassword.setText("");
+
+                } else if(!emailvalidator.isValidUsername(user) && !emailvalidator.isValidPassword(password)){
+                        JOptionPane.showMessageDialog(null, "Registration failed! Username and Password are Invalid", "Error", JOptionPane.ERROR_MESSAGE);
+                        username.setText("");
+                        psswordField.setText("");
+                        cnpassword.setText("");
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Registration failed! Please check all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    
+        );
+        
         
         JButton bck = new JButton("Back");
         bck.setSize(150, 60);
@@ -237,6 +315,7 @@ public class RegisterFrame extends JFrame {
                 username.setLocation(centerX + 150, centerY - 50);
 
                 psswordLabel.setLocation(centerX + 150, centerY + 10);
+                passwordInfoBtn.setLocation(centerX + 270, centerY + 10);
                 psswordField.setLocation(centerX + 150, centerY + 60);
 
                 // Birthday combo boxes
