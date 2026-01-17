@@ -32,7 +32,7 @@ public class LoginFrame extends JFrame {
         this.setContentPane(backgroundPanel); 
 
 
-        ImageIcon originalIcon = new ImageIcon("c:\\Users\\Ryan Que\\Downloads\\nu_logo.png");
+        ImageIcon originalIcon = new ImageIcon("src\\main\\image\\nu_logo.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
         logoLabel.setSize(180, 180);
