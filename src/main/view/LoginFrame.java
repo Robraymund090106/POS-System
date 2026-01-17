@@ -22,7 +22,7 @@ public class LoginFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon bgIcon = new ImageIcon("c:\\Users\\Ryan Que\\Downloads\\Email.png");
+                ImageIcon bgIcon = new ImageIcon("src\\main\\image\\Email.png");
               
                 g.drawImage(bgIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
