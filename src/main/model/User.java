@@ -3,15 +3,17 @@ package main.model;
 public class User {
     private String username;
     private String password;
+    private String Fullname;
     private String email;
     private String role;
     private boolean isActive;
     private int userId;
     private int age;
 
-    public User(String username, String password, String email, String role, boolean isActive, int userId, int age) {
+    public User(String username, String password, String Fullname,String email, String role, boolean isActive, int userId, int age) {
         this.username = username;
         this.password = password;
+        this.Fullname = Fullname;
         this.email = email;
         this.role = role;
         this.isActive = isActive;
@@ -31,6 +33,12 @@ public class User {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+    public String getFullname() {
+        return Fullname;
+    }
+    public void setFullname(String Fullname) {
+        this.Fullname = Fullname;
     }
     public String getEmail() {
         return email;
