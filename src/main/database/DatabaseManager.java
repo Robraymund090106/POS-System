@@ -147,7 +147,7 @@ public class DatabaseManager {
                 rs.getString("password"),
                 rs.getString("fullname"),
                 rs.getString("gender"),
-                rs.getString("bday"),
+                rs.getString("birthday"),
                 rs.getString("email"),
                 rs.getString("role"),
                 rs.getInt("isActive") == 1,
