@@ -113,7 +113,11 @@ public class DatabaseManager {
         pstmt.setString(4, user.getgender());
         pstmt.setString(4, user.getEmail());
         pstmt.setString(5, user.getRole());
-        pstmt.setInt(6, user.isActive() ? 1 : 0); // Convert boolean to SQLite 0/1
+        if (user.getRole().equalsIgnoreCase("STAFF")) {
+            pstmt.setInt(7, 0); 
+        } else {
+            pstmt.setInt(7, user.isActive() ? 1 : 0);
+        }
         pstmt.setInt(7, user.getAge());
 
         pstmt.executeUpdate();
