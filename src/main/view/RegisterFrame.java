@@ -13,10 +13,8 @@ import java.awt.event.*;
 
 public class RegisterFrame extends JFrame {
 
-
     private JLabel monthLabel, dayLabel, yearLabel;
     private JComboBox<String> monthCombo, dayCombo, yearCombo;
-
     private JLabel genderLabel;
     private JRadioButton maleCheckBox, femaleCheckBox;
     private emailvalidator vl = new emailvalidator();
@@ -53,7 +51,7 @@ public class RegisterFrame extends JFrame {
         backgroundPanel.add(fnLabel);
 
         JTextField fname = new JTextField();
-        fname.setSize(200, 50);
+        fname.setSize(250, 50);
         fname.setFont(new Font("Arial", Font.PLAIN, 18));
         fname.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(fname);
@@ -66,7 +64,7 @@ public class RegisterFrame extends JFrame {
         backgroundPanel.add(lnLabel);
 
         JTextField lname = new JTextField();
-        lname.setSize(200, 50);
+        lname.setSize(250, 50);
         lname.setFont(new Font("Arial", Font.PLAIN, 18));
         lname.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(lname);
@@ -79,7 +77,7 @@ public class RegisterFrame extends JFrame {
         backgroundPanel.add(userLabel);
 
         JTextField username = new JTextField();
-        username.setSize(200, 50);
+        username.setSize(250, 50);
         username.setFont(new Font("Arial", Font.PLAIN, 18));
         username.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(username);
@@ -107,7 +105,7 @@ public class RegisterFrame extends JFrame {
         backgroundPanel.add(passwordInfoBtn);
 
         JPasswordField psswordField = new JPasswordField();
-        psswordField.setSize(200, 50);
+        psswordField.setSize(250, 50);
         psswordField.setFont(new Font("Arial", Font.PLAIN, 18));
         psswordField.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(psswordField);
@@ -122,7 +120,7 @@ public class RegisterFrame extends JFrame {
         backgroundPanel.add(cnpsswordLabel);
 
         JPasswordField cnpassword = new JPasswordField();
-        cnpassword.setSize(200, 50);
+        cnpassword.setSize(250, 50);
         cnpassword.setFont(new Font("Arial ", Font.PLAIN, 18));
         cnpassword.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(cnpassword);
@@ -192,7 +190,6 @@ public class RegisterFrame extends JFrame {
         yearCombo.setFont(new Font("Arial", Font.PLAIN, 18));
         yearCombo.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(yearCombo);
-
 
         genderLabel = new JLabel("Gender");
         genderLabel.setSize(100, 30);
@@ -293,6 +290,24 @@ public class RegisterFrame extends JFrame {
         bck.setSize(150, 60);
         bck.setFont(new Font("Arial", Font.BOLD, 20));
         bck.setFocusPainted(false);
+        
+        bck.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int option = JOptionPane.showConfirmDialog(
+                    null, 
+                    "Are you sure you want to exit?", 
+                    "Confirm Exit", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+                );
+                
+                if (option == JOptionPane.YES_OPTION) {
+                    dispose();
+                    new LoginFrame();
+                }
+            }
+        });
+        
         backgroundPanel.add(cnfm);
         backgroundPanel.add(bck); 
         this.addComponentListener(new ComponentAdapter() {
@@ -305,17 +320,17 @@ public class RegisterFrame extends JFrame {
 
                title.setLocation(centerX - 240, centerY - 250);
 
-                fnLabel.setLocation(centerX - 350, centerY - 100);
+                fnLabel.setLocation(centerX - 350, centerY - 80);
                 fname.setLocation(centerX - 350, centerY - 50);
 
-                lnLabel.setLocation(centerX - 350, centerY + 10);
+                lnLabel.setLocation(centerX - 350, centerY + 30);
                 lname.setLocation(centerX - 350, centerY + 60);
 
-                userLabel.setLocation(centerX + 150, centerY - 100);
+                userLabel.setLocation(centerX + 150, centerY - 80);
                 username.setLocation(centerX + 150, centerY - 50);
 
-                psswordLabel.setLocation(centerX + 150, centerY + 10);
-                passwordInfoBtn.setLocation(centerX + 270, centerY + 10);
+                psswordLabel.setLocation(centerX + 150, centerY + 30);
+                passwordInfoBtn.setLocation(centerX + 270, centerY + 30);
                 psswordField.setLocation(centerX + 150, centerY + 60);
 
                 // Birthday combo boxes
@@ -335,12 +350,11 @@ public class RegisterFrame extends JFrame {
                 maleCheckBox.setLocation(centerX - 280, centerY + 220);
                 femaleCheckBox.setLocation(centerX - 220, centerY + 220);
                 
-                cnpsswordLabel.setLocation(centerX + 150, centerY + 110);
+                cnpsswordLabel.setLocation(centerX + 150, centerY + 130);
                 cnpassword.setLocation(centerX + 150, centerY + 160);
-                cnshowPass.setLocation(centerX + 150, centerY + 220);
+                cnshowPass.setLocation(centerX + 150, centerY + 210);
 
-
-                cnfm.setLocation(centerX - 5, centerY + 330);
+                cnfm.setLocation(centerX - - 60, centerY + 330);
                 bck.setLocation(centerX - 165, centerY + 330);
             }
         });
