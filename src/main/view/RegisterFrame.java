@@ -191,19 +191,19 @@ public class RegisterFrame extends JFrame {
         yearCombo.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(yearCombo);
 
-        genderLabel = new JLabel("Gender");
+        genderLabel = new JLabel("Gender: ");
         genderLabel.setSize(100, 30);
-        genderLabel.setFont(new Font("Arial ", Font.BOLD, 20));
+        genderLabel.setFont(new Font("Arial ", Font.BOLD, 18));
         backgroundPanel.add(genderLabel);
 
         maleCheckBox = new JRadioButton("Male");
-        maleCheckBox.setSize(100, 40);
+        maleCheckBox.setSize(70, 40);
         maleCheckBox.setFont(new Font("Arial", Font.PLAIN, 18));
         maleCheckBox.setOpaque(false);
         backgroundPanel.add(maleCheckBox);
 
         femaleCheckBox = new JRadioButton("Female");
-        femaleCheckBox.setSize(100, 40);
+        femaleCheckBox.setSize(90, 40);
         femaleCheckBox.setFont(new Font("Arial", Font.PLAIN, 18));
         femaleCheckBox.setOpaque(false);
         backgroundPanel.add(femaleCheckBox);
@@ -330,7 +330,7 @@ public class RegisterFrame extends JFrame {
                 username.setLocation(centerX + 150, centerY - 50);
 
                 psswordLabel.setLocation(centerX + 150, centerY + 30);
-                passwordInfoBtn.setLocation(centerX + 270, centerY + 30);
+                passwordInfoBtn.setLocation(centerX + 270, centerY + 25);
                 psswordField.setLocation(centerX + 150, centerY + 60);
 
                 // Birthday combo boxes
@@ -346,9 +346,9 @@ public class RegisterFrame extends JFrame {
                 yearCombo.setLocation(centerX - 210, centerY + 170);
 
                 // Gender checkboxes positioned below birthday
-                genderLabel.setLocation(centerX - 350, centerY + 220);
+                genderLabel.setLocation(centerX - 350, centerY + 223);
                 maleCheckBox.setLocation(centerX - 280, centerY + 220);
-                femaleCheckBox.setLocation(centerX - 220, centerY + 220);
+                femaleCheckBox.setLocation(centerX - 215, centerY + 220);
                 
                 cnpsswordLabel.setLocation(centerX + 150, centerY + 130);
                 cnpassword.setLocation(centerX + 150, centerY + 160);

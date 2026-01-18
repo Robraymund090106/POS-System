@@ -109,7 +109,7 @@ public class LoginFrame extends JFrame {
         String passText = new String(password.getPassword()).trim();
         
         if (userText.isEmpty() && passText.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Invalid credentials", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Please input your details", "Login Failed", JOptionPane.ERROR_MESSAGE);
             username.setText("");
             password.setText("");
             return;
@@ -144,8 +144,8 @@ public class LoginFrame extends JFrame {
                 password.setText("");
             }
         } else {
-        
-            JOptionPane.showMessageDialog(null, "Wrong Username", "Login Failed", JOptionPane.ERROR_MESSAGE);
+
+            JOptionPane.showMessageDialog(null, "Wrong Username, Password Needed", "Login Failed", JOptionPane.ERROR_MESSAGE);
             username.setText("");
             password.setText("");
         }
