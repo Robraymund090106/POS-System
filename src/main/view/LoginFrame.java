@@ -23,14 +23,12 @@ public class LoginFrame extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 ImageIcon bgIcon = new ImageIcon("src\\main\\image\\Email.png");
-              
-                g.drawImage(bgIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
+               g.drawImage(bgIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
 
         backgroundPanel.setLayout(null); 
         this.setContentPane(backgroundPanel); 
-
 
         ImageIcon originalIcon = new ImageIcon("src\\main\\image\\nu_logo.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
@@ -105,45 +103,63 @@ public class LoginFrame extends JFrame {
             }
         });
 
+      login.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        String userText = username.getText().trim().toLowerCase();  // FIXED: lowercase + trim
+        String passText = new String(password.getPassword()).trim();
+        
+        if (userText.isEmpty() && passText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Invalid credentials", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            username.setText("");
+            password.setText("");
+            return;
+        }
+        if (userText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Username needed", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            username.setText("");
+            return;
+        }
+        if (passText.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Password needed", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            password.setText("");
+            return;
+        }
+        
+        if (DatabaseManager.existsByUsername(userText)) {
+            if (DatabaseManager.checkPassword(userText, passText)) {
+                User loggedInUser = DatabaseManager.findByUsername(userText);
 
-        login.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String userText = username.getText();
-                String passText = new String(password.getPassword());
-                if (DatabaseManager.existsByUsername(userText)) {
-                    if (DatabaseManager.checkPassword(userText, passText)) {
-                        User loggedInUser = DatabaseManager.findByUsername(userText);
-                        if(!loggedInUser.isActive()) {
-                            JOptionPane.showMessageDialog(null, "Your account is inactive. Please contact the administrator.", "Login Failed", JOptionPane.ERROR_MESSAGE);
-                            password.setText("");
-                            username.setText("");
-                            return; 
-                        }
-                        Main.currentUser = loggedInUser;
-                        JOptionPane.showMessageDialog(null, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        dispose();
-                        new MainDashboard(Main.currentUser);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Invalid password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
-                        password.setText("");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Invalid username ", "Login Failed", JOptionPane.ERROR_MESSAGE);
-                    username.setText("");
+                if(!loggedInUser.isActive()) {
+                    JOptionPane.showMessageDialog(null, "Your account is inactive. Please contact the administrator.", "Login Failed", JOptionPane.ERROR_MESSAGE);
                     password.setText("");
+                    username.setText("");
+                    return; 
                 }
+                Main.currentUser = loggedInUser;
+                JOptionPane.showMessageDialog(null, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+                new MainDashboard(Main.currentUser);
+            } else {
+                JOptionPane.showMessageDialog(null, "Wrong password", "Login Failed", JOptionPane.ERROR_MESSAGE);
+                password.setText("");
             }
-        });
+        } else {
+        
+            JOptionPane.showMessageDialog(null, "Wrong Username", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            username.setText("");
+            password.setText("");
+        }
+    }
+});
+
         backgroundPanel.add(login);
 
-     
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 int w = backgroundPanel.getWidth();
                 int h = backgroundPanel.getHeight();
                 int centerX = w / 2;
-                
                 
                 int centerY = (h / 2) - 100; 
 
