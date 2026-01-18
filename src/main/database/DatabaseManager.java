@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+import main.model.Product;
 import main.model.User;
 
 public class DatabaseManager {
@@ -51,6 +54,21 @@ public class DatabaseManager {
             String addAdmin = "INSERT OR IGNORE INTO User (username, password, fullname, gender, birthday, role, email, age) " +
                               "VALUES ('admin', 'admin123', 'Rob Raymundo', 'Male', 'September 1 2006', 'ADMIN', 'admin@pos.com', 25)";
             stmt.execute(addAdmin);
+
+            String productTable = "CREATE TABLE IF NOT EXISTS Product (" +
+                                 "productId INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                 "name TEXT NOT NULL, " +
+                                 "price REAL NOT NULL, " +
+                                 "stock INTEGER, " +
+                                 "category TEXT, " +
+                                 "imagePath TEXT)";
+            stmt.execute(productTable);
+
+            // Add sample items 
+            String addSample = "INSERT OR IGNORE INTO Product (name, price, stock, category, imagePath) " +
+                               "VALUES ('Classic Burger', 150.00, 50, 'Food', 'src/main/image/burger.png'), " +
+                               "('Iced Coffee', 85.00, 100, 'Drink', 'src/main/image/coffee.png')";
+            stmt.execute(addSample);
             
             System.out.println("Database checked/created successfully.");
         }
@@ -159,6 +177,56 @@ public class DatabaseManager {
         System.err.println("Error finding user: " + e.getMessage());
     }
     return null; 
+}
+
+    public static List<Product> getAllProducts() {
+    List<Product> products = new ArrayList<>();
+    String sql = "SELECT * FROM Product";
+    
+    try (Connection conn = connect();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+        
+        while (rs.next()) {
+            products.add(new Product(
+                rs.getInt("productId"),
+                rs.getString("name"),
+                rs.getDouble("price"),
+                rs.getInt("stock"),
+                rs.getString("category"),
+                rs.getString("imagePath")
+            ));
+        }
+    } catch (SQLException e) {
+        System.err.println("Error fetching products: " + e.getMessage());
+    }
+    return products;
+}
+
+public static List<Product> getProductsByCategory(String category) {
+    List<Product> products = new ArrayList<>();
+    String sql = "SELECT * FROM Product WHERE category = ?";
+    
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, category);
+        ResultSet rs = pstmt.executeQuery();
+        
+        while (rs.next()) {
+            products.add(new Product(
+                rs.getInt("productId"),
+                rs.getString("name"),
+                rs.getDouble("price"),
+                rs.getInt("stock"),
+                rs.getString("category"),
+                rs.getString("imagePath")
+            ));
+        }
+    } catch (SQLException e) {
+        System.err.println("Error filtering products: " + e.getMessage());
+    }
+    return products;
 }
 
 }
