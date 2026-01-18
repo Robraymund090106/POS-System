@@ -19,7 +19,7 @@ public class MainDashboard extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon imageIcon = new ImageIcon("src\\main\\image\\Email (6).png");
+                ImageIcon imageIcon = new ImageIcon("src\\main\\image\\Email (13).png");
                 Image img = imageIcon.getImage();
                 if (img != null) {
                     g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
@@ -32,27 +32,38 @@ public class MainDashboard extends JFrame {
         JLabel companyNameLabel = new JLabel("Company name");
         companyNameLabel.setFont(new Font("SansSerif", Font.BOLD, 50));
         companyNameLabel.setForeground(Color.WHITE);
-        companyNameLabel.setBounds(80, 25, 400, 70); 
+        companyNameLabel.setBounds(80, 40, 400, 70); 
         mainContainer.add(companyNameLabel);
 
-      // image button cilckable 
+        JLabel Odtails = new JLabel("Order Details");
+        Odtails.setFont(new Font("SansSerif", Font.PLAIN, 40));
+        Odtails.setForeground(Color.BLACK);
+        Odtails.setBounds(960, 58, 500, 50); 
+        mainContainer.add(Odtails);
 
-      // 1st image button
-        ImageIcon staffIcon = new ImageIcon("src\\main\\image\\Email (1) (1).png"); 
-        JLabel clickableImage = new JLabel(staffIcon);
+        JLabel CstmOrd = new JLabel("Current Order: ");
+       CstmOrd.setFont(new Font("SansSerif", Font.PLAIN, 29));
+       CstmOrd.setForeground(Color.BLACK);
+       CstmOrd.setBounds(960, 150, 500, 50); 
+        mainContainer.add(CstmOrd);
+
         
+// image button cilckabless 
+
+      // 1st IMAGE BUTTON
+        ImageIcon staffIcon = new ImageIcon("src\\main\\image\\Email (4) (1).png"); 
+        JLabel clickableImage = new JLabel(staffIcon);
+        clickableImage.setHorizontalAlignment(JLabel.CENTER); 
       
         int imgW = staffIcon.getIconWidth();
         int imgH = staffIcon.getIconHeight();
         
-
-        clickableImage.setBounds(0, 150, imgW, imgH); 
+        clickableImage.setBounds(20, 70, imgW, imgH); 
         
         clickableImage.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 // ACTION HERE when button clicked 
-
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -63,35 +74,190 @@ public class MainDashboard extends JFrame {
         mainContainer.add(clickableImage);
         mainContainer.setComponentZOrder(clickableImage, 0);
 
-    
-    // 2nd imagee button 
-    ImageIcon secondIcon = new ImageIcon("src\\main\\image\\Email (2) (1).png"); 
-    JLabel secondClickable = new JLabel(secondIcon);
+// 2nd IMAGE BUTTON
+       ImageIcon secondIcon = new ImageIcon("src\\main\\image\\Email (7) (1).png"); 
+       JLabel secondClickable = new JLabel(secondIcon);
+       secondClickable.setHorizontalAlignment(JLabel.CENTER); 
 
+       int imgW2 = secondIcon.getIconWidth();
+       int imgH2 = secondIcon.getIconHeight();
 
-     int imgW2 = secondIcon.getIconWidth();
-     int imgH2 = secondIcon.getIconHeight();
+       secondClickable.setBounds(20, 198, imgW2, imgH2); 
 
-
-    secondClickable.setBounds(0, 280, imgW2, imgH2); 
-
-
-    secondClickable.addMouseListener(new MouseAdapter() {
+      secondClickable.addMouseListener(new MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
+        // ACTION HERE
 
-        // ADD ACTION HEREEE
-       
     } 
+
     @Override
     public void mouseEntered(MouseEvent e) {
-      
         secondClickable.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 });
 
-      mainContainer.add(secondClickable);
-       mainContainer.setComponentZOrder(secondClickable, 0);
+    mainContainer.add(secondClickable);
+    mainContainer.setComponentZOrder(secondClickable, 0);
+
+// 3rd IMAGE BUTTON
+  ImageIcon thirdIcon = new ImageIcon("src\\main\\image\\Email (2).png");
+  JLabel thirdClickable = new JLabel(thirdIcon);
+  thirdClickable.setHorizontalAlignment(JLabel.CENTER); 
+  int imgW3 = thirdIcon.getIconWidth();
+  int imgH3 = thirdIcon.getIconHeight();
+
+thirdClickable.setBounds(20, 139, imgW3, imgH3); 
+
+thirdClickable.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // ACTION FOR 3rd BUTTON
+    }
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        thirdClickable.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+});
+
+   mainContainer.add(thirdClickable);
+   mainContainer.setComponentZOrder(thirdClickable, 0);
+
+//  4th IMAGE BUTTON 
+  ImageIcon fourthIcon = new ImageIcon("src\\main\\image\\Email (10) (1).png");
+  JLabel fourthClickable = new JLabel(fourthIcon);
+  fourthClickable.setHorizontalAlignment(JLabel.CENTER); 
+  int imgW4 = fourthIcon.getIconWidth();
+  int imgH4 = fourthIcon.getIconHeight();
+
+   fourthClickable.setBounds(20, 459, imgW4, imgH4); 
+
+  fourthClickable.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // ACTION FOR 4th BUTTON
+    }
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        fourthClickable.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+});
+
+mainContainer.add(fourthClickable);
+mainContainer.setComponentZOrder(fourthClickable, 0);
+
+//  5th IMAGE BUTTON 
+ImageIcon fifthIcon = new ImageIcon("src\\main\\image\\Email (9) (1).png"); 
+JLabel fifthClickable = new JLabel(fifthIcon);
+fifthClickable.setHorizontalAlignment(JLabel.CENTER); 
+
+int imgW5 = fifthIcon.getIconWidth();
+int imgH5 = fifthIcon.getIconHeight();
+
+fifthClickable.setBounds(20, 590, imgW5, imgH5); 
+
+fifthClickable.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // ACTION FOR 5th BUTTON
+    }
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        fifthClickable.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+});
+
+mainContainer.add(fifthClickable);
+mainContainer.setComponentZOrder(fifthClickable, 0);
+
+
+
+//  STAFF IMAGE BUTTON CLICKABLE 
+ImageIcon sixthIcon = new ImageIcon("src\\main\\image\\Email (14) (1).png"); 
+JLabel sixthClickable = new JLabel(sixthIcon);
+sixthClickable.setHorizontalAlignment(JLabel.CENTER); 
+
+int imgW6 = sixthIcon.getIconWidth();
+int imgH6 = sixthIcon.getIconHeight();
+
+
+sixthClickable.setBounds(0, 50, imgW6, imgH6); 
+
+//  6th IMAGE BUTTON 
+sixthClickable.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // Action HEREE
+    } 
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        sixthClickable.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+}); 
+mainContainer.add(sixthClickable);
+mainContainer.setComponentZOrder(sixthClickable, 0);
+
+//  7th IMAGE BUTTON 
+ImageIcon seventhIcon = new ImageIcon("src\\main\\image\\Email (15) (1).png"); 
+JLabel seventhClickable = new JLabel(seventhIcon);
+seventhClickable.setHorizontalAlignment(JLabel.CENTER); 
+
+int imgW7 = seventhIcon.getIconWidth();
+int imgH7 = seventhIcon.getIconHeight();
+
+
+seventhClickable.setBounds(0, 60, imgW7, imgH7); 
+
+seventhClickable.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
+      // ACTION HEREE
+    }
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        seventhClickable.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+});
+
+mainContainer.add(seventhClickable);
+mainContainer.setComponentZOrder(seventhClickable, 0);
+
+ 
+// STAFF TXT CLICKABLIE
+JLabel textButton = new JLabel("Staff");
+textButton.setFont(new Font("SansSerif", Font.BOLD, 40)); 
+textButton.setForeground(Color.WHITE); 
+
+textButton.setBounds(780, 67, 200, 50); 
+
+
+textButton.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+        // ACTION !!!
+
+       
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+       
+        textButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+       
+        textButton.setText("<html><u>Staff</u></html>");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+      
+        textButton.setText("Staff");
+    }
+});
+
+mainContainer.add(textButton);
+
+mainContainer.setComponentZOrder(textButton, 0);
 
         // search barr
         JTextField searchField = new JTextField() {
@@ -119,7 +285,7 @@ public class MainDashboard extends JFrame {
         searchField.setBorder(new EmptyBorder(0, 45, 0, 10)); 
         searchField.setForeground(Color.BLACK);
         searchField.setFont(new Font("SansSerif", Font.PLAIN, 25));
-        searchField.setBounds(279, 145, 350, 30); 
+        searchField.setBounds(279, 153, 350, 30); 
         searchField.setCaretColor(new Color(0, 0, 0, 0)); 
         searchField.setFocusable(false);
 
