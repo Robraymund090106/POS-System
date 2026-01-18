@@ -234,7 +234,8 @@ textButton.setBounds(780, 67, 200, 50);
 textButton.addMouseListener(new MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
-
+        UserDetailFrame userDetailFrame = new UserDetailFrame(user);
+        userDetailFrame.setVisible(true);
         // ACTION !!!
 
        

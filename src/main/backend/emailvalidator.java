@@ -58,7 +58,6 @@ public class emailvalidator {
 
         for(char ch : name.trim().toCharArray()){
             if (!Character.isLetter(ch) && ch != ' '){
-            JOptionPane.showMessageDialog(null, "name can only contain letters and spaces", "Error", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         }

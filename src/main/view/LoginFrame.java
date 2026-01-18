@@ -105,7 +105,7 @@ public class LoginFrame extends JFrame {
 
       login.addActionListener(new ActionListener() {
     public void actionPerformed(ActionEvent e) {
-        String userText = username.getText().trim().toLowerCase();  // FIXED: lowercase + trim
+        String userText = username.getText().trim(); // FIXED: lowercase + trim
         String passText = new String(password.getPassword()).trim();
         
         if (userText.isEmpty() && passText.isEmpty()) {
@@ -145,7 +145,7 @@ public class LoginFrame extends JFrame {
             }
         } else {
 
-            JOptionPane.showMessageDialog(null, "Wrong Username, Password Needed", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Username not Found", "Login Failed", JOptionPane.ERROR_MESSAGE);
             username.setText("");
             password.setText("");
         }
