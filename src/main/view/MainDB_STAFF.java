@@ -194,8 +194,7 @@ sixthClickable.setBounds(0, 50, imgW6, imgH6);
 sixthClickable.addMouseListener(new MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
-        UserDetailFrame userDetailFrame = new UserDetailFrame(user);
-        userDetailFrame.setVisible(true);// Action HEREE
+        // Action HEREE
     } 
     @Override
     public void mouseEntered(MouseEvent e) {
