@@ -6,10 +6,10 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import main.model.User;
 
-public class MainDashboard extends JFrame {
+public class MainDB_STAFF extends JFrame {
     private User user;
 
-    public MainDashboard(User user) {
+    public MainDB_STAFF (User user) {
         this.user = user;
         setTitle("Dashboard");
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
@@ -46,6 +46,13 @@ public class MainDashboard extends JFrame {
        CstmOrd.setForeground(Color.BLACK);
        CstmOrd.setBounds(960, 150, 500, 50); 
         mainContainer.add(CstmOrd);
+
+         JLabel Total = new JLabel("Total: ");
+      Total.setFont(new Font("SansSerif", Font.BOLD, 29));
+      Total.setForeground(Color.BLACK);
+      Total .setBounds(970, 640, 500, 50); 
+        mainContainer.add(Total);
+
 
         
 // image button cilckabless 
@@ -183,7 +190,7 @@ int imgH6 = sixthIcon.getIconHeight();
 
 sixthClickable.setBounds(0, 50, imgW6, imgH6); 
 
-//  6th IMAGE BUTTON 
+//  6th IMAGE BUTTON staff pic
 sixthClickable.addMouseListener(new MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
@@ -197,7 +204,7 @@ sixthClickable.addMouseListener(new MouseAdapter() {
 mainContainer.add(sixthClickable);
 mainContainer.setComponentZOrder(sixthClickable, 0);
 
-//  7th IMAGE BUTTON 
+//  7th IMAGE BUTTON current order button 
 ImageIcon seventhIcon = new ImageIcon("src\\main\\image\\Email (15) (1).png"); 
 JLabel seventhClickable = new JLabel(seventhIcon);
 seventhClickable.setHorizontalAlignment(JLabel.CENTER); 
@@ -206,7 +213,7 @@ int imgW7 = seventhIcon.getIconWidth();
 int imgH7 = seventhIcon.getIconHeight();
 
 
-seventhClickable.setBounds(0, 60, imgW7, imgH7); 
+seventhClickable.setBounds(290, 52, imgW7, imgH7); 
 
 seventhClickable.addMouseListener(new MouseAdapter() {
     @Override
@@ -221,6 +228,35 @@ seventhClickable.addMouseListener(new MouseAdapter() {
 
 mainContainer.add(seventhClickable);
 mainContainer.setComponentZOrder(seventhClickable, 0);
+
+
+//  8th IMAGE BUTTON place order  button 
+ImageIcon eightIcon = new ImageIcon("src\\main\\image\\Email (16) (1).png"); 
+JLabel eightClickable = new JLabel(eightIcon);
+eightClickable.setHorizontalAlignment(JLabel.CENTER); 
+
+int imgW8 = seventhIcon.getIconWidth();
+int imgH8 = seventhIcon.getIconHeight();
+
+
+eightClickable.setBounds(300, 250, imgW8, imgH8); 
+
+eightClickable.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
+      // ACTION HEREE
+    }
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        eightClickable.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+});
+
+mainContainer.add(eightClickable);
+mainContainer.setComponentZOrder(eightClickable, 0);
+
+
+
 
  
 // STAFF TXT CLICKABLIE
