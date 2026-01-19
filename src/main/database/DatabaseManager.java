@@ -57,7 +57,7 @@ public class DatabaseManager {
 
             String productTable = "CREATE TABLE IF NOT EXISTS Product (" +
                                  "productId INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                 "name TEXT NOT NULL, " +
+                                 "name TEXT NOT NULL UNIQUE, " +
                                  "price REAL NOT NULL, " +
                                  "stock INTEGER, " +
                                  "category TEXT, " +
@@ -69,6 +69,8 @@ public class DatabaseManager {
                                "VALUES ('Classic Burger', 150.00, 50, 'Food', 'src/main/image/burger.png'), " +
                                "('Iced Coffee', 85.00, 100, 'Drink', 'src/main/image/coffee.png')";
             stmt.execute(addSample);
+
+            stmt.execute("DELETE FROM Product WHERE productId NOT IN (SELECT MIN(productId) FROM Product GROUP BY name)");
             
             System.out.println("Database checked/created successfully.");
         }
@@ -227,6 +229,23 @@ public static List<Product> getProductsByCategory(String category) {
         System.err.println("Error filtering products: " + e.getMessage());
     }
     return products;
+}
+
+    public static boolean activateUser(String username) {
+    String sql = "UPDATE User SET isActive = 1 WHERE username = ?";
+    
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, username);
+        int rowsAffected = pstmt.executeUpdate();
+        
+        return rowsAffected > 0; 
+        
+    } catch (SQLException e) {
+        System.err.println("Activation Error: " + e.getMessage());
+        return false;
+    }
 }
 
 }
