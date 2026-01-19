@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 import java.awt.*;
 import main.model.*;
+import main.backend.*;
 
 public class UserDetailFrame extends JFrame {
 
@@ -50,6 +51,17 @@ public class UserDetailFrame extends JFrame {
         JButton changePassBtn = createStyledButton("Change Password");
 
         JButton logoutBtn = createStyledButton("Logout");
+        logoutBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (Window window : Window.getWindows()) {
+                    window.dispose(); 
+                }
+                    new LoginFrame();
+
+                
+            }
+        });
 
 
         sidebar.add(roleLabel);
@@ -59,6 +71,9 @@ public class UserDetailFrame extends JFrame {
         sidebar.add(privacyBtn);
         sidebar.add(Box.createVerticalStrut(15));
         sidebar.add(changePassBtn);
+        sidebar.add(Box.createVerticalStrut(15));
+        sidebar.add(logoutBtn);
+
 
         
         JPanel mainContent = new JPanel(null);
@@ -114,6 +129,13 @@ public class UserDetailFrame extends JFrame {
                         }
                     }
                 });
+
+        changePassBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ChangePasswordFrame(user);
+            }
+        });
 
         mainContent.add(detailCard);
 

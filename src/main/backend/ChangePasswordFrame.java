@@ -39,7 +39,7 @@ public class ChangePasswordFrame extends JFrame{
 
 
 
-        
+        add(panel);
         setVisible(true);
     }
     
