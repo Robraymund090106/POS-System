@@ -70,7 +70,7 @@ public class MainDB_STAFF extends JFrame {
         clickableImage.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                // ACTION HERE when button clicked 
+                
             }
             @Override
             public void mouseEntered(MouseEvent e) {
