@@ -171,7 +171,7 @@ public class RegisterFrame extends JFrame {
         for (int i = 1; i <= 31; i++) days[i - 1] = String.valueOf(i);
 
         dayCombo = new JComboBox<>(days);
-        dayCombo.setSize(50, 40);
+        dayCombo.setSize(65, 40);
         dayCombo.setFont(new Font("Arial", Font.PLAIN, 16));
         dayCombo.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(dayCombo);
@@ -215,7 +215,7 @@ public class RegisterFrame extends JFrame {
          JButton cnfm = new JButton("Confirm");
         cnfm.setSize(150, 60);
         cnfm.setFont(new Font("Arial", Font.BOLD, 20));
-        cnfm.setBackground(Color.BLACK);
+        cnfm.setBackground(Color.GREEN);
         cnfm.setForeground(Color.WHITE);
         cnfm.setFocusPainted(false);
         cnfm.addActionListener(new ActionListener() {
@@ -288,6 +288,8 @@ public class RegisterFrame extends JFrame {
         
         JButton bck = new JButton("Back");
         bck.setSize(150, 60);
+        bck.setBackground(Color.RED);
+        bck.setForeground(Color.WHITE);
         bck.setFont(new Font("Arial", Font.BOLD, 20));
         bck.setFocusPainted(false);
         
@@ -336,14 +338,14 @@ public class RegisterFrame extends JFrame {
                 // Birthday combo boxes
                 bdayLabel.setLocation(centerX - 350, centerY + 110);
 
-                monthLabel.setLocation(centerX - 330, centerY + 140);
-                monthCombo.setLocation(centerX - 363, centerY + 170);
+                monthLabel.setLocation(centerX - 350, centerY + 140);
+                monthCombo.setLocation(centerX - 350, centerY + 170);
 
-                dayLabel.setLocation(centerX - 260, centerY + 140);
-                dayCombo.setLocation(centerX - 257, centerY + 170);
+                dayLabel.setLocation(centerX - 244, centerY + 140);
+                dayCombo.setLocation(centerX - 244, centerY + 170);
 
-                yearLabel.setLocation(centerX - 220, centerY + 140);
-                yearCombo.setLocation(centerX - 210, centerY + 170);
+                yearLabel.setLocation(centerX - 180, centerY + 140);
+                yearCombo.setLocation(centerX - 180, centerY + 170);
 
                 // Gender checkboxes positioned below birthday
                 genderLabel.setLocation(centerX - 350, centerY + 223);

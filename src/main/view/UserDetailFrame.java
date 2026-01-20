@@ -50,6 +50,7 @@ public class UserDetailFrame extends JFrame {
         
         JButton changePassBtn = createStyledButton("Change Password");
 
+
         JButton logoutBtn = createStyledButton("Logout");
         logoutBtn.addActionListener(new ActionListener() {
             @Override

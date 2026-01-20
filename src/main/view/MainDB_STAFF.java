@@ -219,6 +219,7 @@ seventhClickable.addMouseListener(new MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
       // ACTION HEREE
+      
     }
     @Override
     public void mouseEntered(MouseEvent e) {
