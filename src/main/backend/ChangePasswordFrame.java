@@ -1,16 +1,8 @@
 package main.backend;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import main.model.User;
 
 public class ChangePasswordFrame extends JFrame {
@@ -20,58 +12,73 @@ public class ChangePasswordFrame extends JFrame {
         this.user = user;
         
         setTitle("Change Password");
-        setSize(400, 300);
+        setSize(500, 400); // Increased window size slightly to fit larger fields
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         Color navy = new Color(0, 0, 128);
 
-        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(navy);
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
         
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Helper dimension for text field sizing
+        Dimension textFieldSize = new Dimension(250, 40); 
+
+        // --- Current Password ---
         JLabel currentPasswordLabel = new JLabel("Current Password: ");
         currentPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
         currentPasswordLabel.setForeground(Color.WHITE);
-        
-        JTextField currentPassword = new JTextField();
-        currentPassword.setFont(new Font("Arial", Font.BOLD, 12));
-        currentPassword.setForeground(Color.WHITE);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0;
+        panel.add(currentPasswordLabel, gbc);
 
-        
+        JTextField currentPassword = new JTextField();
+        currentPassword.setPreferredSize(textFieldSize); // This sets the size you want
+        gbc.gridx = 1; gbc.gridy = 0; gbc.weightx = 1.0;
+        panel.add(currentPassword, gbc);
+
+        // --- New Password ---
         JLabel newPasswordLabel = new JLabel("New Password: ");
         newPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
         newPasswordLabel.setForeground(Color.WHITE);
-        
+        gbc.gridx = 0; gbc.gridy = 1;
+        panel.add(newPasswordLabel, gbc);
+
         JTextField newPassword = new JTextField();
-        newPassword.setFont(new Font("Arial", Font.BOLD, 12));
-        newPassword.setForeground(Color.WHITE);
-        
+        newPassword.setPreferredSize(textFieldSize);
+        gbc.gridx = 1; gbc.gridy = 1;
+        panel.add(newPassword, gbc);
+
+        // --- Confirm Password ---
         JLabel confirmPasswordLabel = new JLabel("Confirm Password: ");
         confirmPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
         confirmPasswordLabel.setForeground(Color.WHITE);
-        
+        gbc.gridx = 0; gbc.gridy = 2;
+        panel.add(confirmPasswordLabel, gbc);
+
         JTextField confirmPassword = new JTextField();
-        confirmPassword.setFont(new Font("Arial", Font.BOLD, 12));
-        confirmPassword.setForeground(Color.WHITE);
-        
+        confirmPassword.setPreferredSize(textFieldSize);
+        gbc.gridx = 1; gbc.gridy = 2;
+        panel.add(confirmPassword, gbc);
+
+        // --- Buttons (Height adjusted to match) ---
         JButton changePasswordButton = new JButton("Change Password");
         changePasswordButton.setBackground(Color.GREEN);
         changePasswordButton.setForeground(Color.WHITE);
-        changePasswordButton.setFont(new Font("Arial", Font.BOLD, 12));
-        
+        changePasswordButton.setPreferredSize(new Dimension(150, 40));
+        gbc.gridx = 0; gbc.gridy = 3;
+        panel.add(changePasswordButton, gbc);
+
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setBackground(Color.RED);
         cancelButton.setForeground(Color.WHITE);
-        cancelButton.setFont(new Font("Arial", Font.BOLD, 12));
-
-        panel.add(currentPasswordLabel);
-        panel.add(currentPassword);
-        panel.add(newPasswordLabel);
-        panel.add(newPassword);
-        panel.add(confirmPasswordLabel);
-        panel.add(confirmPassword);
-        panel.add(changePasswordButton);
-        panel.add(cancelButton);
+        cancelButton.setPreferredSize(new Dimension(150, 40));
+        gbc.gridx = 1; gbc.gridy = 3;
+        panel.add(cancelButton, gbc);
 
         add(panel);
         setVisible(true);

@@ -19,39 +19,46 @@ public class UserDetailFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
         
         JPanel sidebar = new JPanel();
         sidebar.setPreferredSize(new Dimension(280, 500));
-        sidebar.setBackground(Color.WHITE);
-        sidebar.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, Color.BLACK));
+        sidebar.setBackground(new Color(0, 0, 128));
+        sidebar.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, new Color(255, 215, 0)));
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
 
         
         JLabel roleLabel = new JLabel("#" + user.getRole().toUpperCase());
         roleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        roleLabel.setForeground(Color.WHITE);
         roleLabel.setBorder(new EmptyBorder(20, 0, 10, 0));
 
         
         JLabel profileIcon = new JLabel("👤"); 
         profileIcon.setFont(new Font("Arial", Font.PLAIN, 100));
+        profileIcon.setForeground(Color.WHITE);
         profileIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Greeting
         String prefix = user.getgender().equalsIgnoreCase("Female") ? "Ms." : "Mr.";
         JLabel greeting = new JLabel("Hi, " + prefix + " " + user.getUsername());
         greeting.setFont(new Font("Arial", Font.PLAIN, 18));
+        greeting.setForeground(Color.WHITE);
         greeting.setAlignmentX(Component.CENTER_ALIGNMENT);
         greeting.setBorder(new EmptyBorder(10, 0, 30, 0));
 
         // Buttons
         JButton privacyBtn = createStyledButton("Privacy Details");
+        privacyBtn.setBackground(Color.GREEN);
+        privacyBtn.setForeground(Color.WHITE);
         
         JButton changePassBtn = createStyledButton("Change Password");
-
+        changePassBtn.setBackground(Color.GREEN);
+        changePassBtn.setForeground(Color.WHITE);
 
         JButton logoutBtn = createStyledButton("Logout");
+        logoutBtn.setBackground(Color.RED);
+        logoutBtn.setForeground(Color.WHITE);
         logoutBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -78,9 +85,9 @@ public class UserDetailFrame extends JFrame {
 
         
         JPanel mainContent = new JPanel(null);
-        mainContent.setBackground(Color.WHITE);
+        mainContent.setBackground(new Color(0, 0, 128));
 
-        
+
         JLabel goBack = new JLabel("Go Back");
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
         goBack.setBounds(420, 10, 60, 20);
@@ -92,16 +99,16 @@ public class UserDetailFrame extends JFrame {
         
         JLabel header = new JLabel("View Profile / ");
         header.setFont(new Font("Arial", Font.BOLD, 28));
+        header.setForeground(Color.WHITE);
         header.setBounds(30, 40, 200, 40);
         mainContent.add(header);
 
 
-        
         JPanel detailCard = new JPanel(new GridLayout(5, 1, 0, 10));
         detailCard.setBackground(Color.WHITE);
         detailCard.setBounds(50, 120, 350, 250);
         detailCard.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(230, 230, 230), 1),
+           BorderFactory.createLineBorder(new Color(255, 215, 0), 2),
             new EmptyBorder(20, 20, 20, 20)
         ));
 
