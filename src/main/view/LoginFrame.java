@@ -22,7 +22,7 @@ public class LoginFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon bgIcon = new ImageIcon("src\\main\\image\\Email.png");
+                ImageIcon bgIcon = new ImageIcon("src\\main\\image\\Login Frame.png");
                g.drawImage(bgIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -39,16 +39,20 @@ public class LoginFrame extends JFrame {
         JLabel title = new JLabel("POS System", SwingConstants.CENTER);
         title.setSize(500, 60);
         title.setFont(new Font("Arial", Font.BOLD, 45)); 
+
+        title.setForeground(new Color(255, 215, 0)); 
         backgroundPanel.add(title);
 
         JLabel subtitle = new JLabel("Welcome back! Please enter your details.", SwingConstants.CENTER);
         subtitle.setSize(500, 30);
         subtitle.setFont(new Font("Arial", Font.PLAIN, 18));
+        subtitle.setForeground(Color.WHITE);
         backgroundPanel.add(subtitle);
 
         JLabel userLabel = new JLabel("Username");
         userLabel.setSize(400, 30);
         userLabel.setFont(new Font("Arial ", Font.BOLD, 20));
+        userLabel.setForeground(Color.WHITE);
         backgroundPanel.add(userLabel);
 
         JTextField username = new JTextField();
@@ -61,6 +65,7 @@ public class LoginFrame extends JFrame {
         JLabel passLabel = new JLabel("Password");
         passLabel.setSize(400, 30);
         passLabel.setFont(new Font("Arial ", Font.BOLD, 20));
+        passLabel.setForeground(Color.WHITE);
         backgroundPanel.add(passLabel);
 
         JPasswordField password = new JPasswordField();
@@ -74,6 +79,7 @@ public class LoginFrame extends JFrame {
         showPass.setSize(200, 30);
         showPass.setOpaque(false); 
         showPass.setFont(new Font("Arial", Font.PLAIN, 14));
+        showPass.setForeground(Color.WHITE);
         showPass.addActionListener(e -> {
             if (showPass.isSelected()) password.setEchoChar((char) 0);
             else password.setEchoChar('•');

@@ -25,7 +25,7 @@ public class RegisterFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon bgIcon = new ImageIcon("src\\main\\image\\Email.png");
+                ImageIcon bgIcon = new ImageIcon("src\\main\\image\\_Sign Up Frame.png");
                 g.drawImage(bgIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -35,6 +35,7 @@ public class RegisterFrame extends JFrame {
         JLabel title = new JLabel("Sign Up", SwingConstants.CENTER);
         title.setSize(500, 60);
         title.setFont(new Font("Arial", Font.BOLD, 45));
+        title.setForeground(new Color(255, 215, 0)); 
         backgroundPanel.add(title);
 
         add(backgroundPanel);
@@ -48,6 +49,7 @@ public class RegisterFrame extends JFrame {
         JLabel fnLabel = new JLabel("First Name");
         fnLabel.setSize(150, 30);
         fnLabel.setFont(new Font("Arial ", Font.BOLD, 20));
+        fnLabel.setForeground(Color.WHITE);
         backgroundPanel.add(fnLabel);
 
         JTextField fname = new JTextField();
@@ -61,6 +63,7 @@ public class RegisterFrame extends JFrame {
         JLabel lnLabel = new JLabel("Last Name");
         lnLabel.setSize(150, 30);
         lnLabel.setFont(new Font("Arial ", Font.BOLD, 20));
+        lnLabel.setForeground(Color.WHITE);
         backgroundPanel.add(lnLabel);
 
         JTextField lname = new JTextField();
@@ -74,6 +77,7 @@ public class RegisterFrame extends JFrame {
         JLabel userLabel = new JLabel("Username");
         userLabel.setSize(150, 30);
         userLabel.setFont(new Font("Arial ", Font.BOLD, 20));
+        userLabel.setForeground(Color.WHITE);
         backgroundPanel.add(userLabel);
 
         JTextField username = new JTextField();
@@ -87,11 +91,13 @@ public class RegisterFrame extends JFrame {
         JLabel psswordLabel = new JLabel("Password");
         psswordLabel.setSize(150, 30);
         psswordLabel.setFont(new Font("Arial ", Font.BOLD, 20));
+        psswordLabel.setForeground(Color.WHITE);
         backgroundPanel.add(psswordLabel);
 
         JButton passwordInfoBtn = new JButton("?");
         passwordInfoBtn.setSize(60, 30);
         passwordInfoBtn.setFont(new Font("Arial", Font.BOLD, 16));
+        passwordInfoBtn.setForeground(new Color(255, 215, 0));
         passwordInfoBtn.setFocusPainted(false);
         passwordInfoBtn.addActionListener(e -> {
             String requirements = "Password Requirements:\n\n" +
@@ -117,6 +123,7 @@ public class RegisterFrame extends JFrame {
         JLabel cnpsswordLabel = new JLabel("Confirm Password");
         cnpsswordLabel.setSize(200, 30);
         cnpsswordLabel.setFont(new Font("Arial ", Font.BOLD, 18));
+        cnpsswordLabel.setForeground(Color.WHITE);
         backgroundPanel.add(cnpsswordLabel);
 
         JPasswordField cnpassword = new JPasswordField();
@@ -130,6 +137,7 @@ public class RegisterFrame extends JFrame {
         cnshowPass.setSize(200, 30);
         cnshowPass.setOpaque(false);
         cnshowPass.setFont(new Font("Arial", Font.PLAIN, 14));
+        cnshowPass.setForeground(Color.WHITE);
 
         cnshowPass.addActionListener(e -> {
             if (cnshowPass.isSelected()) {
@@ -146,11 +154,13 @@ public class RegisterFrame extends JFrame {
         JLabel bdayLabel = new JLabel("Birthday");
         bdayLabel.setSize(200, 30);
         bdayLabel.setFont(new Font("Arial ", Font.BOLD, 18));
+        bdayLabel.setForeground(Color.WHITE);
         backgroundPanel.add(bdayLabel);
 
         monthLabel = new JLabel("Month");
         monthLabel.setSize(80, 30);
         monthLabel.setFont(new Font("Arial ", Font.BOLD, 18));
+        monthLabel.setForeground(Color.WHITE);
         backgroundPanel.add(monthLabel);
 
         String[] months = {
@@ -165,6 +175,7 @@ public class RegisterFrame extends JFrame {
         dayLabel = new JLabel("Day");
         dayLabel.setSize(40, 30);
         dayLabel.setFont(new Font("Arial ", Font.BOLD, 18));
+        dayLabel.setForeground(Color.WHITE);
         backgroundPanel.add(dayLabel);
 
         String[] days = new String[31];
@@ -179,6 +190,7 @@ public class RegisterFrame extends JFrame {
         yearLabel = new JLabel("Year");
         yearLabel.setSize(60, 30);
         yearLabel.setFont(new Font("Arial ", Font.BOLD, 18));
+        yearLabel.setForeground(Color.WHITE);
         backgroundPanel.add(yearLabel);
 
         String[] years = new String[100];
@@ -194,17 +206,20 @@ public class RegisterFrame extends JFrame {
         genderLabel = new JLabel("Gender: ");
         genderLabel.setSize(100, 30);
         genderLabel.setFont(new Font("Arial ", Font.BOLD, 18));
+        genderLabel.setForeground(Color.WHITE);
         backgroundPanel.add(genderLabel);
 
         maleCheckBox = new JRadioButton("Male");
         maleCheckBox.setSize(70, 40);
         maleCheckBox.setFont(new Font("Arial", Font.PLAIN, 18));
+        maleCheckBox.setForeground(Color.WHITE);
         maleCheckBox.setOpaque(false);
         backgroundPanel.add(maleCheckBox);
 
         femaleCheckBox = new JRadioButton("Female");
         femaleCheckBox.setSize(90, 40);
         femaleCheckBox.setFont(new Font("Arial", Font.PLAIN, 18));
+        femaleCheckBox.setForeground(Color.WHITE);
         femaleCheckBox.setOpaque(false);
         backgroundPanel.add(femaleCheckBox);
 

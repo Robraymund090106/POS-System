@@ -12,7 +12,7 @@ public class ChangePasswordFrame extends JFrame {
         this.user = user;
         
         setTitle("Change Password");
-        setSize(500, 400); // Increased window size slightly to fit larger fields
+        setSize(500, 400); 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -26,10 +26,8 @@ public class ChangePasswordFrame extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Helper dimension for text field sizing
         Dimension textFieldSize = new Dimension(250, 40); 
 
-        // --- Current Password ---
         JLabel currentPasswordLabel = new JLabel("Current Password: ");
         currentPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
         currentPasswordLabel.setForeground(Color.WHITE);
@@ -37,11 +35,10 @@ public class ChangePasswordFrame extends JFrame {
         panel.add(currentPasswordLabel, gbc);
 
         JTextField currentPassword = new JTextField();
-        currentPassword.setPreferredSize(textFieldSize); // This sets the size you want
+        currentPassword.setPreferredSize(textFieldSize); 
         gbc.gridx = 1; gbc.gridy = 0; gbc.weightx = 1.0;
         panel.add(currentPassword, gbc);
 
-        // --- New Password ---
         JLabel newPasswordLabel = new JLabel("New Password: ");
         newPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
         newPasswordLabel.setForeground(Color.WHITE);
@@ -53,7 +50,6 @@ public class ChangePasswordFrame extends JFrame {
         gbc.gridx = 1; gbc.gridy = 1;
         panel.add(newPassword, gbc);
 
-        // --- Confirm Password ---
         JLabel confirmPasswordLabel = new JLabel("Confirm Password: ");
         confirmPasswordLabel.setFont(new Font("Arial", Font.BOLD, 12));
         confirmPasswordLabel.setForeground(Color.WHITE);
@@ -65,7 +61,6 @@ public class ChangePasswordFrame extends JFrame {
         gbc.gridx = 1; gbc.gridy = 2;
         panel.add(confirmPassword, gbc);
 
-        // --- Buttons (Height adjusted to match) ---
         JButton changePasswordButton = new JButton("Change Password");
         changePasswordButton.setBackground(Color.GREEN);
         changePasswordButton.setForeground(Color.WHITE);
