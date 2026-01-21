@@ -292,7 +292,42 @@ public class RegisterFrame extends JFrame {
                         psswordField.setText("");
                         cnpassword.setText("");
 
-                } else {
+                } else if(!emailvalidator.isValidUsername(user) && !emailvalidator.isValidName(firstName)) {
+                JOptionPane.showMessageDialog(null, "Invalid Username and First Name", "Error", JOptionPane.ERROR_MESSAGE);
+
+                // 2. Username + Last Name
+                } else if(!emailvalidator.isValidUsername(user) && !emailvalidator.isValidName(lastName)) {
+                    JOptionPane.showMessageDialog(null, "Invalid Username and Last Name", "Error", JOptionPane.ERROR_MESSAGE);
+
+                // 3. Username + Password Mismatch
+                } else if(!emailvalidator.isValidUsername(user) && !emailvalidator.samePassword(password, confirmPassword)) {
+                    JOptionPane.showMessageDialog(null, "Invalid Username and Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
+
+                // 4. Password + First Name
+                } else if(!emailvalidator.isValidPassword(password) && !emailvalidator.isValidName(firstName)) {
+                    JOptionPane.showMessageDialog(null, "Invalid Password and First Name", "Error", JOptionPane.ERROR_MESSAGE);
+
+                // 5. Password + Last Name
+                } else if(!emailvalidator.isValidPassword(password) && !emailvalidator.isValidName(lastName)) {
+                    JOptionPane.showMessageDialog(null, "Invalid Password and Last Name", "Error", JOptionPane.ERROR_MESSAGE);
+
+                // 6. Password + Password Mismatch (Technically password is invalid AND doesn't match)
+                } else if(!emailvalidator.isValidPassword(password) && !emailvalidator.samePassword(password, confirmPassword)) {
+                    JOptionPane.showMessageDialog(null, "Password format is invalid and they do not match", "Error", JOptionPane.ERROR_MESSAGE);
+
+                // 7. First Name + Last Name
+                } else if(!emailvalidator.isValidName(firstName) && !emailvalidator.isValidName(lastName)) {
+                    JOptionPane.showMessageDialog(null, "Both First and Last Names are invalid", "Error", JOptionPane.ERROR_MESSAGE);
+
+                // 8. First Name + Password Mismatch
+                } else if(!emailvalidator.isValidName(firstName) && !emailvalidator.samePassword(password, confirmPassword)) {
+                    JOptionPane.showMessageDialog(null, "Invalid First Name and Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
+
+                // 9. Last Name + Password Mismatch
+                } else if(!emailvalidator.isValidName(lastName) && !emailvalidator.samePassword(password, confirmPassword)) {
+                    JOptionPane.showMessageDialog(null, "Invalid Last Name and Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
                     JOptionPane.showMessageDialog(null, "Registration failed! Please check all fields.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }

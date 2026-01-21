@@ -39,7 +39,7 @@ public class emailvalidator {
 
         for (int i = 0; i < username.length(); i++) {
             if(i < 3 && !Character.isLetter(username.charAt(i))){
-                JOptionPane.showMessageDialog(null, "The first three characters must be letters", "Error", JOptionPane.ERROR_MESSAGE);
+                
                 return false;
             }
         }
