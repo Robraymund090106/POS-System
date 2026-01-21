@@ -105,19 +105,7 @@ public class MainDB_STAFF extends JFrame {
 
        secondClickable.setBounds(20, 198, imgW2, imgH2); 
 
-      secondClickable.addMouseListener(new MouseAdapter() {
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // ACTION HERE
-
-    } 
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        secondClickable.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
-});
-
+      
     mainContainer.add(secondClickable);
     mainContainer.setComponentZOrder(secondClickable, 0);
 
@@ -300,6 +288,26 @@ mainContainer.add(eightClickable);
 mainContainer.setComponentZOrder(eightClickable, 0);
 mainContainer.setComponentZOrder(scrollPane, 0);
 
+secondClickable.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            menuPanel.removeAll(); // Clear current cards
+        
+        for (Product p : foodProducts) {
+            menuPanel.add(createProductCard(p.getName(), p.getPrice()));
+        }
+        menuPanel.revalidate();
+        menuPanel.repaint();
+
+        } 
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        secondClickable.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+});
+
+
 
 
 
@@ -423,7 +431,7 @@ mainContainer.setComponentZOrder(textButton, 0);
             public void mousePressed(MouseEvent e) {
                 OrderName.add(name);
                 OrderPrice.add(price);
-                JOptionPane.showMessageDialog(null,"Product Added", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, name + " Added to Order", "Success", JOptionPane.INFORMATION_MESSAGE);
                 
             }
 
@@ -439,5 +447,17 @@ mainContainer.setComponentZOrder(textButton, 0);
 
         return card;
     }
+
+    private JLabel createHotspot(int x, int y, int w, int h, MouseAdapter listener) {
+    JLabel hotspot = new JLabel();
+    hotspot.setBounds(x, y, w, h);
+    hotspot.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    hotspot.addMouseListener(listener);
+    
+    
+    hotspot.setBorder(BorderFactory.createLineBorder(Color.RED)); 
+    
+    return hotspot;
+}
         
 }
