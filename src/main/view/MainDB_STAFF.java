@@ -4,10 +4,24 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import main.model.User;
+
+import main.database.DatabaseManager;
+import main.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 public class MainDB_STAFF extends JFrame {
     private User user;
+
+    private List<Product> products = DatabaseManager.getAllProducts();
+    private List<Product> foodProducts = DatabaseManager.getProductsByCategory("Food");
+    private List<Product> DrinkProducts = DatabaseManager.getProductsByCategory("Drink");
+    private List<String> OrderName = new ArrayList<>();
+    private List<Double> OrderPrice = new ArrayList<>();
+
 
     public MainDB_STAFF (User user) {
         this.user = user;
@@ -253,8 +267,38 @@ eightClickable.addMouseListener(new MouseAdapter() {
     }
 });
 
+
+
+
+
+
+JPanel menuPanel = new JPanel();
+menuPanel.setBackground(Color.WHITE);
+
+menuPanel.setLayout(new GridLayout(0, 3, 20, 20)); 
+
+
+JScrollPane scrollPane = new JScrollPane(menuPanel);
+scrollPane.setBounds(280, 200, 650, 500); 
+scrollPane.setBorder(null); 
+scrollPane.getViewport().setBackground(Color.WHITE);
+
+// 3. Add sample product cards (You can loop your database results here)
+//int counter = 0;
+for (Product p : products) {
+
+    menuPanel.add(createProductCard(p.getName(), p.getPrice()));
+    //counter++;
+    //if(counter > 30){
+        //break;
+    //}
+}
+
+mainContainer.add(scrollPane);
+
 mainContainer.add(eightClickable);
 mainContainer.setComponentZOrder(eightClickable, 0);
+mainContainer.setComponentZOrder(scrollPane, 0);
 
 
 
@@ -359,4 +403,41 @@ mainContainer.setComponentZOrder(textButton, 0);
         this.repaint();
         setVisible(true);
     }
+
+    private JPanel createProductCard(String name, double price) {
+        JPanel card = new JPanel();
+       
+        card.setPreferredSize(new Dimension(180, 110)); // Size of the blue box
+        card.setBackground(new Color(102, 225, 225));   // Light blue color from your screenshot
+        card.setLayout(new BorderLayout());
+        card.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150), 1));
+
+        JLabel nameLabel = new JLabel("<html><center>" + name + "<br>₱" + price + "</center></html>", SwingConstants.CENTER);
+        nameLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        nameLabel.setForeground(Color.BLACK);
+        card.add(nameLabel, BorderLayout.CENTER);
+
+        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        card.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                OrderName.add(name);
+                OrderPrice.add(price);
+                JOptionPane.showMessageDialog(null,"Product Added", "Success", JOptionPane.INFORMATION_MESSAGE);
+                
+            }
+
+            public void mouseEntered(MouseEvent e) {
+            card.setBackground(new Color(80, 200, 200)); // Darker blue on hover
+             }
+        
+            @Override
+            public void mouseExited(MouseEvent e) {
+                card.setBackground(new Color(102, 225, 225)); // Original color
+            }
+        });
+
+        return card;
+    }
+        
 }

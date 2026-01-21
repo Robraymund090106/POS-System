@@ -231,6 +231,46 @@ public static List<Product> getProductsByCategory(String category) {
     return products;
 }
 
+    public static boolean addProduct(Product product) {
+
+        String checkSql = "SELECT count(*) FROM Product WHERE name = ?";
+    String insertSql = "INSERT INTO Product (name, price, stock, category, imagePath) VALUES (?, ?, ?, ?, ?)";
+
+    try (Connection conn = connect()) {
+        // Validation Step
+        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+            checkStmt.setString(1, product.getName());
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("Product already exists!");
+                return false; // Reject the addition
+            }
+        }
+
+        // 2. If it doesn't exist, proceed with Insert
+        try (PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
+            pstmt.setString(1, product.getName());
+            pstmt.setDouble(2, product.getPrice());
+            pstmt.setInt(3, product.getStock());
+            pstmt.setString(4, product.getCategory());
+            pstmt.setString(5, product.getImagePath());
+
+            pstmt.executeUpdate();
+            return true;
+        }
+    } catch (SQLException e) {
+        System.err.println("Database error: " + e.getMessage());
+        return false;
+    }
+    }
+    
+
+
+
+
+
+
+
     public static boolean activateUser(String username) {
     String sql = "UPDATE User SET isActive = 1 WHERE username = ?";
     
@@ -247,5 +287,7 @@ public static List<Product> getProductsByCategory(String category) {
         return false;
     }
 }
+
+
 
 }
