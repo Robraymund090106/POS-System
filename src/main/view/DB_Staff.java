@@ -16,10 +16,13 @@ public class DB_Staff extends JFrame {
     private List<Product> products = DatabaseManager.getAllProducts();
     private List<Product> foodProducts = DatabaseManager.getProductsByCategory("Food");
     private List<Product> DrinkProducts = DatabaseManager.getProductsByCategory("Drink");
-
-   
     private List<String> OrderName = new ArrayList<>();
     private List<Double> OrderPrice = new ArrayList<>();
+    private double totalprice;
+
+    private JPanel plorJPanel;
+    private JLabel totalValueLabel;
+
 
     public DB_Staff(User user) {
         this.user = user;
@@ -54,10 +57,18 @@ public class DB_Staff extends JFrame {
   // --- PANEL 1: HEADER (Blue) ---
         JPanel header = new JPanel(null);
         header.setBackground(Color.BLUE); 
-        header.setBounds(30, 50, 999, 90);
+        header.setBounds(30, 0, 950, 90);
+        header.setOpaque(false);
 
 
         canvas.add(header);
+
+        JLabel companyName = new JLabel("Company name");
+        companyName.setFont(new Font("SansSerif", Font.BOLD, 35));
+        companyName.setForeground(new Color(255, 204, 0));
+        companyName.setBounds(20, 20, 350, 50); 
+        header.add(companyName);
+
 
         
 
@@ -70,7 +81,7 @@ public class DB_Staff extends JFrame {
         ImageIcon staffLogoIcon = new ImageIcon(scaledImg);
 
         JLabel staffLogo = new JLabel(staffLogoIcon);
-        staffLogo.setBounds(600, 20, 50, 50);
+        staffLogo.setBounds(800, 20, 50, 50);
 
         // DEBUG: This red border will show you exactly where the image SHOULD be
         staffLogo.setBorder(BorderFactory.createLineBorder(Color.RED)); 
@@ -103,9 +114,9 @@ public class DB_Staff extends JFrame {
 
     //Staff Text
         JLabel staffText = new JLabel("Staff");
-        staffText.setFont(new Font("SansSerif", Font.PLAIN, 30));
+        staffText.setFont(new Font("SansSerif", Font.BOLD, 35));
         staffText.setForeground(new Color(255, 204, 0));
-        staffText.setBounds(670, 20, 100, 50);
+        staffText.setBounds(870, 20, 100, 50);
         staffText.setCursor(new Cursor(Cursor.HAND_CURSOR));
         staffText.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -281,6 +292,8 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         JPanel MenuContainer = new JPanel(null);
         MenuContainer.setBackground(new Color(200, 0, 200)); 
         MenuContainer.setBounds(240, 240, 650, 630);
+        MenuContainer.setOpaque(false);
+
 
       
       
@@ -297,7 +310,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
         scrollPane.setBackground(Color.YELLOW);
 
-        scrollPane.setBounds(25, 100, 600, 500);
+        scrollPane.setBounds(25, 50, 600, 500);
 
         scrollPane.setBorder(null);
 
@@ -319,86 +332,162 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         // --- 5th PANEL: ORDER DETAILS (Green) ---
         JPanel orderJPanel = new JPanel(null);
         orderJPanel.setBackground(new Color(0, 255, 0, 150)); 
-        orderJPanel.setBounds(940, 2, 445, 380);
-        orderJPanel.setOpaque(false);
+        orderJPanel.setBounds(1015, 25, 480, 200);
+        //orderJPanel.setOpaque(false);
         canvas.add(orderJPanel);
 
         // clear button
-ImageIcon clearIcon = new ImageIcon("src/main/image/clear all (2).png");
-JLabel clearLabel = new JLabel(clearIcon);
+        ImageIcon clearIcon = new ImageIcon("src/main/image/clear all (2).png");
+        JLabel clearLabel = new JLabel(clearIcon);
 
-int barw = 150;
-int W = rawfoodIcon.getIconWidth();
-int H = rawfoodIcon.getIconHeight();
-int centerc = (barwidth - Width) / 2;
+        int barw = 150;
+        int W = rawfoodIcon.getIconWidth();
+        int H = rawfoodIcon.getIconHeight();
+        int centerc = (barwidth - Width) / 2;
 
-clearLabel.setBounds(100, 230, 350, Height);
-clearLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-clearLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-
-    @Override
-
-    public void mousePressed(MouseEvent e) {
-
-        JOptionPane.showMessageDialog(null, "clear pressed!", "clear all Button", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    @Override
-
-    public void mouseEntered(MouseEvent e) {
+        clearLabel.setBounds(100, 230, 350, Height);
         clearLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        clearLabel.setText("<html><u>Staff</u></html>");
 
-    }
-    @Override
+        clearLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
-    public void mouseExited(MouseEvent e) { }
-});
+            @Override
+
+            public void mousePressed(MouseEvent e) {
+
+                JOptionPane.showMessageDialog(null, "clear pressed!", "clear all Button", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            @Override
+
+            public void mouseEntered(MouseEvent e) {
+                clearLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                clearLabel.setText("<html><u>Staff</u></html>");
+
+            }
+            @Override
+
+            public void mouseExited(MouseEvent e) { }
+        });
     
 
-    // --- 6th PANEL: PLACE ORDER PANEL (Magenta/Pink) ---
-JPanel plorJPanel = new JPanel(null);
-        plorJPanel.setBackground(new Color(0, 255, 0, 150)); 
-        plorJPanel.setBounds(940, 2, 445, 380);
-        canvas.add(plorJPanel);
+    // --- 6th PANEL: PLACE ORDER PANEL (Green) ---
+        plorJPanel = new JPanel();
+        plorJPanel.setLayout(new BoxLayout(plorJPanel, BoxLayout.Y_AXIS)); 
+        plorJPanel.setBackground(Color.WHITE); 
+        plorJPanel.setOpaque(true);
 
-        // place order button
-ImageIcon poIcon = new ImageIcon("src/main/image/place order (1).png");
-JLabel powLabel = new JLabel(poIcon);
+        JScrollPane orderScroll = new JScrollPane(plorJPanel);
+        orderScroll.setBounds(1015, 220, 475, 460); 
+        orderScroll.setBorder(BorderFactory.createEmptyBorder());
+        orderScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-int bw = 150;
-int w = rawfoodIcon.getIconWidth();
-int h = rawfoodIcon.getIconHeight();
-int centere = (barwidth - Width) / 2;
+        canvas.add(orderScroll);
 
-powLabel.setBounds(100, 230, 350, Height);
-powLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+         //place order button
+       
+    // 7th PANEL: ORDER DETAILS (Green) ---
 
-clearLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+    JPanel bottomorderJPanel = new JPanel(null);
+    bottomorderJPanel.setBackground(Color.GREEN);
+    bottomorderJPanel.setBounds(1015, 680, 480, 160);
+    bottomorderJPanel.setOpaque(false);
 
-    @Override
+    JLabel totalText = new JLabel("Total:");
+    totalText.setForeground(Color.BLACK);
+    totalText.setFont(new Font("SansSerif", Font.PLAIN, 30));
+    totalText.setBounds(0, 0, 400, 50);
+    
+    totalprice = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
+    totalValueLabel = new JLabel("₱ "+ totalprice); 
+    totalValueLabel.setForeground(Color.BLACK);
+    totalValueLabel.setFont(new Font("SansSerif", Font.BOLD, 30));
+    totalValueLabel.setBounds(100, 0, 200, 50);
 
-    public void mousePressed(MouseEvent e) {
 
-        JOptionPane.showMessageDialog(null, "place order pressed!", "place all Button", JOptionPane.INFORMATION_MESSAGE);
-    }
 
-    @Override
 
-    public void mouseEntered(MouseEvent e) {
-        powLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        powLabel.setText("<html><u>Staff</u></html>");
+    ImageIcon rawPoIcon = new ImageIcon("src/main/image/poo.png");
 
-    }
-    @Override
+    // 2. Scale it to fit the panel (e.g., 400 width, 120 height)
+    Image poImg = rawPoIcon.getImage();
+    Image scaledPoImg = poImg.getScaledInstance(147, 65, Image.SCALE_SMOOTH); 
+    ImageIcon poIcon = new ImageIcon(scaledPoImg);
 
-    public void mouseExited(MouseEvent e) { }
-});
+    // 3. Create the label with the scaled icon
+    JLabel powLabel = new JLabel(poIcon);
+    powLabel.setBounds(160, 85, 147, 65); // Center it within the 480x160 panel
+    powLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
- plorJPanel.add(powLabel);
+    // 4. Correct the listener logic
+    powLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            
+            if (OrderName.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Order is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+            double totalSum = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
+        
+            StringBuilder orderDetails = new StringBuilder("Items to Finalize:\n");
+            for (int i = 0; i < OrderName.size(); i++) {
+                orderDetails.append("- ").append(OrderName.get(i)).append(" (₱").append(OrderPrice.get(i)).append(")\n");
+            }
+            orderDetails.append("\nTOTAL AMOUNT: ₱").append(String.format("%.2f", totalSum));
+
+        // 3. Create the Finalize Dialog
+            JTextField cashField = new JTextField();
+            Object[] message = {
+                orderDetails.toString(),
+                "Enter Cash Amount:", cashField
+            };
+
+            int option = JOptionPane.showConfirmDialog(null, message, "Finalize Order", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        
+            if(option == JOptionPane.OK_OPTION && !OrderName.isEmpty()) {
+                try {
+                double cash = Double.parseDouble(cashField.getText());
+                if (cash < totalSum) {
+                    JOptionPane.showMessageDialog(null, "Insufficient cash!", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    double change = cash - totalSum;
+                    JOptionPane.showMessageDialog(null, "Order Successful!\nChange: ₱" + String.format("%.2f", change), "Success", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    // --- CLEAR EVERYTHING AFTER SUCCESS ---
+                    OrderName.clear();
+                    OrderPrice.clear();
+                    plorJPanel.removeAll();
+                    plorJPanel.revalidate();
+                    plorJPanel.repaint();
+                    totalValueLabel.setText("₱ 0.00");
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Please enter a valid amount.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            }
+            } else{
+
+            }
+        }
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            powLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
+    });
+    canvas.add(bottomorderJPanel);
+    bottomorderJPanel.add(powLabel);
+    bottomorderJPanel.add(totalText);
+    bottomorderJPanel.add(totalValueLabel);
+    mainContainer.add(canvas);
+    this.add(mainContainer);
+    this.setVisible(true);
+
        
     }
+
+
+
 
 
     private JPanel createProductCard(String name, double price) {
@@ -416,22 +505,49 @@ clearLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
         card.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                OrderName.add(name);
-                OrderPrice.add(price);
-                JOptionPane.showMessageDialog(null, name + " Added to Order", "Success", JOptionPane.INFORMATION_MESSAGE);
-                
-            }
+        @Override
+        public void mousePressed(MouseEvent e) {
+            OrderName.add(name);
+            OrderPrice.add(price);
 
-            public void mouseEntered(MouseEvent e) {
-            card.setBackground(new Color(80, 200, 200)); // Darker blue on hover
-             }
+  
+            JPanel itemRow = new JPanel(new BorderLayout());
+            itemRow.setMaximumSize(new Dimension(450, 50)); 
+            itemRow.setBackground(Color.WHITE);
+            itemRow.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+
+  
+            JLabel nameLbl = new JLabel("  " + name);
+            nameLbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
+            
+            JLabel priceLbl = new JLabel("₱ " + (int)price + "  ");
+            priceLbl.setFont(new Font("SansSerif", Font.BOLD, 16));
+
+            itemRow.add(nameLbl, BorderLayout.WEST);
+            itemRow.add(priceLbl, BorderLayout.EAST);
+
+            double currentTotal = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
+            totalValueLabel.setText("₱ " + String.format("%.2f", currentTotal));
+
+
+            // 3. Add to the 6th panel (plorJPanel) and refresh UI
+            plorJPanel.add(itemRow);
+            plorJPanel.revalidate();
+            plorJPanel.repaint();
+            
+           
+           
+        }
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            card.setBackground(new Color(80, 200, 200)); 
+        }
+        @Override
+        public void mouseExited(MouseEvent e) {
+            card.setBackground(new Color(102, 225, 225)); 
+        }
+
         
-            @Override
-            public void mouseExited(MouseEvent e) {
-                card.setBackground(new Color(102, 225, 225)); // Original color
-            }
         });
 
         return card;
