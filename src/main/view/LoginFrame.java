@@ -89,7 +89,7 @@ public class LoginFrame extends JFrame {
         JButton login = new JButton("Login");
         login.setSize(150, 60);
         login.setFont(new Font("Arial", Font.BOLD, 20));
-        login.setBackground(Color.GREEN);
+        login.setBackground(new Color(255, 215, 50));
         login.setForeground(Color.WHITE);
         login.setFocusPainted(false);
 
