@@ -95,8 +95,8 @@ public class LoginFrame extends JFrame {
 
         JButton sgnup = new JButton("Sign Up");
         sgnup.setSize(150, 60);
-        sgnup.setFont(new Font("Arial", Font.BOLD, 20));
-        sgnup.setBackground(Color.GREEN);
+        sgnup.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        sgnup.setBackground(new Color(165, 215, 155));
         sgnup.setForeground(Color.WHITE);
         sgnup.setFocusPainted(false);
         backgroundPanel.add(login);
@@ -144,7 +144,7 @@ public class LoginFrame extends JFrame {
                 Main.currentUser = loggedInUser;
                 JOptionPane.showMessageDialog(null, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
-                new testframe (Main.currentUser);
+                new MainDB_STAFF (Main.currentUser);
             } else {
                 JOptionPane.showMessageDialog(null, "Wrong password", "Login Failed", JOptionPane.ERROR_MESSAGE);
                 password.setText("");
