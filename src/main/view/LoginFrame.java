@@ -144,7 +144,7 @@ public class LoginFrame extends JFrame {
                 Main.currentUser = loggedInUser;
                 JOptionPane.showMessageDialog(null, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
-                new MainDB_STAFF (Main.currentUser);
+                new  DB_Staff (Main.currentUser);
             } else {
                 JOptionPane.showMessageDialog(null, "Wrong password", "Login Failed", JOptionPane.ERROR_MESSAGE);
                 password.setText("");
