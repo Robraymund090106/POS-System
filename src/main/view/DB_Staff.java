@@ -315,6 +315,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         scrollPane.setBorder(null);
 
         scrollPane.getViewport().setBackground(Color.WHITE);
+        scrollPane.setOpaque(false);
 
 
         for (Product p : products) {
@@ -522,7 +523,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
         JLabel nameLabel = new JLabel("<html><center>" + name + "<br>₱" + price + "</center></html>", SwingConstants.CENTER);
         nameLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-        nameLabel.setForeground(Color.BLACK);
+        nameLabel.setForeground(Color.YELLOW);
         card.add(nameLabel, BorderLayout.CENTER);
 
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
