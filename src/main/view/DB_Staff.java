@@ -291,8 +291,8 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         // Fills the middle gap
         JPanel MenuContainer = new JPanel(null);
         MenuContainer.setBackground(new Color(200, 0, 200)); 
-        MenuContainer.setBounds(240, 240, 650, 630);
-        MenuContainer.setOpaque(false);
+        MenuContainer.setBounds(240, 200, 700, 630);
+        //MenuContainer.setOpaque(false);
 
 
       
@@ -310,7 +310,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
         scrollPane.setBackground(Color.YELLOW);
 
-        scrollPane.setBounds(25, 50, 600, 500);
+        scrollPane.setBounds(0, 0, 700, 630);
 
         scrollPane.setBorder(null);
 
@@ -333,8 +333,24 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         JPanel orderJPanel = new JPanel(null);
         orderJPanel.setBackground(new Color(0, 255, 0, 150)); 
         orderJPanel.setBounds(1015, 25, 480, 200);
-        //orderJPanel.setOpaque(false);
+        orderJPanel.setOpaque(false);
         canvas.add(orderJPanel);
+
+        JLabel orderDetails = new JLabel("Order Details");
+        orderDetails.setForeground(Color.BLACK);
+        orderDetails.setFont(new Font("SansSerif", Font.BOLD, 40));
+        orderDetails.setBounds(115, 10, 400, 40);
+        orderJPanel.add(orderDetails);
+
+
+        JLabel currentOrder = new JLabel("Current Order");
+        currentOrder.setForeground(Color.BLACK);
+        currentOrder.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        currentOrder.setBounds(5, 120, 400, 50);
+        orderJPanel.add(currentOrder);
+
+        
+
 
         // clear button
         ImageIcon clearIcon = new ImageIcon("src/main/image/clear all (2).png");
@@ -345,7 +361,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         int H = rawfoodIcon.getIconHeight();
         int centerc = (barwidth - Width) / 2;
 
-        clearLabel.setBounds(100, 230, 350, Height);
+        clearLabel.setBounds(50, 90, 350, Height);
         clearLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         clearLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -361,13 +377,16 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
             public void mouseEntered(MouseEvent e) {
                 clearLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                clearLabel.setText("<html><u>Staff</u></html>");
+               
 
             }
             @Override
 
             public void mouseExited(MouseEvent e) { }
         });
+
+        orderJPanel.add(clearLabel);
+
     
 
     // --- 6th PANEL: PLACE ORDER PANEL (Green) ---
@@ -380,6 +399,9 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         orderScroll.setBounds(1015, 220, 475, 460); 
         orderScroll.setBorder(BorderFactory.createEmptyBorder());
         orderScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
+
+
 
         canvas.add(orderScroll);
 
@@ -406,7 +428,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
 
 
-    ImageIcon rawPoIcon = new ImageIcon("src/main/image/poo.png");
+    ImageIcon rawPoIcon = new ImageIcon("src/main/image/place order (1).png");
 
     // 2. Scale it to fit the panel (e.g., 400 width, 120 height)
     Image poImg = rawPoIcon.getImage();
@@ -494,7 +516,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         JPanel card = new JPanel();
        
         card.setPreferredSize(new Dimension(180, 110)); // Size of the blue box
-        card.setBackground(new Color(102, 225, 225));   // Light blue color from your screenshot
+        card.setBackground(new Color(71, 69, 122));   // Light blue color from your screenshot
         card.setLayout(new BorderLayout());
         card.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150), 1));
 
@@ -540,11 +562,11 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         }
         @Override
         public void mouseEntered(MouseEvent e) {
-            card.setBackground(new Color(80, 200, 200)); 
+            card.setBackground(new Color(81, 79, 132)); 
         }
         @Override
         public void mouseExited(MouseEvent e) {
-            card.setBackground(new Color(102, 225, 225)); 
+            card.setBackground(new Color(71, 69, 122)); 
         }
 
         
