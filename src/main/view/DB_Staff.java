@@ -2,6 +2,7 @@ package main.view;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -10,7 +11,7 @@ import main.model.*;
 
 public class DB_Staff extends JFrame {
 
-    User user;
+    private User user;
 
    
     private List<Product> products = DatabaseManager.getAllProducts();
@@ -22,6 +23,9 @@ public class DB_Staff extends JFrame {
 
     private JPanel plorJPanel;
     private JLabel totalValueLabel;
+    private JPanel scrollJPanel;
+    private JScrollPane scrollPane;
+    
 
 
     public DB_Staff(User user) {
@@ -172,12 +176,27 @@ public class DB_Staff extends JFrame {
     menuiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
-        JOptionPane.showMessageDialog(null, "Menu button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(null, "Menu button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        scrollJPanel.removeAll();
+        for(Product p: products){
+            scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+        }
+        scrollJPanel.revalidate();
+        scrollJPanel.repaint();
+
+
+
     }
     
     @Override
     public void mouseEntered(MouseEvent e) {
+        menuiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        menuiconLabel.setIcon(getDimmedIcon(menuIcon));
         // Optional: Remove the .setText line if you don't want text appearing over your image
+    }
+    @Override
+    public void mouseExited(MouseEvent e) {
+        menuiconLabel.setIcon(menuIcon);
     }
 });
 
@@ -197,15 +216,24 @@ foodiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 foodiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
-        JOptionPane.showMessageDialog(null, "Food button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(null, "Food button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        scrollJPanel.removeAll();
+        for (Product p : foodProducts) {
+            scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+        }
+        scrollJPanel.revalidate();
+        scrollJPanel.repaint();
+
     }
     @Override
     public void mouseEntered(MouseEvent e) {
         foodiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        foodiconLabel.setText("<html><u>Staff</u></html>");
+        foodiconLabel.setIcon(getDimmedIcon(rawfoodIcon));
     }
     @Override
-    public void mouseExited(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) {
+        foodiconLabel.setIcon(rawfoodIcon);
+     }
 });
 
 // DRINK
@@ -221,15 +249,23 @@ drinkiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 drinkiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
-        JOptionPane.showMessageDialog(null, "Drink button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(null, "Drink button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        scrollJPanel.removeAll();
+        for (Product p : DrinkProducts) {
+            scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+        }
+        scrollJPanel.revalidate();
+        scrollJPanel.repaint();
     }
     @Override
     public void mouseEntered(MouseEvent e) {
         drinkiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        drinkiconLabel.setText("<html><u>Staff</u></html>");
+        drinkiconLabel.setIcon(getDimmedIcon(rawdrinkIcon));
     }
     @Override
-    public void mouseExited(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) { 
+        drinkiconLabel.setIcon(rawdrinkIcon);
+    }
 });
 
 // MEAL ICON 
@@ -245,15 +281,23 @@ mealiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 mealiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
-        JOptionPane.showMessageDialog(null, "Meal button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(null, "Meal button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        scrollJPanel.removeAll();
+        for (Product p : foodProducts) {
+            scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+        }
+        scrollJPanel.revalidate();
+        scrollJPanel.repaint();
     }
     @Override
     public void mouseEntered(MouseEvent e) {
         mealiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        mealiconLabel.setText("<html><u>Staff</u></html>");
+        mealiconLabel.setIcon(getDimmedIcon(rawMealIcon));
     }
     @Override
-    public void mouseExited(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) {
+        mealiconLabel.setIcon(rawMealIcon);
+     }
 });
 
 //SALES ICON 
@@ -269,15 +313,19 @@ salesiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
-        JOptionPane.showMessageDialog(null, "Sales button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(null, "Sales button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
+        new salesFrame();
+        dispose();
     }
     @Override
     public void mouseEntered(MouseEvent e) {
         salesiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        salesiconLabel.setText("<html><u>Staff</u></html>");
+        salesiconLabel.setIcon(getDimmedIcon(rawSalesIcon));
     }
     @Override
-    public void mouseExited(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) {
+        salesiconLabel.setIcon(rawSalesIcon);
+     }
 });
 
         sidebar.add(menuiconLabel);
@@ -286,13 +334,44 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         sidebar.add(mealiconLabel);
         sidebar.add(salesiconLabel);
 
+        JPanel textPanel = new JPanel(new BorderLayout());
+        textPanel.setBounds(330, 145, 550, 40);
+        textPanel.setBackground(Color.ORANGE);
+        textPanel.setOpaque(false);
+
+        JTextField searchField = new JTextField(30);
+        searchField.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        searchField.setBounds(0, 0, 540, 30);
+        searchField.setToolTipText("Search products...");
+        searchField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        searchField.setOpaque(false);
+        searchField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String query = searchField.getText().toLowerCase();
+                scrollJPanel.removeAll();
+                for (Product p : products) {
+                    if (p.getName().toLowerCase().contains(query)) {
+                        scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+                    }
+                }
+                scrollJPanel.revalidate();
+                scrollJPanel.repaint();
+            }
+        });
+        textPanel.add(searchField);
+
+        //textPanel.setOpaque(false);
+        add(textPanel);
+
+
 
         // --- PANEL 2: MENU CONTAINER (Magenta) ---
         // Fills the middle gap
         JPanel MenuContainer = new JPanel(null);
         MenuContainer.setBackground(new Color(200, 0, 200)); 
         MenuContainer.setBounds(240, 200, 700, 630);
-        //MenuContainer.setOpaque(false);
+        MenuContainer.setOpaque(false);
 
 
       
@@ -301,12 +380,12 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
         // Centered inside Magenta
 
-        JPanel scrollJPanel = new JPanel(new BorderLayout());
+        scrollJPanel = new JPanel(new BorderLayout());
 
         scrollJPanel.setLayout(new GridLayout(0, 3, 20, 20));
 
 
-        JScrollPane scrollPane = new JScrollPane(scrollJPanel);
+        scrollPane = new JScrollPane(scrollJPanel);
 
         scrollPane.setBackground(Color.YELLOW);
 
@@ -371,19 +450,36 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
             public void mousePressed(MouseEvent e) {
 
-                JOptionPane.showMessageDialog(null, "clear pressed!", "clear all Button", JOptionPane.INFORMATION_MESSAGE);
+                int option =JOptionPane.showConfirmDialog(null, "Are you sure you want to clear all items?", "Confirm Clear All", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                if (option == JOptionPane.YES_OPTION) {
+                    JOptionPane.showMessageDialog(null, "Items deleted!", "clear all Button", JOptionPane.INFORMATION_MESSAGE);
+                    OrderName.clear();
+                    OrderPrice.clear();
+                    plorJPanel.removeAll();
+                    plorJPanel.revalidate();
+                    plorJPanel.repaint();
+                    totalValueLabel.setText("₱ 0.00");
+                    totalprice = 0.0;
+
+                }
+
+               
             }
 
             @Override
 
             public void mouseEntered(MouseEvent e) {
                 clearLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                clearLabel.setIcon(getDimmedIcon(clearIcon));
                
 
             }
             @Override
 
-            public void mouseExited(MouseEvent e) { }
+            public void mouseExited(MouseEvent e) { 
+                clearLabel.setIcon(clearIcon);
+            }
         });
 
         orderJPanel.add(clearLabel);
@@ -483,6 +579,9 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
                     plorJPanel.revalidate();
                     plorJPanel.repaint();
                     totalValueLabel.setText("₱ 0.00");
+
+                    new ReceiptFrame(user);
+                    dispose();
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Please enter a valid amount.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -521,7 +620,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         card.setLayout(new BorderLayout());
         card.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150), 1));
 
-        JLabel nameLabel = new JLabel("<html><center>" + name + "<br>₱" + price + "</center></html>", SwingConstants.CENTER);
+        JLabel nameLabel = new JLabel("<html><center>" + name +  "<br>₱" + price + "</center></html>", SwingConstants.CENTER);
         nameLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
         nameLabel.setForeground(Color.YELLOW);
         card.add(nameLabel, BorderLayout.CENTER);
@@ -540,14 +639,45 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             itemRow.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 
   
-            JLabel nameLbl = new JLabel("  " + name);
+            JLabel nameLbl = new JLabel("  " + name + "  ");
             nameLbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
             
             JLabel priceLbl = new JLabel("₱ " + (int)price + "  ");
             priceLbl.setFont(new Font("SansSerif", Font.BOLD, 16));
 
+            JButton removeBtn = new JButton("X");
+            removeBtn.setFont(new Font("SansSerif", Font.BOLD, 12));
+            removeBtn.setForeground(Color.RED);
+            removeBtn.setBorderPainted(false);
+            removeBtn.setContentAreaFilled(false);
+            removeBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            removeBtn.addMouseListener(new MouseAdapter() {
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    int index = plorJPanel.getComponentZOrder(itemRow);
+                    if (index >= 0 && index < OrderName.size()) {
+                        OrderName.remove(index);
+                        OrderPrice.remove(index);
+                        plorJPanel.remove(itemRow);
+                        plorJPanel.revalidate();
+                        plorJPanel.repaint();
+
+                        double currentTotal = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
+                        totalValueLabel.setText("₱ " + String.format("%.2f", currentTotal));
+                    }
+                }
+            });
+
+            
+            
+
+
             itemRow.add(nameLbl, BorderLayout.WEST);
-            itemRow.add(priceLbl, BorderLayout.EAST);
+            itemRow.add(priceLbl, BorderLayout.CENTER);
+            itemRow.add(removeBtn, BorderLayout.EAST);
+
+            
 
             double currentTotal = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
             totalValueLabel.setText("₱ " + String.format("%.2f", currentTotal));
@@ -575,6 +705,19 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
         return card;
     }
+
+    private ImageIcon getDimmedIcon(ImageIcon icon) {
+    Image img = icon.getImage();
+    BufferedImage buffered = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g2d = buffered.createGraphics();
+    
+    // Set opacity to 50%
+    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+    g2d.drawImage(img, 0, 0, null);
+    g2d.dispose();
+    
+    return new ImageIcon(buffered);
+}
         public static void main(String[] args) {
             User testUser = new User("rob", "hi", "raymundo", "Male", null, null, "staff", true, 00, 19);
             new DB_Staff(testUser);

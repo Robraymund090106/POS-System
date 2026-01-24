@@ -12,8 +12,6 @@ public class Main {
         
     
         DatabaseManager.initializeDatabase();
-
-
         new LoginFrame();
 
     }
