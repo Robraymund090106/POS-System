@@ -130,6 +130,7 @@ public class testframe extends JFrame{
 
         //LOOOOPPPPPPPPPPPPTOPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
 
+        //OOOOOOOOOOOOREEEEEEEEEEOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 
         JPanel sidebar = new JPanel(null);
         sidebar.setBackground(Color.CYAN);
