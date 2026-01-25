@@ -6,6 +6,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "main.Main",
+            "projectName": "POS-System_69118933"
+        },
+        {
+            "type": "java",
+            "name": "MainDB_Admin",
+            "request": "launch",
+            "mainClass": "main.view.MainDB_Admin",
+            "projectName": "POS-System_69118933"
+        },
+        {
+            "type": "java",
+            "name": "DBSales_Admin",
+            "request": "launch",
+            "mainClass": "main.view.DBSales_Admin",
+            "projectName": "POS-System_69118933"
+        },
+        {
+            "type": "java",
+            "name": "DB_Staff",
+            "request": "launch",
+            "mainClass": "main.view.DB_Staff",
+            "projectName": "POS-System_69118933"
+        },
+        {
+            "type": "java",
             "name": "testframe",
             "request": "launch",
             "mainClass": "main.view.testframe",

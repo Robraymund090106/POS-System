@@ -4,5 +4,6 @@
         "c:\\Users\\Rob Raymundo\\Downloads\\sqlite-jdbc-3.51.1.0.jar",
         "c:\\Users\\karin\\Downloads\\sqlite-jdbc-3.51.1.0.jar",
         "c:\\Users\\Ryan Que\\Downloads\\sqlite-jdbc-3.51.1.0.jar"
-    ]
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
 }
