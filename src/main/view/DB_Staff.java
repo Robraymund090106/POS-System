@@ -60,8 +60,8 @@ public class DB_Staff extends JFrame {
 
   // --- PANEL 1: HEADER (Blue) ---
         JPanel header = new JPanel(null);
-        header.setBackground(Color.BLUE); 
-        header.setBounds(30, 0, 950, 90);
+        header.setBackground(Color.MAGENTA); 
+        header.setBounds(30, 30, 950, 90);
         header.setOpaque(false);
 
 
@@ -74,53 +74,54 @@ public class DB_Staff extends JFrame {
         header.add(companyName);
 
 
+      // staff logo (image)
+ImageIcon rawIcon = new ImageIcon("src/main/image/stafflogo.png"); 
+
+Image img = rawIcon.getImage();
+Image scaledImg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+ImageIcon staffLogoIcon = new ImageIcon(scaledImg);
+
+
+JLabel staffLogo = new JLabel("", staffLogoIcon, JLabel.LEFT);
+
+
+staffLogo.setBounds(743, 30, 180, 50); 
+
+
+staffLogo.setHorizontalTextPosition(JLabel.RIGHT); 
+staffLogo.setIconTextGap(12); 
+staffLogo.setForeground(new Color(255, 204, 0)); 
+staffLogo.setFont(new Font("SansSerif", Font.BOLD, 22));
+staffLogo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+staffLogo.addMouseListener(new java.awt.event.MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
         
+        UserDetailFrame userDetailFrame = new UserDetailFrame(user);
+        userDetailFrame.setVisible(true);  
+    }
 
-        //Staff Logo (The Image)
-        ImageIcon rawIcon = new ImageIcon("src/main/image/stafflogo.png"); 
-
-        Image img = rawIcon.getImage();
-        Image scaledImg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+    @Override
+    public void mouseEntered(MouseEvent e) {
         
-        ImageIcon staffLogoIcon = new ImageIcon(scaledImg);
+        staffLogo.setForeground(new Color(255, 255, 150)); 
+    }
 
-        JLabel staffLogo = new JLabel(staffLogoIcon);
-        staffLogo.setBounds(800, 20, 50, 50);
+    @Override
+    public void mouseExited(MouseEvent e) {
+        
+        staffLogo.setForeground(new Color(255, 204, 0));
+    }
+});
 
-        // DEBUG: This red border will show you exactly where the image SHOULD be
-        staffLogo.setBorder(BorderFactory.createLineBorder(Color.RED)); 
-        staffLogo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        staffLogo.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-            UserDetailFrame userDetailFrame = new UserDetailFrame(user);
-            userDetailFrame.setVisible(true);  
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            
-                staffLogo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            
-                staffLogo.setText("<html><u>Staff</u></html>");
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            
-                staffLogo.setText("Staff");
-            }
-        });
-
-    
-
-        header.add(staffLogo);
+header.add(staffLogo);
 
     //Staff Text
-        JLabel staffText = new JLabel("Staff");
-        staffText.setFont(new Font("SansSerif", Font.BOLD, 35));
+        JLabel staffText = new JLabel("STAFF");
+        staffText.setFont(new Font("SansSerif", Font.BOLD, 26));
         staffText.setForeground(new Color(255, 204, 0));
-        staffText.setBounds(870, 20, 100, 50);
+        staffText.setBounds(810, 30, 400, 50);
         staffText.setCursor(new Cursor(Cursor.HAND_CURSOR));
         staffText.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -314,7 +315,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
         //JOptionPane.showMessageDialog(null, "Sales button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
-        new salesFrame();
+        new sales_staffFrame();
         dispose();
     }
     @Override
@@ -334,43 +335,89 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         sidebar.add(mealiconLabel);
         sidebar.add(salesiconLabel);
 
-        JPanel textPanel = new JPanel(new BorderLayout());
-        textPanel.setBounds(330, 145, 550, 40);
-        textPanel.setBackground(Color.ORANGE);
-        textPanel.setOpaque(false);
 
-        JTextField searchField = new JTextField(30);
-        searchField.setFont(new Font("SansSerif", Font.PLAIN, 20));
-        searchField.setBounds(0, 0, 540, 30);
-        searchField.setToolTipText("Search products...");
-        searchField.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        searchField.setOpaque(false);
-        searchField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String query = searchField.getText().toLowerCase();
-                scrollJPanel.removeAll();
-                for (Product p : products) {
-                    if (p.getName().toLowerCase().contains(query)) {
-                        scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
-                    }
-                }
-                scrollJPanel.revalidate();
-                scrollJPanel.repaint();
+     
+        //  PANEL ?? BSTA SEARCH BAR PANEL XD
+JPanel textPanel = new JPanel(new BorderLayout());
+textPanel.setBounds(275, 162, 550, 40); 
+textPanel.setBackground(Color.ORANGE);
+textPanel.setOpaque(false);
+
+
+JTextField searchField = new JTextField() {
+    @Override
+    protected void paintComponent(Graphics g) {
+        if (!isOpaque()) {
+            g.setColor(new Color(0, 0, 0, 0));
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
+        super.paintComponent(g);
+        if (getText().length() == 0) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(new Color(130, 130, 130)); 
+            g2.setFont(new Font("SansSerif", Font.ITALIC, 25));
+            FontMetrics fm = g2.getFontMetrics();
+            int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
+            g2.drawString("Search here", 45, y); 
+            g2.dispose();
+        }
+    }
+};
+
+
+searchField.setOpaque(false);
+searchField.setBorder(new javax.swing.border.EmptyBorder(0, 45, 0, 10)); 
+searchField.setForeground(Color.BLACK);
+searchField.setFont(new Font("SansSerif", Font.PLAIN, 20));
+searchField.setFocusable(false); 
+searchField.setCaretColor(new Color(0, 0, 0, 0)); 
+searchField.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mousePressed(MouseEvent e) {
+        searchField.setFocusable(true);
+        searchField.requestFocusInWindow();
+        searchField.setCaretColor(Color.BLACK); 
+        searchField.getCaret().setBlinkRate(500); 
+    }
+});
+
+
+searchField.addFocusListener(new FocusAdapter() {
+    @Override
+    public void focusLost(FocusEvent e) {
+        if (searchField.getText().isEmpty()) {
+            searchField.setCaretColor(new Color(0, 0, 0, 0)); // Hide caret again
+            searchField.setFocusable(false);
+        }
+    }
+});
+
+
+searchField.addKeyListener(new KeyAdapter() {
+    @Override
+    public void keyReleased(KeyEvent e) {
+        String query = searchField.getText().toLowerCase();
+        scrollJPanel.removeAll();
+        for (Product p : products) {
+            if (p.getName().toLowerCase().contains(query)) {
+                scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
             }
-        });
-        textPanel.add(searchField);
+        }
+        scrollJPanel.revalidate();
+        scrollJPanel.repaint();
+    }
+});
 
-        //textPanel.setOpaque(false);
-        add(textPanel);
-
+   textPanel.add(searchField, BorderLayout.CENTER);
+   add(textPanel); 
 
 
         // --- PANEL 2: MENU CONTAINER (Magenta) ---
         // Fills the middle gap
         JPanel MenuContainer = new JPanel(null);
         MenuContainer.setBackground(new Color(200, 0, 200)); 
-        MenuContainer.setBounds(240, 200, 700, 630);
+        MenuContainer.setBounds(209, 239, 900, 700);
         MenuContainer.setOpaque(false);
 
 
@@ -380,19 +427,15 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
         // Centered inside Magenta
 
-        scrollJPanel = new JPanel(new BorderLayout());
+     scrollJPanel = new JPanel(new BorderLayout());
 
         scrollJPanel.setLayout(new GridLayout(0, 3, 20, 20));
-
-
         scrollPane = new JScrollPane(scrollJPanel);
 
         scrollPane.setBackground(Color.YELLOW);
-
         scrollPane.setBounds(0, 0, 700, 630);
-
         scrollPane.setBorder(null);
-
+        
         scrollPane.getViewport().setBackground(Color.WHITE);
         scrollPane.setOpaque(false);
 
@@ -409,24 +452,24 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
 
 
-        // --- 5th PANEL: ORDER DETAILS (Green) ---
+        // --- 5th PANEL: ORDER DETAILS 
         JPanel orderJPanel = new JPanel(null);
         orderJPanel.setBackground(new Color(0, 255, 0, 150)); 
-        orderJPanel.setBounds(1015, 25, 480, 200);
+        orderJPanel.setBounds(940, 25, 480, 200);
         orderJPanel.setOpaque(false);
         canvas.add(orderJPanel);
 
         JLabel orderDetails = new JLabel("Order Details");
         orderDetails.setForeground(Color.BLACK);
         orderDetails.setFont(new Font("SansSerif", Font.BOLD, 40));
-        orderDetails.setBounds(115, 10, 400, 40);
+        orderDetails.setBounds(110, 29, 400, 40);
         orderJPanel.add(orderDetails);
 
 
-        JLabel currentOrder = new JLabel("Current Order");
+        JLabel currentOrder = new JLabel("Current Order:");
         currentOrder.setForeground(Color.BLACK);
-        currentOrder.setFont(new Font("SansSerif", Font.PLAIN, 20));
-        currentOrder.setBounds(5, 120, 400, 50);
+        currentOrder.setFont(new Font("SansSerif", Font.PLAIN, 26));
+        currentOrder.setBounds(50, 150, 500, 50);
         orderJPanel.add(currentOrder);
 
         
@@ -441,7 +484,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         int H = rawfoodIcon.getIconHeight();
         int centerc = (barwidth - Width) / 2;
 
-        clearLabel.setBounds(50, 90, 350, Height);
+        clearLabel.setBounds(140, 120, 350, Height);
         clearLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         clearLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -489,11 +532,12 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     // --- 6th PANEL: PLACE ORDER PANEL (Green) ---
         plorJPanel = new JPanel();
         plorJPanel.setLayout(new BoxLayout(plorJPanel, BoxLayout.Y_AXIS)); 
-        plorJPanel.setBackground(Color.WHITE); 
+        plorJPanel.setBackground(Color.WHITE);
         plorJPanel.setOpaque(true);
 
+
         JScrollPane orderScroll = new JScrollPane(plorJPanel);
-        orderScroll.setBounds(1015, 220, 475, 460); 
+        orderScroll.setBounds(962, 250, 430, 480); 
         orderScroll.setBorder(BorderFactory.createEmptyBorder());
         orderScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         
@@ -508,34 +552,41 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
     JPanel bottomorderJPanel = new JPanel(null);
     bottomorderJPanel.setBackground(Color.GREEN);
-    bottomorderJPanel.setBounds(1015, 680, 480, 160);
+    bottomorderJPanel.setBounds(940, 745, 480, 160);
     bottomorderJPanel.setOpaque(false);
 
-    JLabel totalText = new JLabel("Total:");
+    JLabel totalText = new JLabel("Total: ");
     totalText.setForeground(Color.BLACK);
     totalText.setFont(new Font("SansSerif", Font.PLAIN, 30));
-    totalText.setBounds(0, 0, 400, 50);
+    totalText.setBounds(30, 20, 400, 50);
     
     totalprice = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
     totalValueLabel = new JLabel("₱ "+ totalprice); 
     totalValueLabel.setForeground(Color.BLACK);
     totalValueLabel.setFont(new Font("SansSerif", Font.BOLD, 30));
-    totalValueLabel.setBounds(100, 0, 200, 50);
+    totalValueLabel.setBounds(120, 20, 200, 50);
 
 
 
 
-    ImageIcon rawPoIcon = new ImageIcon("src/main/image/place order (1).png");
+   ImageIcon rawPoIcon = new ImageIcon("src/main/image/PlaceOrder (1).png");
+
+
 
     // 2. Scale it to fit the panel (e.g., 400 width, 120 height)
+
     Image poImg = rawPoIcon.getImage();
-    Image scaledPoImg = poImg.getScaledInstance(147, 65, Image.SCALE_SMOOTH); 
+
+    Image scaledPoImg = poImg.getScaledInstance(147, 65, Image.SCALE_SMOOTH);
+
     ImageIcon poIcon = new ImageIcon(scaledPoImg);
 
-    // 3. Create the label with the scaled icon
+
     JLabel powLabel = new JLabel(poIcon);
+
     powLabel.setBounds(160, 85, 147, 65); // Center it within the 480x160 panel
-    powLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+    powLabel.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 
     // 4. Correct the listener logic
     powLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -607,10 +658,6 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
 
        
     }
-
-
-
-
 
     private JPanel createProductCard(String name, double price) {
         JPanel card = new JPanel();
@@ -722,4 +769,4 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             User testUser = new User("rob", "hi", "raymundo", "Male", null, null, "staff", true, 00, 19);
             new DB_Staff(testUser);
         }
-    }
+    } 

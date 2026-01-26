@@ -25,6 +25,10 @@ public class User {
         this.age = age;
     }
 
+    public User() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     // Getters and Setters
     public String getUsername() {
         return username;
