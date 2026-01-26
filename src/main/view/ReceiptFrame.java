@@ -1,16 +1,11 @@
 package main.view;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;      
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.*;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.BorderFactory;   
 import javax.swing.ImageIcon;
 import javax.swing.JButton;        
@@ -21,15 +16,30 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingUtilities;
 import main.model.User;
+import java.util.List;
+
 
 
 public class ReceiptFrame extends JFrame {
     User user;
     JPanel canvas; 
+    private double totalprice;
+    private double cashgiven;
+    private double change;
+    private String paymentmethod;
+    private List<String> orderItems;
+    private List<Double> orderPrices;
 
-    public ReceiptFrame(User user) {
+
+    public ReceiptFrame(User user, double totalprice, double cashgiven, double change, String paymentmethod, List<String> orderItems, List<Double> orderPrices) {
 
         this.user = user;
+        this.totalprice = totalprice;
+        this.cashgiven = cashgiven;
+        this.change = change;
+        this.paymentmethod = paymentmethod;
+        this.orderItems = orderItems;
+        this.orderPrices = orderPrices;
         setTitle("Receipt");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -307,8 +317,16 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             User testUser = new User("Name", "User", "ID", "Addr", "Phone", "Mail", "Role", true, 0, 0); 
-            ReceiptFrame frame = new ReceiptFrame(testUser);
-            frame.setVisible(true);
+            List<String> testItems = new ArrayList<>();
+            List<Double> testPrices = new ArrayList<>();
+            testItems.add("Item 1");
+            testPrices.add(100.0);
+
+            testItems.add("Item 2");
+            testPrices.add(150.0);
+
+            ReceiptFrame frame = new ReceiptFrame(testUser, 100.0, 150.0, 50.0, "Cash", testItems, testPrices);
+
         });
     }
 }

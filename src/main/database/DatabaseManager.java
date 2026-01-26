@@ -71,6 +71,33 @@ public class DatabaseManager {
             stmt.execute(addSample);
 
             stmt.execute("DELETE FROM Product WHERE productId NOT IN (SELECT MIN(productId) FROM Product GROUP BY name)");
+
+            String salesTable = "CREATE TABLE IF NOT EXISTS Sales (" +
+                                "saleId INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                "userId INTEGER, " +
+                                "totalPrice REAL, " +
+                                "cashGiven REAL, " +
+                                "change REAL, " +
+                                "paymentMethod TEXT, " +
+                                "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)";
+
+            stmt.execute(salesTable);
+
+            //String addSalesSample = "INSERT OR IGNORE INTO Sales (userId, totalPrice, cashGiven, change, paymentMethod) " +
+                                   //"VALUES (1, 235.00, 300.00, 65.00, 'Cash')";
+//stmt.execute(addSalesSample);
+
+            String saleItemsTable = "CREATE TABLE IF NOT EXISTS SaleItems (" +
+                                    "itemId INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                    "saleId INTEGER, " +
+                                    "productId INTEGER, " +
+                                    "quantity INTEGER, " +
+                                    "price REAL, " +
+                                    "FOREIGN KEY(saleId) REFERENCES Sales(saleId), " +
+                                    "FOREIGN KEY(productId) REFERENCES Product(productId))";
+            stmt.execute(saleItemsTable);
+
+
             
             System.out.println("Database checked/created successfully.");
         }
@@ -307,6 +334,47 @@ public static List<Product> getProductsByCategory(String category) {
     }
 }
 
+public static boolean recordSale(int userId, double total, double cash, double change, List<String> itemNames, List<Double> itemPrices) {
+    String saleSql = "INSERT INTO Sales (userId, totalPrice, cashGiven, change, paymentMethod) VALUES (?, ?, ?, ?, 'Cash')";
+    String itemSql = "INSERT INTO SaleItems (saleId, productId, quantity, price) VALUES (?, (SELECT productId FROM Product WHERE name = ?), ?, ?)";
 
+    try (Connection conn = connect()) {
+        conn.setAutoCommit(false); // Start transaction
+
+        try (PreparedStatement salePstmt = conn.prepareStatement(saleSql, Statement.RETURN_GENERATED_KEYS)) {
+            salePstmt.setInt(1, userId);
+            salePstmt.setDouble(2, total);
+            salePstmt.setDouble(3, cash);
+            salePstmt.setDouble(4, change);
+            salePstmt.executeUpdate();
+
+            // Get the saleId that was just created
+            ResultSet rs = salePstmt.getGeneratedKeys();
+            if (rs.next()) {
+                int saleId = rs.getInt(1);
+
+                try (PreparedStatement itemPstmt = conn.prepareStatement(itemSql)) {
+                    for (int i = 0; i < itemNames.size(); i++) {
+                        itemPstmt.setInt(1, saleId);
+                        itemPstmt.setString(2, itemNames.get(i));
+                        itemPstmt.setInt(3, 1); // Quantity is 1 per list entry
+                        itemPstmt.setDouble(4, itemPrices.get(i));
+                        itemPstmt.addBatch();
+                    }
+                    itemPstmt.executeBatch();
+                }
+            }
+            conn.commit(); // Save everything
+            return true;
+        } catch (SQLException e) {
+            conn.rollback(); // Undo if error occurs
+            System.err.println("Transaction Rollback: " + e.getMessage());
+            return false;
+        }
+    } catch (SQLException e) {
+        System.err.println("Database Connection Error: " + e.getMessage());
+        return false;
+    }
+}
 
 }

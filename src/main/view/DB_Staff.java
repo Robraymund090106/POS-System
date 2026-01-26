@@ -635,7 +635,8 @@ searchField.addKeyListener(new KeyAdapter() {
                     plorJPanel.repaint();
                     totalValueLabel.setText("₱ 0.00");
 
-                    new ReceiptFrame(user);
+                    
+                    new ReceiptFrame(user, totalSum, cash, change, "Cash",  OrderName,  OrderPrice);
                     dispose();
                 }
             } catch (NumberFormatException ex) {
