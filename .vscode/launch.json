@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ReceiptFrame",
+            "request": "launch",
+            "mainClass": "main.view.ReceiptFrame",
+            "projectName": "POS system_6d0aafbc"
+        },
+        {
+            "type": "java",
+            "name": "MainDB_Admin",
+            "request": "launch",
+            "mainClass": "main.view.MainDB_Admin",
+            "projectName": "POS system_6d0aafbc"
+        },
+        {
+            "type": "java",
             "name": "MainDB_Admin",
             "request": "launch",
             "mainClass": "main.view.MainDB_Admin",

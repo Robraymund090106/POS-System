@@ -180,7 +180,7 @@ header.add(staffLogo);
         //JOptionPane.showMessageDialog(null, "Menu button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
         scrollJPanel.removeAll();
         for(Product p: products){
-            scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+            scrollJPanel.add(createProductCard(p));
         }
         scrollJPanel.revalidate();
         scrollJPanel.repaint();
@@ -220,7 +220,7 @@ foodiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         //JOptionPane.showMessageDialog(null, "Food button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
         scrollJPanel.removeAll();
         for (Product p : foodProducts) {
-            scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+            scrollJPanel.add(createProductCard(p));
         }
         scrollJPanel.revalidate();
         scrollJPanel.repaint();
@@ -253,7 +253,7 @@ drinkiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         //JOptionPane.showMessageDialog(null, "Drink button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
         scrollJPanel.removeAll();
         for (Product p : DrinkProducts) {
-            scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+            scrollJPanel.add(createProductCard(p));
         }
         scrollJPanel.revalidate();
         scrollJPanel.repaint();
@@ -285,7 +285,7 @@ mealiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
         //JOptionPane.showMessageDialog(null, "Meal button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
         scrollJPanel.removeAll();
         for (Product p : foodProducts) {
-            scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+            scrollJPanel.add(createProductCard(p));
         }
         scrollJPanel.revalidate();
         scrollJPanel.repaint();
@@ -401,7 +401,7 @@ searchField.addKeyListener(new KeyAdapter() {
         scrollJPanel.removeAll();
         for (Product p : products) {
             if (p.getName().toLowerCase().contains(query)) {
-                scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+                scrollJPanel.add(createProductCard(p));
             }
         }
         scrollJPanel.revalidate();
@@ -443,7 +443,7 @@ searchField.addKeyListener(new KeyAdapter() {
         for (Product p : products) {
 
 
-            scrollJPanel.add(createProductCard(p.getName(), p.getPrice()));
+            scrollJPanel.add(createProductCard(p));
 
         }
 
@@ -620,6 +620,10 @@ searchField.addKeyListener(new KeyAdapter() {
                 if (cash < totalSum) {
                     JOptionPane.showMessageDialog(null, "Insufficient cash!", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
+                    for (String itemName : OrderName) {
+                        // Decrement stock by 1 for every instance in the list
+                        DatabaseManager.updateProductStock(itemName, 1);
+                    }
                     double change = cash - totalSum;
                     JOptionPane.showMessageDialog(null, "Order Successful!\nChange: ₱" + String.format("%.2f", change), "Success", JOptionPane.INFORMATION_MESSAGE);
                     
@@ -659,27 +663,62 @@ searchField.addKeyListener(new KeyAdapter() {
        
     }
 
-    private JPanel createProductCard(String name, double price) {
+    private JPanel createProductCard(Product product) {
+        String name = product.getName();
+        double price = product.getPrice();
+        int stock = product.getStock();
         JPanel card = new JPanel();
        
         card.setPreferredSize(new Dimension(180, 110)); // Size of the blue box
-        card.setBackground(new Color(71, 69, 122));   // Light blue color from your screenshot
+        if(stock <=0){
+            card.setBackground(Color.GRAY);
+            JLabel soldOut = new JLabel("OUT OF STOCK", SwingConstants.CENTER);
+            soldOut.setForeground(Color.RED);
+            soldOut.setFont(new Font("SansSerif", Font.BOLD, 12));
+            card.add(soldOut, BorderLayout.NORTH);   
+        } else{
+            card.setBackground(new Color(71, 69, 122)); 
+            
+            
+        }  // Light blue color from your screenshot
         card.setLayout(new BorderLayout());
         card.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150), 1));
 
         JLabel nameLabel = new JLabel("<html><center>" + name +  "<br>₱" + price + "</center></html>", SwingConstants.CENTER);
         nameLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
-        nameLabel.setForeground(Color.YELLOW);
+        if(stock <=0){nameLabel.setForeground(Color.DARK_GRAY);
+        } else {nameLabel.setForeground(Color.YELLOW);}
+ 
         card.add(nameLabel, BorderLayout.CENTER);
+        
 
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
         card.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
+            if(stock <=0){
+                JOptionPane.showMessageDialog(null, "Out of stock!", "Error", JOptionPane.ERROR_MESSAGE);
+                OrderName.remove(OrderName.size() - 1);
+                OrderPrice.remove(OrderPrice.size() - 1);
+                return;
+            } 
+
+            long countInOrder = OrderName.stream()
+                                     .filter(item -> item.equals(name))
+                                     .count();
+                                     
+
+        // 2. Check if adding one more exceeds the database stock
+        if (countInOrder >= stock) {
+            JOptionPane.showMessageDialog(null, 
+                "Cannot add more! Only " + stock + " items available in stock.", 
+                "Stock Limit Reached", 
+                JOptionPane.WARNING_MESSAGE);
+            return; // Stop here; don't add to OrderName
+        }
             OrderName.add(name);
             OrderPrice.add(price);
-
-  
+ 
             JPanel itemRow = new JPanel(new BorderLayout());
             itemRow.setMaximumSize(new Dimension(450, 50)); 
             itemRow.setBackground(Color.WHITE);
@@ -740,10 +779,16 @@ searchField.addKeyListener(new KeyAdapter() {
         }
         @Override
         public void mouseEntered(MouseEvent e) {
+            if(stock <=0){
+                return;
+            }
             card.setBackground(new Color(81, 79, 132)); 
         }
         @Override
         public void mouseExited(MouseEvent e) {
+            if(stock <=0){
+                return;
+            }
             card.setBackground(new Color(71, 69, 122)); 
         }
 
@@ -754,6 +799,7 @@ searchField.addKeyListener(new KeyAdapter() {
     }
 
     private ImageIcon getDimmedIcon(ImageIcon icon) {
+
     Image img = icon.getImage();
     BufferedImage buffered = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
     Graphics2D g2d = buffered.createGraphics();

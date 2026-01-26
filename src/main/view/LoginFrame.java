@@ -142,9 +142,16 @@ public class LoginFrame extends JFrame {
                     return; 
                 }
                 Main.currentUser = loggedInUser;
-                JOptionPane.showMessageDialog(null, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-                new  DB_Staff (Main.currentUser);
+
+                if (loggedInUser.isAdmin()) {
+                    JOptionPane.showMessageDialog(null, "Admin Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                    new MainDB_Admin(Main.currentUser);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Staff Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                    new DB_Staff(Main.currentUser);
+                } 
             } else {
                 JOptionPane.showMessageDialog(null, "Wrong password", "Login Failed", JOptionPane.ERROR_MESSAGE);
                 password.setText("");

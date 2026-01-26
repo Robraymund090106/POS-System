@@ -205,6 +205,25 @@ public class DatabaseManager {
     return products;
 }
 
+public static boolean updateProductStock(String productName, int quantitySold) {
+    // This SQL subtracts the sold amount from the current stock
+    String sql = "UPDATE Product SET stock = stock - ? WHERE name = ?";
+
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setInt(1, quantitySold);
+        pstmt.setString(2, productName);
+
+        int rowsAffected = pstmt.executeUpdate();
+        return rowsAffected > 0;
+
+    } catch (SQLException e) {
+        System.err.println("Error updating stock: " + e.getMessage());
+        return false;
+    }
+}
+
 public static List<Product> getProductsByCategory(String category) {
     List<Product> products = new ArrayList<>();
     String sql = "SELECT * FROM Product WHERE category = ?";
@@ -265,7 +284,7 @@ public static List<Product> getProductsByCategory(String category) {
     }
     
 
-
+ 
 
 
 

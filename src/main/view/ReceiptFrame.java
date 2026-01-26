@@ -28,12 +28,14 @@ public class ReceiptFrame extends JFrame {
     JPanel canvas; 
 
     public ReceiptFrame(User user) {
+
         this.user = user;
         setTitle("Receipt");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setUndecorated(false);
         this.setResizable(false);
+        setVisible(true);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int CW = screenSize.width;
@@ -118,6 +120,7 @@ public class ReceiptFrame extends JFrame {
             }
         }
     }
+
 
    
     
