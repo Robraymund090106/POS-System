@@ -481,26 +481,6 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
 
 
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            User testUser = new User("Name", "User", "ID", "Addr", "Phone", "Mail", "Role", true, 0, 0); 
-            List<String> testItems = new ArrayList<>();
-            List<Double> testPrices = new ArrayList<>();
-            testItems.add("Item 1");
-            testPrices.add(100.0);
-
-            testItems.add("Item 2");
-            testPrices.add(150.0);
-
-            testItems.add("Item 1");
-            testPrices.add(100.0);
-
-            testItems.add("Item 3");
-            testPrices.add(200.0);
-
-            ReceiptFrame frame = new ReceiptFrame(testUser, 100.0, testItems, testPrices);
-
-        });
-    }
+    
 }
 
