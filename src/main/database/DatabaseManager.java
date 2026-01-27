@@ -334,8 +334,8 @@ public static List<Product> getProductsByCategory(String category) {
     }
 }
 
-public static boolean recordSale(int userId, double total, double cash, double change, List<String> itemNames, List<Double> itemPrices) {
-    String saleSql = "INSERT INTO Sales (userId, totalPrice, cashGiven, change, paymentMethod) VALUES (?, ?, ?, ?, 'Cash')";
+public static boolean recordSale(int userId, double total, double cash, double change, List<String> itemNames, List<Double> itemPrices, String paymentmethod) {
+    String saleSql = "INSERT INTO Sales (userId, totalPrice, cashGiven, change, paymentMethod) VALUES (?, ?, ?, ?, ?)";
     String itemSql = "INSERT INTO SaleItems (saleId, productId, quantity, price) VALUES (?, (SELECT productId FROM Product WHERE name = ?), ?, ?)";
 
     try (Connection conn = connect()) {
@@ -346,6 +346,7 @@ public static boolean recordSale(int userId, double total, double cash, double c
             salePstmt.setDouble(2, total);
             salePstmt.setDouble(3, cash);
             salePstmt.setDouble(4, change);
+            salePstmt.setString(5, paymentmethod); 
             salePstmt.executeUpdate();
 
             // Get the saleId that was just created

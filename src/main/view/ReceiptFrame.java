@@ -11,7 +11,7 @@ import javax.swing.*;
 import main.model.User;
 import java.util.List;
 import java.util.Map;
-
+import main.database.*;
 
 
 public class ReceiptFrame extends JFrame {
@@ -23,11 +23,12 @@ public class ReceiptFrame extends JFrame {
     private String paymentmethod;
     private List<String> orderItems;
     private List<Double> orderPrices;
+    private JPanel detailsPanel;
     private JPanel receiptContent;
-    private JScrollPane recieptPane;
 
 
-    public ReceiptFrame(User user, double totalprice, double cashgiven, double change, String paymentmethod, List<String> orderItems, List<Double> orderPrices) {
+
+    public ReceiptFrame(User user, double totalprice, List<String> orderItems, List<Double> orderPrices) {
 
         this.user = user;
         this.totalprice = totalprice;
@@ -81,23 +82,58 @@ public class ReceiptFrame extends JFrame {
         canvas.add(header);
 
         // PANEL 2: FOR RECEIPT 
-        JPanel detailsPanel = new JPanel(null);
+        detailsPanel = new JPanel(null);
         detailsPanel.setBackground(Color.CYAN);
         detailsPanel.setBounds(60, 132, 817, 646); 
         detailsPanel.setOpaque(false);
-        receiptContent = new JPanel(new GridLayout(0, 1));
-        receiptContent.setOpaque(false);
 
-        recieptPane = new JScrollPane(receiptContent);
-        recieptPane.setBounds(0, 80, 500, 566);
-        recieptcontent(orderItems, orderPrices);
-        recieptPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        recieptPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        recieptPane.setOpaque(false);
-        recieptPane.getViewport().setOpaque(false);
+        JLabel receiptLabel = new JLabel("Receipt");
+        receiptLabel.setFont(new Font("SansSerif", Font.PLAIN, 40));
+        receiptLabel.setForeground(new Color(58, 83, 155));
+        receiptLabel.setBounds(0, 10, 200, 50);
+        detailsPanel.add(receiptLabel);
+
+        JLabel receiptNumber = new JLabel("Receipt No.: (Pending)");
+        receiptNumber.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        receiptNumber.setForeground(new Color(58, 83, 155));
+        receiptNumber.setBounds(0, 60, 200, 30);
+        detailsPanel.add(receiptNumber);
 
 
-        detailsPanel.add(recieptPane);
+        JLabel lineSeparator = new JLabel("---------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        lineSeparator.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        lineSeparator.setForeground(new Color(58, 83, 155));
+        lineSeparator.setBounds(0, 90, 817, 30);
+        detailsPanel.add(lineSeparator);
+
+        JLabel lineSeparator2 = new JLabel("---------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        lineSeparator2.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        lineSeparator2.setForeground(new Color(58, 83, 155));
+        lineSeparator2.setBounds(0, 505, 817, 30);
+        detailsPanel.add(lineSeparator2);
+
+
+        JLabel total = new JLabel("Total Amount:                                                                                         " + String.format("%.2f", this.totalprice));
+        total.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        total.setForeground(new Color(58, 83, 155));
+        total.setBounds(0, 530, 817, 30);
+        detailsPanel.add(total);
+
+        JLabel lineSeparator3 = new JLabel("---------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        lineSeparator3.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        lineSeparator3.setForeground(new Color(58, 83, 155));
+        lineSeparator3.setBounds(0, 550, 817, 30);
+        detailsPanel.add(lineSeparator3);
+
+        //receiptContent = new JPanel();
+        //receiptContent.setBounds(0, 100, 817, 500);
+        //receiptContent.setBackground(Color.LIGHT_GRAY);
+        //detailsPanel.add(receiptContent);
+
+        recieptcontent(orderItems, orderPrices); 
+
+
+
 
         canvas.add(detailsPanel);
 
@@ -135,6 +171,8 @@ public class ReceiptFrame extends JFrame {
             String password = new String(pf.getPassword());
             if (password.equals("admin123")) { // ginamit ko pass nung unang admin usert natin 
                 JOptionPane.showMessageDialog(null, "Order Successfully Canceled.");
+                ReceiptFrame.this.dispose(); 
+                new DB_Staff(user);
         
             } else {
                 JOptionPane.showMessageDialog(null, "Invalid Password", "Error", JOptionPane.ERROR_MESSAGE);
@@ -161,6 +199,12 @@ public class ReceiptFrame extends JFrame {
         Total.setBackground(Color.BLACK);
         Total.setBounds(55, 29, 343, 50); 
         TPanel.add(Total);
+
+        JLabel TotalPrice = new JLabel(String.format("%.2f", this.totalprice));
+        TotalPrice.setFont(new Font("SansSerif", Font.BOLD, 30));
+        TotalPrice.setBackground(Color.BLACK);
+        TotalPrice.setBounds(300, 29, 343, 50);
+        TPanel.add(TotalPrice);
         canvas.add(TPanel);
 
       
@@ -261,7 +305,61 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
     payBtnLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
-        JOptionPane.showMessageDialog(null, "This button is pressed", "Pay Action", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(null, "This button is pressed", "Pay Action", JOptionPane.INFORMATION_MESSAGE);
+
+        if (calcDisplay.getText().isEmpty() || calcDisplay.getText().equals("0")) {
+            JOptionPane.showMessageDialog(null, "Please enter the cash given amount.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double cashGiven;
+        JPanel optionPanel = new JPanel(new GridLayout(3, 1, 5, 5));
+        JComboBox<String> methodCombo = new JComboBox<>(new String[]{"Cash", "GCash", "Maya"});
+        JCheckBox seniorCheck = new JCheckBox("Apply Senior/PWD Discount (20%)");
+        
+        optionPanel.add(new JLabel("Select Payment Method:"));
+        optionPanel.add(methodCombo);
+        optionPanel.add(seniorCheck);
+        int result = JOptionPane.showConfirmDialog(null, optionPanel, "Payment Details", JOptionPane.OK_CANCEL_OPTION);
+        if (result != JOptionPane.OK_OPTION) {
+            return; 
+        }
+            if (seniorCheck.isSelected()) {
+                ReceiptFrame.this.totalprice *= 0.8;
+                total.setText("Total Amount: " + String.format("   %.2f", totalprice));
+                // Update the big Total display on the right
+                TotalPrice.setText(String.format("%.2f", totalprice));
+
+                JOptionPane.showMessageDialog(null, "Senior Discount Applied!");
+            }
+        
+        
+        String paymentmethod = (String) methodCombo.getSelectedItem();
+
+        try {
+            cashGiven = Double.parseDouble(calcDisplay.getText());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Invalid cash amount entered.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (cashGiven < totalprice) {
+            JOptionPane.showMessageDialog(null, "Insufficient cash given.", "Payment Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double change = cashGiven - ReceiptFrame.this.totalprice;
+        JOptionPane.showMessageDialog(null, "Change: ₱" + String.format("%.2f", change), "Payment Successful", JOptionPane.INFORMATION_MESSAGE);
+        DatabaseManager.recordSale(user.getUserId(), totalprice, cashGiven, change, orderItems, orderPrices, paymentmethod);
+        for (String itemName : orderItems) {
+                        // Decrement stock by 1 for every instance in the list
+                        DatabaseManager.updateProductStock(itemName, 1);
+                    }
+        ReceiptFrame.this.dispose(); 
+        new DB_Staff(user);
+
+        // --- CLEAR EVERYTHING AFTER SUCCESS ---
+        calcDisplay.setText("0");
     }
 });
 
@@ -292,7 +390,7 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
      printBtnLabel.addMouseListener(new java.awt.event.MouseAdapter() {
        @Override
         public void mousePressed(java.awt.event.MouseEvent e) {
-        JOptionPane.showMessageDialog(null, "This button is pressed", "Print Action", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "PDF has been downloaded", "Print Action", JOptionPane.INFORMATION_MESSAGE);
      }
   });
 
@@ -321,46 +419,64 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
         background.add(foreground, gbc);
     }
 
-    public void recieptcontent(List<String> items, List<Double> prices){
-        Map<String, Integer> counts = new HashMap<>();
-        Map<String, Double> unitprice = new HashMap<>();
-
-        for(int i = 0;  i < items.size(); i++){
-            String item = items.get(i);
-            Double price = prices.get(i);
-            counts.put(item, counts.getOrDefault(item, 0) + 1);
-            unitprice.put(item, price);
-        }
-        JPanel firstRow = new JPanel(new GridLayout(1, 3));
-        JLabel qtyHeader = new JLabel("Qty", JLabel.LEFT);
-        JLabel itemHeader = new JLabel("Item", JLabel.CENTER);
-        JLabel priceHeader = new JLabel("Price", JLabel.RIGHT);
-        firstRow.setOpaque(false);
-        firstRow.add(qtyHeader); 
-        firstRow.add(itemHeader);
-        firstRow.add(priceHeader);
-        receiptContent.add(firstRow);
-
-        for(String item : counts.keySet()){
-            int count = counts.get(item);
-            Double price = unitprice.get(item);
-
-            JPanel row = new JPanel(new GridLayout(1, 3));
-            row.setOpaque(false);
-
-            row.add(new JLabel(count + " x "));
-            row.add(new JLabel(item, JLabel.CENTER));
-            row.add(new JLabel(String.format("%.2f", price), JLabel.RIGHT));
-
-            receiptContent.add(row);
-        }
+    public void recieptcontent(List<String> items, List<Double> prices) {
+    // 1. Setup the main container panel
+    JPanel receiptContainer = new JPanel();
+    receiptContainer.setLayout(new BoxLayout(receiptContainer, BoxLayout.Y_AXIS));
+    receiptContainer.setBackground(Color.WHITE);
+    //receiptContainer.setOpaque(false);
+    // Set position within detailsPanel (Panel 2)
+    receiptContainer.setBounds(00, 120, 740, 400); 
 
 
-
-
-
+    Map<String, Integer> counts = new HashMap<>();
+    Map<String, Double> unitprice = new HashMap<>();
+    for(int i = 0; i < items.size(); i++){
+        counts.put(items.get(i), counts.getOrDefault(items.get(i), 0) + 1);
+        unitprice.put(items.get(i), prices.get(i));
     }
 
+
+    JPanel headerRow = new JPanel(new GridLayout(1, 4));
+    headerRow.setOpaque(false);
+    headerRow.setMaximumSize(new Dimension(740, 30));
+    
+    String[] cols = {"Qty", "Product", "Price", "Total Price"};
+    for (String col : cols) {
+        JLabel lbl = new JLabel(col, JLabel.CENTER);
+        lbl.setFont(new Font("SansSerif", Font.BOLD, 16));
+        lbl.setForeground(new Color(58, 83, 155)); // Matching your UI blue
+        headerRow.add(lbl);
+    }
+    receiptContainer.add(headerRow);
+    receiptContainer.add(Box.createVerticalStrut(10)); // Spacing
+
+
+    for (String item : counts.keySet()) {
+        int qty = counts.get(item);
+        double price = unitprice.get(item);
+        double lineTotal = qty * price;
+
+        JPanel row = new JPanel(new GridLayout(1, 4));
+        row.setOpaque(false);
+        row.setMaximumSize(new Dimension(740, 40));
+
+        row.add(new JLabel(String.valueOf(qty), JLabel.CENTER));
+        row.add(new JLabel(item, JLabel.CENTER));
+        row.add(new JLabel(String.format("%.0f", price), JLabel.CENTER));
+        row.add(new JLabel(String.format("%.0f", lineTotal), JLabel.CENTER));
+
+ 
+        for (Component c : row.getComponents()) {
+            c.setFont(new Font("SansSerif", Font.PLAIN, 15));
+        }
+        
+        receiptContainer.add(row);
+    }
+
+
+    detailsPanel.add(receiptContainer); 
+}
 
 
 
@@ -376,90 +492,15 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
             testItems.add("Item 2");
             testPrices.add(150.0);
 
-            ReceiptFrame frame = new ReceiptFrame(testUser, 100.0, 150.0, 50.0, "Cash", testItems, testPrices);
+            testItems.add("Item 1");
+            testPrices.add(100.0);
+
+            testItems.add("Item 3");
+            testPrices.add(200.0);
+
+            ReceiptFrame frame = new ReceiptFrame(testUser, 100.0, testItems, testPrices);
 
         });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

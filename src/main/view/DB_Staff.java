@@ -605,43 +605,19 @@ searchField.addKeyListener(new KeyAdapter() {
             orderDetails.append("\nTOTAL AMOUNT: ₱").append(String.format("%.2f", totalSum));
 
         // 3. Create the Finalize Dialog
-            JTextField cashField = new JTextField();
-            Object[] message = {
-                orderDetails.toString(),
-                "Enter Cash Amount:", cashField
-            };
+            String message = orderDetails.toString();
+            
 
             int option = JOptionPane.showConfirmDialog(null, message, "Finalize Order", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         
             if(option == JOptionPane.OK_OPTION && !OrderName.isEmpty()) {
-                try {
-                double cash = Double.parseDouble(cashField.getText());
-                if (cash < totalSum) {
-                    JOptionPane.showMessageDialog(null, "Insufficient cash!", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    for (String itemName : OrderName) {
-                        // Decrement stock by 1 for every instance in the list
-                        DatabaseManager.updateProductStock(itemName, 1);
-                    }
-                    double change = cash - totalSum;
-                    JOptionPane.showMessageDialog(null, "Order Successful!\nChange: ₱" + String.format("%.2f", change), "Success", JOptionPane.INFORMATION_MESSAGE);
-                    
-                    // --- CLEAR EVERYTHING AFTER SUCCESS ---
-                    OrderName.clear();
-                    OrderPrice.clear();
-                    plorJPanel.removeAll();
-                    plorJPanel.revalidate();
-                    plorJPanel.repaint();
-                    totalValueLabel.setText("₱ 0.00");
+                
+                
+                
+                    new ReceiptFrame(user, totalSum,  OrderName,  OrderPrice);
 
-                    
-                    new ReceiptFrame(user, totalSum, cash, change, "Cash",  OrderName,  OrderPrice);
                     dispose();
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Please enter a valid amount.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-            }
             } else{
 
             }
