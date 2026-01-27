@@ -5,18 +5,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import javax.swing.BorderFactory;   
-import javax.swing.ImageIcon;
-import javax.swing.JButton;        
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;   
 import main.model.User;
 import java.util.List;
+import java.util.Map;
 
 
 
@@ -29,6 +23,8 @@ public class ReceiptFrame extends JFrame {
     private String paymentmethod;
     private List<String> orderItems;
     private List<Double> orderPrices;
+    private JPanel receiptContent;
+    private JScrollPane recieptPane;
 
 
     public ReceiptFrame(User user, double totalprice, double cashgiven, double change, String paymentmethod, List<String> orderItems, List<Double> orderPrices) {
@@ -88,8 +84,23 @@ public class ReceiptFrame extends JFrame {
         JPanel detailsPanel = new JPanel(null);
         detailsPanel.setBackground(Color.CYAN);
         detailsPanel.setBounds(60, 132, 817, 646); 
-        detailsPanel.setOpaque(true);
+        detailsPanel.setOpaque(false);
+        receiptContent = new JPanel(new GridLayout(0, 1));
+        receiptContent.setOpaque(false);
+
+        recieptPane = new JScrollPane(receiptContent);
+        recieptPane.setBounds(0, 80, 500, 566);
+        recieptcontent(orderItems, orderPrices);
+        recieptPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        recieptPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        recieptPane.setOpaque(false);
+        recieptPane.getViewport().setOpaque(false);
+
+
+        detailsPanel.add(recieptPane);
+
         canvas.add(detailsPanel);
+
 
         //  PANEL 3: ORANGE // cancel order
 
@@ -308,6 +319,46 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         background.add(foreground, gbc);
+    }
+
+    public void recieptcontent(List<String> items, List<Double> prices){
+        Map<String, Integer> counts = new HashMap<>();
+        Map<String, Double> unitprice = new HashMap<>();
+
+        for(int i = 0;  i < items.size(); i++){
+            String item = items.get(i);
+            Double price = prices.get(i);
+            counts.put(item, counts.getOrDefault(item, 0) + 1);
+            unitprice.put(item, price);
+        }
+        JPanel firstRow = new JPanel(new GridLayout(1, 3));
+        JLabel qtyHeader = new JLabel("Qty", JLabel.LEFT);
+        JLabel itemHeader = new JLabel("Item", JLabel.CENTER);
+        JLabel priceHeader = new JLabel("Price", JLabel.RIGHT);
+        firstRow.setOpaque(false);
+        firstRow.add(qtyHeader); 
+        firstRow.add(itemHeader);
+        firstRow.add(priceHeader);
+        receiptContent.add(firstRow);
+
+        for(String item : counts.keySet()){
+            int count = counts.get(item);
+            Double price = unitprice.get(item);
+
+            JPanel row = new JPanel(new GridLayout(1, 3));
+            row.setOpaque(false);
+
+            row.add(new JLabel(count + " x "));
+            row.add(new JLabel(item, JLabel.CENTER));
+            row.add(new JLabel(String.format("%.2f", price), JLabel.RIGHT));
+
+            receiptContent.add(row);
+        }
+
+
+
+
+
     }
 
 
