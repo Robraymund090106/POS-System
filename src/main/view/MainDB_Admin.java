@@ -3,6 +3,12 @@ package main.view;
 import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import main.database.*;
+import java.util.List;
+import java.util.ArrayList;
+import main.model.Product;
+
 import main.model.User;
 
 public class MainDB_Admin extends JFrame {
@@ -13,6 +19,7 @@ public class MainDB_Admin extends JFrame {
     JPanel transactionpanel;
     JPanel salespanel;
     JComboBox<String> CategCombo;
+    private List<Product> allproducts;
 
     public MainDB_Admin(User user) {
         this.user = user;
@@ -22,7 +29,8 @@ public class MainDB_Admin extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setUndecorated(false); 
         this.setResizable(false);   
-        
+        allproducts = new ArrayList<>();
+        allproducts = DatabaseManager.getAllProducts();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int CW = screenSize.width;
         int CH = screenSize.height;
@@ -153,11 +161,38 @@ public class MainDB_Admin extends JFrame {
         listpanelitem.setBounds(210, 118, 1290, 700);
         listpanelitem.setOpaque(false);
         listpanelitem.setVisible(true);
-    
-        
+        String[] columnNames = {"", "", "", ""};
+        Object[][] data = {};
+
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Makes the table read-only
+            }
+        };
+
+        for(Product p : allproducts){
+            Object[] rowData = {p.getName(), p.getPrice(), p.getCategory(), p.getStock()};
+            model.addRow(rowData);
+        }
+
+        JTable table = new JTable(model);
+        table.setRowHeight(40); 
+        table.setFont(new Font("SansSerif", Font.PLAIN, 24));
+        table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 24));
+        table.getTableHeader().setBackground(Color.WHITE); 
+        table.getTableHeader().setForeground(Color.WHITE);
+
+     
+        JScrollPane scrollPane = new JScrollPane(table);
+     
+        scrollPane.setBounds(30, 160, 1190, 500); 
+        scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Keeps it clean
+
+        // 4. Add to the panel
+        listpanelitem.add(scrollPane);
+
         canvas.add(listpanelitem);
-
-
         //ADD MENU PANEL
         addmenuitem = new JPanel(null) {
         private Image addMenuBg = new ImageIcon("src/main/image/AddBtnBG.png").getImage();
@@ -462,7 +497,7 @@ public class MainDB_Admin extends JFrame {
         menuiconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "This button has been clicked");
+                //JOptionPane.showMessageDialog(null, "This button has been clicked");
                 listpanelitem.setVisible(true);
                 addmenuitem.setVisible(false);
                 addstaff.setVisible(false);
@@ -480,7 +515,7 @@ public class MainDB_Admin extends JFrame {
         foodiconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "This button has been clicked");
+                //JOptionPane.showMessageDialog(null, "This button has been clicked");
                 listpanelitem.setVisible(false);
                 addmenuitem.setVisible(true);
                 addstaff.setVisible(false);
@@ -500,7 +535,7 @@ public class MainDB_Admin extends JFrame {
         drinkiconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "This button has been clicked");
+                //JOptionPane.showMessageDialog(null, "This button has been clicked");
                 listpanelitem.setVisible(false);
                 addmenuitem.setVisible(false);
                 addstaff.setVisible(true);
@@ -519,7 +554,7 @@ public class MainDB_Admin extends JFrame {
         mealiconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "This button has been clicked");
+                //JOptionPane.showMessageDialog(null, "This button has been clicked");
                 listpanelitem.setVisible(false);
                 addmenuitem.setVisible(false);
                 addstaff.setVisible(false);
@@ -538,7 +573,7 @@ public class MainDB_Admin extends JFrame {
         salesiconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "This button has been clicked");
+                //JOptionPane.showMessageDialog(null, "This button has been clicked");
                 listpanelitem.setVisible(false);
                 addmenuitem.setVisible(false);
                 addstaff.setVisible(false);
