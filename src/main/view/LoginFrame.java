@@ -192,6 +192,7 @@ public class LoginFrame extends JFrame {
                 sgnup.setLocation(centerX - 165, centerY + 350);
             }
         });
+        this.getRootPane().setDefaultButton(login);
 
         setVisible(true);
     }
