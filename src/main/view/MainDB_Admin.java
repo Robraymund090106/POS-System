@@ -7,6 +7,11 @@ import main.model.User;
 
 public class MainDB_Admin extends JFrame {
     User user;
+    JPanel listpanelitem;
+    JPanel addmenuitem;
+    JPanel addstaff;
+    JPanel transactionpanel;
+    JPanel salespanel;
 
     public MainDB_Admin(User user) {
         this.user = user;
@@ -113,6 +118,39 @@ public class MainDB_Admin extends JFrame {
         header.add(staffText);
         header.setComponentZOrder(staffLogo, 0);
 
+        //PANELS
+
+        listpanelitem = new JPanel();
+        listpanelitem.setBackground(Color.CYAN);
+        listpanelitem.setBounds(210, 118, 1290, 700);
+        listpanelitem.setVisible(true);
+        canvas.add(listpanelitem);
+
+        addmenuitem = new JPanel();
+        addmenuitem.setBackground(Color.RED);
+        addmenuitem.setBounds(210, 118, 1290, 700);
+        addmenuitem.setVisible(false);
+        canvas.add(addmenuitem);
+
+        addstaff = new JPanel();
+        addstaff.setBackground(Color.ORANGE);
+        addstaff.setBounds(210, 118, 1290, 700);
+        addstaff.setVisible(false);
+        canvas.add(addstaff);
+
+        transactionpanel = new JPanel();
+        transactionpanel.setBackground(Color.PINK);
+        transactionpanel.setBounds(210, 118, 1290, 700);
+        transactionpanel.setVisible(false);
+        canvas.add(transactionpanel);
+
+
+        salespanel = new JPanel();
+        salespanel.setBackground(Color.BLUE);
+        salespanel.setBounds(210, 118, 1290, 700);
+        salespanel.setVisible(false);
+        canvas.add(salespanel);
+
         //  PANEL 3: SIDEBAR
         JPanel sidebar = new JPanel(null);
         sidebar.setBounds(30, 130, 158, 800);
@@ -129,6 +167,11 @@ public class MainDB_Admin extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 JOptionPane.showMessageDialog(null, "This button has been clicked");
+                listpanelitem.setVisible(true);
+                addmenuitem.setVisible(false);
+                addstaff.setVisible(false);
+                transactionpanel.setVisible(false);
+                salespanel.setVisible(false);
             }
         });
         sidebar.add(menuiconLabel);
@@ -142,6 +185,13 @@ public class MainDB_Admin extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 JOptionPane.showMessageDialog(null, "This button has been clicked");
+                listpanelitem.setVisible(false);
+                addmenuitem.setVisible(true);
+                addstaff.setVisible(false);
+                transactionpanel.setVisible(false);
+                salespanel.setVisible(false);
+
+
             }
         });
         sidebar.add(foodiconLabel);
@@ -155,6 +205,12 @@ public class MainDB_Admin extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 JOptionPane.showMessageDialog(null, "This button has been clicked");
+                listpanelitem.setVisible(false);
+                addmenuitem.setVisible(false);
+                addstaff.setVisible(true);
+                transactionpanel.setVisible(false);
+                salespanel.setVisible(false);
+
             }
         });
         sidebar.add(drinkiconLabel);
@@ -168,6 +224,12 @@ public class MainDB_Admin extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 JOptionPane.showMessageDialog(null, "This button has been clicked");
+                listpanelitem.setVisible(false);
+                addmenuitem.setVisible(false);
+                addstaff.setVisible(false);
+                transactionpanel.setVisible(true);
+                salespanel.setVisible(false);
+
             }
         });
         sidebar.add(mealiconLabel);
@@ -181,9 +243,17 @@ public class MainDB_Admin extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 JOptionPane.showMessageDialog(null, "This button has been clicked");
+                listpanelitem.setVisible(false);
+                addmenuitem.setVisible(false);
+                addstaff.setVisible(false);
+                transactionpanel.setVisible(false);
+                salespanel.setVisible(true);
+
             }
         });
         sidebar.add(salesiconLabel);
+
+
 
         
 
@@ -253,6 +323,7 @@ public class MainDB_Admin extends JFrame {
                 // Logic goes here
             }
         });
+
         
         textPanel.add(searchField, BorderLayout.CENTER);
         canvas.add(textPanel);
