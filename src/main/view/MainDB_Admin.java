@@ -12,6 +12,7 @@ public class MainDB_Admin extends JFrame {
     JPanel addstaff;
     JPanel transactionpanel;
     JPanel salespanel;
+    JComboBox<String> CategCombo;
 
     public MainDB_Admin(User user) {
         this.user = user;
@@ -158,35 +159,269 @@ public class MainDB_Admin extends JFrame {
 
 
         //ADD MENU PANEL
-        addmenuitem = new JPanel();
-        addmenuitem.setBackground(Color.RED);
+        addmenuitem = new JPanel(null) {
+        private Image addMenuBg = new ImageIcon("src/main/image/AddBtnBG.png").getImage();
+
+        @Override
+         protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (addMenuBg != null) {
+            g.drawImage(addMenuBg, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+};
         addmenuitem.setBounds(210, 118, 1290, 700);
+        addmenuitem.setOpaque(false);
         addmenuitem.setVisible(false);
 
+        JLabel ItemLabel = new JLabel("Item Name");
+        ItemLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        ItemLabel.setForeground(Color.BLACK);
+        ItemLabel.setBounds(100, 100, 150, 30);
+        addmenuitem.add(ItemLabel); 
+
+        JTextField Itemname = new JTextField();
+        Itemname.setBounds(100, 130, 300, 48); 
+        Itemname.setFont(new Font("Arial", Font.PLAIN, 18));
+        Itemname.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(Color.BLUE, 1), 
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        addmenuitem.add(Itemname);
+        Itemname.setOpaque(true);
+
+        JLabel ItemstockLabel = new JLabel("Item Stock");
+        ItemstockLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        ItemstockLabel.setForeground(Color.BLACK);
+        ItemstockLabel.setBounds(100, 230, 150, 30);
+        addmenuitem.add(ItemstockLabel);    
+
+        JTextField Itemstock = new JTextField();
+        Itemstock.setBounds(100, 260, 300, 48); 
+        Itemstock.setFont(new Font("Arial", Font.PLAIN, 18));
+        Itemstock.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(Color.BLUE, 1), 
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        addmenuitem.add(Itemstock);
+        Itemstock.setOpaque(true);
+
+        JLabel ItempriceLabel = new JLabel("Item Price");
+        ItempriceLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        ItempriceLabel.setForeground(Color.BLACK);
+        ItempriceLabel.setBounds(670, 100, 150, 30);
+        addmenuitem.add(ItempriceLabel); 
+
+        JTextField Itemprice = new JTextField();
+        Itemprice.setBounds(670, 130, 300, 48); 
+        Itemprice.setFont(new Font("Arial", Font.PLAIN, 18));
+        Itemprice.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createLineBorder(Color.BLUE, 1), 
+        BorderFactory.createEmptyBorder(5, 10, 5, 10)));
+        addmenuitem.add(Itemprice);
+        Itemprice.setOpaque(true);
+
+        JLabel ItemCatLabel = new JLabel("Item Category");
+        ItemCatLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        ItemCatLabel.setForeground(Color.BLACK);
+        ItemCatLabel.setBounds(670, 230, 200, 30); 
+        addmenuitem.add(ItemCatLabel); 
+
+        String[] ItemCateg = {"Meal", "Drink", "Dessert"}; 
+        CategCombo = new JComboBox<>(ItemCateg);
+        CategCombo.setFont(new Font("Arial", Font.PLAIN, 17));
+        CategCombo.setBounds(670, 260, 300, 48);
+        CategCombo.setForeground(Color.BLACK);
+        addmenuitem.add(CategCombo);
+        
+        JLabel ItemLabelbottom = new JLabel("Item Name");
+        ItemLabelbottom.setFont(new Font("Arial", Font.BOLD, 20));
+        ItemLabelbottom.setForeground(Color.WHITE);
+        ItemLabelbottom.setBounds(150, 445, 150, 30);
+        addmenuitem.add(ItemLabelbottom); 
+
+        JLabel priceLabelbottom = new JLabel("Price");
+        priceLabelbottom.setFont(new Font("Arial", Font.BOLD, 20));
+        priceLabelbottom.setForeground(Color.WHITE);
+        priceLabelbottom.setBounds(320, 445, 150, 30);
+        addmenuitem.add(priceLabelbottom); 
+
+        JLabel categLabelbottom = new JLabel("Category");
+        categLabelbottom.setFont(new Font("Arial", Font.BOLD, 20));
+        categLabelbottom.setForeground(Color.WHITE);
+        categLabelbottom.setBounds(480, 445, 150, 30);
+        addmenuitem.add(categLabelbottom); 
+
+        JLabel stockLabelbottom = new JLabel("Stock");
+        stockLabelbottom.setFont(new Font("Arial", Font.BOLD, 20));
+        stockLabelbottom.setForeground(Color.WHITE);
+        stockLabelbottom.setBounds(670, 445, 150, 30);
+        addmenuitem.add(stockLabelbottom); 
+
+        JButton cnfm = new JButton("Add");
+        cnfm.setSize(150, 60);
+        cnfm.setFont(new Font("Arial", Font.BOLD, 17));
+        cnfm.setBackground(new Color(165, 215, 155));
+        cnfm.setForeground(Color.WHITE);
+        cnfm.setBounds(1000, 260, 100, 50);
+        cnfm.setFocusPainted(false);
+        addmenuitem.add(cnfm);
+
+        //KULANG PA NG SCROLL BAR SA TABI NG MGA LABELS TO SHOW ADDED ITEMS - que
+
+        //important part for adding panel to canvas
         canvas.add(addmenuitem);
+
 
         //ADD STAFF PANEL
 
-        addstaff = new JPanel();
-        addstaff.setBackground(Color.ORANGE);
+        //kulang pa since nakita ko rin na may scrollbar, kapag gagawin ko baka mag ka conflict -que
+
+            addstaff = new JPanel(null) {
+        private Image addStaffBg = new ImageIcon("src/main/image/ActStaffLst.png").getImage();
+
+        @Override
+         protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (addStaffBg != null) {
+            g.drawImage(addStaffBg, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+};
         addstaff.setBounds(210, 118, 1290, 700);
+        addstaff.setOpaque(false);
         addstaff.setVisible(false);
+
+        JLabel usernamelLabel = new JLabel("Username");
+        usernamelLabel.setFont(new Font("Arial", Font.BOLD, 23));
+        usernamelLabel.setForeground(Color.WHITE);
+        usernamelLabel.setBounds(117, 125, 150, 30);
+        addstaff.add(usernamelLabel); 
+
+        JLabel firstnamelLabel = new JLabel("First Name");
+        firstnamelLabel.setFont(new Font("Arial", Font.BOLD, 23));
+        firstnamelLabel.setForeground(Color.WHITE);
+        firstnamelLabel.setBounds(350, 125, 150, 30);
+        addstaff.add(firstnamelLabel); 
+
+        JLabel lastnamelLabel = new JLabel("Last Name");
+        lastnamelLabel.setFont(new Font("Arial", Font.BOLD, 23));
+        lastnamelLabel.setForeground(Color.WHITE);
+        lastnamelLabel.setBounds(620, 125, 150, 30);
+        addstaff.add(lastnamelLabel); 
+
+        JLabel genderlLabel = new JLabel("Gender");
+        genderlLabel.setFont(new Font("Arial", Font.BOLD, 23));
+        genderlLabel.setForeground(Color.WHITE);
+        genderlLabel.setBounds(980, 125, 150, 30);
+        addstaff.add(genderlLabel); 
+
+        JButton bck = new JButton("Delete");
+        bck.setSize(100, 40);
+        bck.setBackground(new Color(220, 120, 100));
+        bck.setForeground(Color.WHITE);
+        bck.setFont(new Font("Arial", Font.BOLD, 20));
+        bck.setBounds(1090, 165, 100, 40);
+        bck.setFocusPainted(false);
+        addstaff.add(bck);
+        
         canvas.add(addstaff);
 
         // TRANSACTION PANEL
 
-        transactionpanel = new JPanel();
-        transactionpanel.setBackground(Color.PINK);
+       transactionpanel = new JPanel(null) {
+        private Image trImage = new ImageIcon("src/main/image/TranRecBTN.png").getImage();
+
+        @Override
+         protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (trImage != null) {
+            g.drawImage(trImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+};
         transactionpanel.setBounds(210, 118, 1290, 700);
+        transactionpanel.setOpaque(false);
         transactionpanel.setVisible(false);
+
+         JLabel usernamelLabel1 = new JLabel("Username");
+        usernamelLabel1.setFont(new Font("Arial", Font.BOLD, 23));
+        usernamelLabel1.setForeground(Color.WHITE);
+        usernamelLabel1.setBounds(117, 125, 150, 30);
+        transactionpanel.add(usernamelLabel1); 
+
+        JLabel firstnamelLabel1 = new JLabel("First Name");
+        firstnamelLabel1.setFont(new Font("Arial", Font.BOLD, 23));
+        firstnamelLabel1.setForeground(Color.WHITE);
+        firstnamelLabel1.setBounds(350, 125, 150, 30);
+        transactionpanel.add(firstnamelLabel1); 
+
+        JLabel lastnamelLabel1 = new JLabel("Last Name");
+        lastnamelLabel1.setFont(new Font("Arial", Font.BOLD, 23));
+        lastnamelLabel1.setForeground(Color.WHITE);
+        lastnamelLabel1.setBounds(620, 125, 150, 30);
+        transactionpanel.add(lastnamelLabel1); 
+
+        JLabel genderlLabel1 = new JLabel("Gender");
+        genderlLabel1.setFont(new Font("Arial", Font.BOLD, 23));
+        genderlLabel1.setForeground(Color.WHITE);
+        genderlLabel1.setBounds(980, 125, 150, 30);
+        transactionpanel.add(genderlLabel1); 
+
+        JButton bc1 = new JButton("Delete");
+        bc1.setSize(100, 40);
+        bc1.setBackground(new Color(220, 120, 100));
+        bc1.setForeground(Color.WHITE);
+        bc1.setFont(new Font("Arial", Font.BOLD, 20));
+        bc1.setBounds(1090, 165, 100, 40);
+        bc1.setFocusPainted(false);
+        transactionpanel.add(bc1);
+
         canvas.add(transactionpanel);
 
         // SALES PANEL
+       salespanel = new JPanel(null) {
+        private Image sImage = new ImageIcon("src/main/image/SalesRepBTN.png").getImage();
 
-        salespanel = new JPanel();
-        salespanel.setBackground(Color.BLUE);
+        @Override
+         protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (sImage != null) {
+            g.drawImage(sImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+};
         salespanel.setBounds(210, 118, 1290, 700);
+        salespanel.setOpaque(false);
         salespanel.setVisible(false);
+
+        JLabel tranlabel = new JLabel("Transaction");
+        tranlabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        tranlabel.setForeground(Color.BLACK);
+        tranlabel.setBounds(85, 95, 150, 30);
+        salespanel.add(tranlabel);
+
+        JLabel onlinestafflabel = new JLabel("Online Staff");
+        onlinestafflabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        onlinestafflabel.setForeground(Color.BLACK);
+        onlinestafflabel.setBounds(415, 95, 150, 30);
+        salespanel.add(onlinestafflabel);
+
+        JLabel totalsaleslabel = new JLabel("Total Sales");
+        totalsaleslabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        totalsaleslabel.setForeground(Color.BLACK);
+        totalsaleslabel.setBounds(750, 95, 150, 30);
+        salespanel.add(totalsaleslabel);
+
+        JLabel bestsellinglabel = new JLabel("Best Selling");
+        bestsellinglabel.setFont(new Font("Arial", Font.BOLD, 20));
+        bestsellinglabel.setForeground(Color.BLACK);
+        bestsellinglabel.setBounds(85, 270, 150, 30);
+        salespanel.add(bestsellinglabel);
+
+        JLabel saleschartlabel = new JLabel("Sales Chart");
+        saleschartlabel.setFont(new Font("Arial", Font.BOLD, 20));
+        saleschartlabel.setForeground(Color.BLACK);
+        saleschartlabel.setBounds(665, 270, 150, 30);
+        salespanel.add(saleschartlabel);
         canvas.add(salespanel);
 
         //

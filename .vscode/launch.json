@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "testframe",
+            "request": "launch",
+            "mainClass": "main.view.testframe",
+            "projectName": "POS-System_11214fde"
+        },
+        {
+            "type": "java",
             "name": "AdminCreateMeal",
             "request": "launch",
             "mainClass": "main.view.AdminCreateMeal",

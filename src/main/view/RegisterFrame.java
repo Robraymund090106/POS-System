@@ -222,17 +222,17 @@ public class RegisterFrame extends JFrame {
         femaleCheckBox.setForeground(Color.WHITE);
         femaleCheckBox.setOpaque(false);
         backgroundPanel.add(femaleCheckBox);
-
-        ButtonGroup genderGroup = new ButtonGroup();
-        genderGroup.add(maleCheckBox);
-        genderGroup.add(femaleCheckBox);
-
-         JButton cnfm = new JButton("Confirm");
+JButton cnfm = new JButton("Confirm");
         cnfm.setSize(150, 60);
         cnfm.setFont(new Font("Arial", Font.BOLD, 20));
         cnfm.setBackground(new Color(165, 215, 155));
         cnfm.setForeground(Color.WHITE);
         cnfm.setFocusPainted(false);
+        ButtonGroup genderGroup = new ButtonGroup();
+        genderGroup.add(maleCheckBox);
+        genderGroup.add(femaleCheckBox);
+
+         
         cnfm.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
