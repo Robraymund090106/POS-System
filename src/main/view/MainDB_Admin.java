@@ -118,19 +118,54 @@ public class MainDB_Admin extends JFrame {
         header.add(staffText);
         header.setComponentZOrder(staffLogo, 0);
 
+        //
+        //
+
+        ///
+        /// /
+        /// 
+        /// 
+        /// 
+        /// 
+        /// 
+        /// //
+        /// /
+        /// /
+        /// ///
+        /// 
+        /// 
+
         //PANELS
 
-        listpanelitem = new JPanel();
+        //ITEM LIST PANEL
+
+        listpanelitem = new JPanel(null) {
+        private Image listBg = new ImageIcon("src/main/image/itemlistbg.png").getImage();
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            // Draws the background to fit the panel perfectly
+            g.drawImage(listBg, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
         listpanelitem.setBackground(Color.CYAN);
         listpanelitem.setBounds(210, 118, 1290, 700);
+        listpanelitem.setOpaque(false);
         listpanelitem.setVisible(true);
+    
+        
         canvas.add(listpanelitem);
 
+
+        //ADD MENU PANEL
         addmenuitem = new JPanel();
         addmenuitem.setBackground(Color.RED);
         addmenuitem.setBounds(210, 118, 1290, 700);
         addmenuitem.setVisible(false);
+
         canvas.add(addmenuitem);
+
+        //ADD STAFF PANEL
 
         addstaff = new JPanel();
         addstaff.setBackground(Color.ORANGE);
@@ -138,18 +173,44 @@ public class MainDB_Admin extends JFrame {
         addstaff.setVisible(false);
         canvas.add(addstaff);
 
+        // TRANSACTION PANEL
+
         transactionpanel = new JPanel();
         transactionpanel.setBackground(Color.PINK);
         transactionpanel.setBounds(210, 118, 1290, 700);
         transactionpanel.setVisible(false);
         canvas.add(transactionpanel);
 
+        // SALES PANEL
 
         salespanel = new JPanel();
         salespanel.setBackground(Color.BLUE);
         salespanel.setBounds(210, 118, 1290, 700);
         salespanel.setVisible(false);
         canvas.add(salespanel);
+
+        //
+
+        //
+        //
+        //
+        ///
+        /// /
+        /// //
+        /// //
+        /// //
+        /// 
+        /// /
+        /// 
+        /// /
+        /// ///
+        /// 
+        /// //
+        /// /
+        /// /
+        /// 
+        /// 
+        /// 
 
         //  PANEL 3: SIDEBAR
         JPanel sidebar = new JPanel(null);
@@ -259,74 +320,7 @@ public class MainDB_Admin extends JFrame {
 
     //Search barr panell 
 
-        JPanel textPanel = new JPanel(new BorderLayout());
-        textPanel.setBounds(830, 162, 550, 40); 
-        textPanel.setBackground(Color.ORANGE);
-        textPanel.setOpaque(false);
-
-        JTextField searchField = new JTextField() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                if (!isOpaque()) {
-                    g.setColor(new Color(0, 0, 0, 0));
-                    g.fillRect(0, 0, getWidth(), getHeight());
-                }
-                super.paintComponent(g);
-                if (getText().length() == 0) {
-                    Graphics2D g2 = (Graphics2D) g.create();
-                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setColor(new Color(130, 130, 130)); 
-                    g2.setFont(new Font("SansSerif", Font.ITALIC, 25));
-                    FontMetrics fm = g2.getFontMetrics();
-                    int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
-                    g2.drawString("Search here", 45, y); 
-                    g2.dispose();
-                }
-            }
-        };
-
-        searchField.setOpaque(false);
-        searchField.setBorder(new javax.swing.border.EmptyBorder(0, 45, 0, 10)); 
-        searchField.setForeground(Color.BLACK);
-        searchField.setFont(new Font("SansSerif", Font.PLAIN, 20));
-        searchField.setFocusable(false); 
         
-       
-        searchField.setCaretColor(new Color(0, 0, 0, 0)); 
-        
-        searchField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                searchField.setFocusable(true);
-                searchField.requestFocusInWindow();
-                
-               
-                searchField.setCaretColor(Color.BLACK); 
-                searchField.getCaret().setBlinkRate(500); 
-            }
-        });
-
-        searchField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (searchField.getText().isEmpty()) {
-                  
-                    searchField.setCaretColor(new Color(0, 0, 0, 0)); 
-                    searchField.setFocusable(false);
-                }
-            }
-        });
-
-        searchField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                // Logic goes here
-            }
-        });
-
-        
-        textPanel.add(searchField, BorderLayout.CENTER);
-        canvas.add(textPanel);
 
 
         // --- FINAL ASSEMBLY ---
