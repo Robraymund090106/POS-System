@@ -4,7 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.swing.*;
 import main.database.*;
 import main.model.*;
@@ -25,7 +28,10 @@ public class DB_Staff extends JFrame {
     private JLabel totalValueLabel;
     private JPanel scrollJPanel;
     private JScrollPane scrollPane;
-    
+
+    private Map<String, Integer> counts = new HashMap<>();
+    private Map<String, Double> unitprice = new HashMap<>();
+
 
 
     public DB_Staff(User user) {
@@ -695,61 +701,19 @@ searchField.addKeyListener(new KeyAdapter() {
         }
             OrderName.add(name);
             OrderPrice.add(price);
+
+    
+
+
+            counts.put(name, counts.getOrDefault(name, 0) + 1);
+            unitprice.put(name, price); 
+
+            updateOrderDisplay();
+            
+
+
  
-            JPanel itemRow = new JPanel(new BorderLayout());
-            itemRow.setMaximumSize(new Dimension(450, 50)); 
-            itemRow.setBackground(Color.WHITE);
-            itemRow.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
-
-  
-            JLabel nameLbl = new JLabel("  " + name + "  ");
-            nameLbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
             
-            JLabel priceLbl = new JLabel("₱ " + (int)price + "  ");
-            priceLbl.setFont(new Font("SansSerif", Font.BOLD, 16));
-
-            JButton removeBtn = new JButton("X");
-            removeBtn.setFont(new Font("SansSerif", Font.BOLD, 12));
-            removeBtn.setForeground(Color.RED);
-            removeBtn.setBorderPainted(false);
-            removeBtn.setContentAreaFilled(false);
-            removeBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            removeBtn.addMouseListener(new MouseAdapter() {
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    int index = plorJPanel.getComponentZOrder(itemRow);
-                    if (index >= 0 && index < OrderName.size()) {
-                        OrderName.remove(index);
-                        OrderPrice.remove(index);
-                        plorJPanel.remove(itemRow);
-                        plorJPanel.revalidate();
-                        plorJPanel.repaint();
-
-                        double currentTotal = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
-                        totalValueLabel.setText("₱ " + String.format("%.2f", currentTotal));
-                    }
-                }
-            });
-
-            
-            
-
-
-            itemRow.add(nameLbl, BorderLayout.WEST);
-            itemRow.add(priceLbl, BorderLayout.CENTER);
-            itemRow.add(removeBtn, BorderLayout.EAST);
-
-            
-
-            double currentTotal = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
-            totalValueLabel.setText("₱ " + String.format("%.2f", currentTotal));
-
-
-            // 3. Add to the 6th panel (plorJPanel) and refresh UI
-            plorJPanel.add(itemRow);
-            plorJPanel.revalidate();
-            plorJPanel.repaint();
             
            
            
@@ -788,6 +752,58 @@ searchField.addKeyListener(new KeyAdapter() {
     
     return new ImageIcon(buffered);
 }
+
+private void updateOrderDisplay(){
+    plorJPanel.removeAll();
+    for(String name : counts.keySet()){
+
+        int qty = counts.get(name);
+        double unitP = unitprice.get(name);
+        double lineTotal = qty * unitP;
+        JPanel itemRow = new JPanel(new BorderLayout());
+        itemRow.setMaximumSize(new Dimension(450, 40));
+        itemRow.setBackground(Color.WHITE);
+        itemRow.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+
+        // Display as "4x Coffee" instead of 4 separate lines
+        JLabel nameLbl = new JLabel("  " + qty + "x  " + name);
+        nameLbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        
+        JLabel priceLbl = new JLabel("₱ " + (int)lineTotal + "  ");
+        priceLbl.setFont(new Font("SansSerif", Font.BOLD, 16));
+
+        JButton removeBtn = new JButton("x");
+        removeBtn.setForeground(Color.RED);
+        removeBtn.setBorderPainted(false);
+        removeBtn.setContentAreaFilled(false);
+        
+        // Remove logic: clears all of that item type
+        removeBtn.addActionListener(e -> {
+            counts.remove(name);
+            unitprice.remove(name);
+            // Re-sync your OrderName/Price lists for the Database/Receipt logic
+            OrderName.removeIf(n -> n.equals(name));
+            OrderPrice.removeIf(p -> p.equals(unitP));
+            updateOrderDisplay(); // Refresh UI
+        });
+
+        itemRow.add(nameLbl, BorderLayout.WEST);
+        itemRow.add(priceLbl, BorderLayout.CENTER);
+        itemRow.add(removeBtn, BorderLayout.EAST);
+
+        plorJPanel.add(itemRow);
+    }
+
+    // Update the visual Total
+    double currentTotal = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
+    totalValueLabel.setText("₱ " + String.format("%.2f", currentTotal));
+
+    plorJPanel.revalidate();
+    plorJPanel.repaint();
+  
+        
+    }
+
         public static void main(String[] args) {
             User testUser = new User("rob", "hi", "raymundo", "Male", null, null, "staff", true, 00, 19);
             new DB_Staff(testUser);

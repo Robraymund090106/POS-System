@@ -9,6 +9,13 @@
             "name": "AdminCreateMeal",
             "request": "launch",
             "mainClass": "main.view.AdminCreateMeal",
+            "projectName": "POS system_6d0aafbc"
+        },
+        {
+            "type": "java",
+            "name": "AdminCreateMeal",
+            "request": "launch",
+            "mainClass": "main.view.AdminCreateMeal",
             "projectName": "POS-System_11214fde"
         },
         {
