@@ -1,17 +1,14 @@
 package main.view;
 
 import java.awt.*;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.swing.*;   
-import main.model.User;
 import java.util.List;
 import java.util.Map;
+import javax.swing.*;
 import main.database.*;
+import main.model.User;
 
 
 public class ReceiptFrame extends JFrame {
@@ -37,34 +34,43 @@ public class ReceiptFrame extends JFrame {
         this.paymentmethod = paymentmethod;
         this.orderItems = orderItems;
         this.orderPrices = orderPrices;
-        setTitle("Receipt");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.setUndecorated(false);
-        this.setResizable(false);
-        setVisible(true);
+  
+   setTitle("Receipt");
+   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int CW = screenSize.width;
-        int CH = screenSize.height;
-        setSize(CW, CH);
-        setLocationRelativeTo(null);
 
-        final Image bgImage = new ImageIcon("src/main/image/Staff Place Order Frame  .png").getImage();
+  this.setUndecorated(true); 
+  this.setResizable(false);
 
-        
-        JPanel mainContainer = new JPanel(new GridBagLayout()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
 
-     
-        canvas = new JPanel(null);
-        canvas.setPreferredSize(new Dimension(CW, CH));
-        canvas.setOpaque(false); 
+ this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+
+  Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+  int CW = screenSize.width;
+  int CH = screenSize.height;
+  setSize(CW, CH);
+  setLocationRelativeTo(null);
+
+final Image bgImage = new ImageIcon("src/main/image/Staff Place Order Frame  .png").getImage();
+
+
+  JPanel mainContainer = new JPanel(new GridBagLayout()) {
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+    
+        g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
+    }
+};
+
+  canvas = new JPanel(null);
+  canvas.setPreferredSize(new Dimension(CW, CH));
+  canvas.setOpaque(false);
+
+
+this.setContentPane(mainContainer);
+this.setVisible(true);
 
         //  PANELSSSSSS
         

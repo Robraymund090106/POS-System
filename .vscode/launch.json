@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "main.Main",
+            "projectName": "POS-System_964457df"
+        },
+        {
+            "type": "java",
             "name": "testframe",
             "request": "launch",
             "mainClass": "main.view.testframe",
