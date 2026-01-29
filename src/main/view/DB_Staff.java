@@ -20,6 +20,8 @@ public class DB_Staff extends JFrame {
     private List<Product> products = DatabaseManager.getAllProducts();
     private List<Product> foodProducts = DatabaseManager.getProductsByCategory("Food");
     private List<Product> DrinkProducts = DatabaseManager.getProductsByCategory("Drink");
+    private List<Product> MealProducts = DatabaseManager.getProductsByCategory("Meal");
+
     private List<String> OrderName = new ArrayList<>();
     private List<Double> OrderPrice = new ArrayList<>();
     private double totalprice;
@@ -290,7 +292,7 @@ mealiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     public void mousePressed(MouseEvent e) {
         //JOptionPane.showMessageDialog(null, "Meal button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
         scrollJPanel.removeAll();
-        for (Product p : foodProducts) {
+        for (Product p : MealProducts) {
             scrollJPanel.add(createProductCard(p));
         }
         scrollJPanel.revalidate();

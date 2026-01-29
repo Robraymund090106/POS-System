@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 import main.database.*;
 import main.model.Product;
 import main.model.User;
@@ -18,6 +20,7 @@ public class MainDB_Admin extends JFrame {
     JPanel salespanel;
     JComboBox<String> CategCombo;
     private List<Product> allproducts;
+    private List<User> allusers;
 
     public MainDB_Admin(User user) {
         this.user = user;
@@ -34,6 +37,8 @@ public class MainDB_Admin extends JFrame {
 
 
  allproducts = DatabaseManager.getAllProducts();
+ allusers = DatabaseManager.getAllUsers();
+
 
   Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
   int CW = screenSize.width;
@@ -205,16 +210,18 @@ public class MainDB_Admin extends JFrame {
         }
 
         JTable table = new JTable(model);
-       table.setRowHeight(40);
+        table.setRowHeight(40);
         table.setFont(new Font("SansSerif", Font.PLAIN, 24));
         table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 24));
         table.getTableHeader().setBackground(Color.WHITE); 
         table.getTableHeader().setForeground(Color.WHITE);
 
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+        table.setRowSorter(sorter);
      
         JScrollPane scrollPane = new JScrollPane(table);
      
-        scrollPane.setBounds(30, 169, 1110, 700); 
+        scrollPane.setBounds(30, 169, 1050, 480); 
         scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Keeps it clean
 
         // 4. Add to the panel
@@ -288,6 +295,15 @@ JTextField searchField1 = new JTextField() {
     @Override
     public void keyReleased(KeyEvent e) {
         String query = searchField1.getText().toLowerCase();
+        
+        if (query.trim().length() == 0) {
+            // If search is empty, show everything
+            sorter.setRowFilter(null);
+        } else {
+            // Filter by the first column (Item Name). 
+            // Use "(?i)" for case-insensitive searching
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + query, 0));
+        }
     }
 });
 
@@ -301,14 +317,15 @@ JTextField searchField1 = new JTextField() {
 
         @Override
          protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (addMenuBg != null) {
-            g.drawImage(addMenuBg, 0, 0, getWidth(), getHeight(), this);
+            super.paintComponent(g);
+            if (addMenuBg != null) {
+                g.drawImage(addMenuBg, 0, 0, getWidth(), getHeight(), this);
+            }
         }
-    }
-};
+    };
        
         addmenuitem.setBounds(197, 125, 1210, 789);
+        //addmenuitem.setBounds(197, 15, 1210, 789);
         addmenuitem.setOpaque(false);
         addmenuitem.setVisible(false);
 
@@ -417,12 +434,7 @@ JTextField searchField1 = new JTextField() {
 });
 
 
-  searchField.addKeyListener(new KeyAdapter() {
-    @Override
-    public void keyReleased(KeyEvent e) {
-        
-    }
-});
+  
 
 
    sbar.add(searchField);
@@ -459,6 +471,21 @@ JTextField searchField1 = new JTextField() {
         BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         addmenuitem.add(Itemstock);
         Itemstock.setOpaque(true);
+        Itemstock.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                // If the character isn't a digit, a period, or a backspace/delete...
+                if (!Character.isDigit(c) && c != '.' && c != KeyEvent.VK_BACK_SPACE) {
+                    e.consume(); // Destroy the event so the character doesn't appear
+                }
+
+                // Prevent multiple decimal points
+                if (c == '.' && Itemstock.getText().contains(".")) {
+                    e.consume();
+                }
+            }
+        });
 
         JLabel ItempriceLabel = new JLabel("Item Price");
         ItempriceLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -474,6 +501,22 @@ JTextField searchField1 = new JTextField() {
         BorderFactory.createEmptyBorder(5, 10, 5, 10)));
         addmenuitem.add(Itemprice);
         Itemprice.setOpaque(true);
+
+        Itemprice.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                // If the character isn't a digit, a period, or a backspace/delete...
+                if (!Character.isDigit(c) && c != '.' && c != KeyEvent.VK_BACK_SPACE) {
+                    e.consume(); // Destroy the event so the character doesn't appear
+                }
+
+                // Prevent multiple decimal points
+                if (c == '.' && Itemprice.getText().contains(".")) {
+                    e.consume();
+                }
+            }
+        });
 
         JLabel ItemCatLabel = new JLabel("Item Category");
         ItemCatLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -519,12 +562,127 @@ JTextField searchField1 = new JTextField() {
         cnfm.setForeground(Color.WHITE);
         cnfm.setBounds(1000, 260, 100, 50);
         cnfm.setFocusPainted(false);
+        cnfm.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        
+
+        String[] columnname = {"", "", "", ""};
+        Object[][] datalist = {};
+
+        DefaultTableModel modelbottom = new DefaultTableModel(datalist, columnname) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Makes the table read-only
+            }
+        };
+
+        for(Product p : allproducts){
+            Object[] rowData = {p.getName(), p.getPrice(), p.getCategory(), p.getStock()};
+            modelbottom.addRow(rowData);
+        }
+
+        JTable tablebottom = new JTable(modelbottom);
+        tablebottom.setRowHeight(30);
+        tablebottom.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        tablebottom.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 18));
+        tablebottom.getTableHeader().setBackground(Color.WHITE);
+        tablebottom.getTableHeader().setForeground(Color.WHITE);
+
+        TableRowSorter<DefaultTableModel> sorter2 = new TableRowSorter<>(modelbottom);
+        tablebottom.setRowSorter(sorter2);
+     
+        JScrollPane scrollPanebottom = new JScrollPane(tablebottom);
+        scrollPanebottom.setBounds(130, 560, 645, 200);
+        //scrollPanebottom.setBorder(BorderFactory.createEmptyBorder()); 
+        addmenuitem.add(scrollPanebottom);
+
         addmenuitem.add(cnfm);
+
+        searchField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String query = searchField.getText().toLowerCase();
+        
+                if (query.trim().length() == 0) {
+                    // If search is empty, show everything
+                    sorter2.setRowFilter(null);
+                } else {
+                    // Filter by the first column (Item Name). 
+                    // Use "(?i)" for case-insensitive searching
+                    sorter2.setRowFilter(RowFilter.regexFilter("(?i)" + query, 0));
+                }
+            }
+        });
+
+        JButton btnDelete = new JButton("Delete Selected");
+        btnDelete.setBounds(780, 560, 150, 40); // Position it next to your scrollPanebottom
+        btnDelete.setBackground(new Color(255, 102, 102)); // Reddish
+        btnDelete.setForeground(Color.WHITE);
+        btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
+        addmenuitem.add(btnDelete);
+        cnfm.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                String name = Itemname.getText();
+                String priceText = Itemprice.getText();
+                String stockText = Itemstock.getText();
+                String category = (String) CategCombo.getSelectedItem();
+                if (name.isEmpty() || priceText.isEmpty() || stockText.isEmpty() || category.isEmpty()) {
+                    JOptionPane.showMessageDialog(addmenuitem, "Please fill in all fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                double price;
+                int stock;
+
+                price = Double.parseDouble(priceText);
+                stock = Integer.parseInt(stockText);
+                DatabaseManager.addProduct(new Product(0, name, price, stock, category, ""));
+                JOptionPane.showMessageDialog(addmenuitem, "Product added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                Itemname.setText("");
+                Itemprice.setText("");
+                Itemstock.setText("");
+                CategCombo.setSelectedIndex(0);
+
+                // Update the table model
+                Object[] rowData = {name, price, category, stock};
+                modelbottom.addRow(rowData);
+            
+
+
+                
+            }
+                
+        });
+        btnDelete.addActionListener(e -> {
+        int selectedRow = tablebottom.getSelectedRow();
+        
+        if (selectedRow != -1) {
+            // Convert sorter index to model index (important because of your search bar!)
+            int modelRow = tablebottom.convertRowIndexToModel(selectedRow);
+            String itemName = (String) modelbottom.getValueAt(modelRow, 0);
+
+            int confirm = JOptionPane.showConfirmDialog(null, 
+                "Are you sure you want to delete " + itemName + "?", "Delete", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                DatabaseManager.deleteProduct(itemName);
+                modelbottom.removeRow(modelRow);
+                JOptionPane.showMessageDialog(null, "Item Deleted");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select a row first!");
+        }
+    });
+
 
         //KULANG PA NG SCROLL BAR SA TABI NG MGA LABELS TO SHOW ADDED ITEMS - que
 
         //important part for adding panel to canvas
         canvas.add(addmenuitem);
+
+
+
 
 
         //ADD STAFF PANEL
@@ -628,13 +786,7 @@ JTextField searchField1 = new JTextField() {
     }
 });
 
-  searchField2.addKeyListener(new KeyAdapter() {
-    @Override
-    public void keyReleased(KeyEvent e) {
-        String query = searchField1.getText().toLowerCase();
-    }
-});
-
+  
    sbarrr.add(searchField2);
 
         JLabel usernamelLabel = new JLabel("Username");
@@ -661,25 +813,180 @@ JTextField searchField1 = new JTextField() {
         genderlLabel.setBounds(870, 140, 150, 30);
         addstaff.add(genderlLabel); 
 
-        JButton bck = new JButton("Delete");
-        bck.setSize(100, 40);
-        bck.setBackground(new Color(220, 120, 100));
-        bck.setForeground(Color.WHITE);
-        bck.setFont(new Font("Arial", Font.BOLD, 15));
-        bck.setBounds(1115, 184, 100, 40);
-        bck.setFocusPainted(false);
-        addstaff.add(bck);
+        //JButton bck = new JButton("Delete");
+       //bck.setSize(100, 40);
+        //bck.setBackground(new Color(220, 120, 100));
+        //bck.setForeground(Color.WHITE);
+        //bck.setFont(new Font("Arial", Font.BOLD, 15));
+        //bck.setBounds(1115, 184, 100, 40);
+       // bck.setFocusPainted(false);
+        //addstaff.add(bck);
         
-        JButton ok = new JButton("Confirm");
-        ok.setSize(400, 40);
-        ok.setBackground(new Color(165, 215, 155));
-        ok.setForeground(Color.WHITE);
-        ok.setFont(new Font("Arial", Font.BOLD, 15));
-        ok.setBounds(990, 184, 100, 40);
-        ok.setFocusPainted(false);
-        addstaff.add(ok);
+        //JButton ok = new JButton("Confirm");
+        //ok.setSize(400, 40);
+        //ok.setBackground(new Color(165, 215, 155));
+        //ok.setForeground(Color.WHITE);
+        //ok.setFont(new Font("Arial", Font.BOLD, 15));
+        //ok.setBounds(990, 184, 100, 40);
+        //ok.setFocusPainted(false);
+        //addstaff.add(ok);
+
+        JButton changeStatus = new JButton("Change Status");
+        changeStatus.setSize(150, 40);
+        changeStatus.setBackground(new Color(165, 215, 155));
+        changeStatus.setForeground(Color.WHITE);
+        changeStatus.setFont(new Font("Arial", Font.BOLD, 15));
+        changeStatus.setBounds(990, 600, 150, 40);
+        changeStatus.setFocusPainted(false);
+
+        JButton viewDetails = new JButton("View Details");
+        viewDetails.setSize(150, 40);
+        viewDetails.setBackground(new Color(165, 215, 155));
+        viewDetails.setForeground(Color.WHITE);
+        viewDetails.setFont(new Font("Arial", Font.BOLD, 15));
+        viewDetails.setBounds(820, 600, 150, 40);
+        viewDetails.setFocusPainted(false);
+        addstaff.add(viewDetails);
+
+
+        addstaff.add(changeStatus);
+
+        String[] usercolumnname = {"Username", "First Name", "Last Name", "Gender","Status"};
+        Object[][] userdatalist = {};
+
+        DefaultTableModel usermodel = new DefaultTableModel(userdatalist, usercolumnname) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Makes the table read-only
+            }
+        };
+
+        JTable usertable = new JTable(usermodel);
+        usertable.setRowHeight(30);
+
+        usertable.setFont(new Font("SansSerif", Font.PLAIN, 18));
+
+        usertable.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 18));
+
+        
+        //usertable.getTableHeader().setBackground(Color.WHITE);
+        //usertable.getTableHeader().setForeground(Color.WHITE);
+
+        usertable.getTableHeader().setBackground(Color.WHITE); // Background is White
+        usertable.getTableHeader().setForeground(Color.BLACK); // Change this to BLACK so you can see it
+        for(User u : allusers){
+            if(!u.isAdmin()){
+            String fullname = u.getFullname();
+            String FirstName = fullname.split(" ")[0];
+            String LastName = fullname.split(" ")[1];
+            String status = u.isActive() ? "Active" : "Inactive";
+            Object[] rowData = {u.getUsername(), FirstName, LastName, u.getgender(), status};
+            usermodel.addRow(rowData);
+        }
+        }
+
+        TableRowSorter<DefaultTableModel> userSorter = new TableRowSorter<>(usermodel);
+        usertable.setRowSorter(userSorter);
+        
+        JScrollPane userscrollPane = new JScrollPane(usertable);
+        userscrollPane.setBounds(40, 190, 1100, 400);
+        addstaff.add(userscrollPane);
+
+        changeStatus.addActionListener(e -> {
+            int selectedRow = usertable.getSelectedRow();
+
+            if (selectedRow >= 0) {
+                int modelRow = usertable.convertRowIndexToModel(selectedRow);
+                String username = (String) usermodel.getValueAt(modelRow, 0);
+                User selectedUser = DatabaseManager.getUserByUsername(username);
+                String status = (String) usermodel.getValueAt(modelRow, 4);
+                int confirm = JOptionPane.showConfirmDialog(
+            null, 
+                "Would you like to change " + username + "'s status to " + 
+                (status.equalsIgnoreCase("Inactive") ? "Active" : "Inactive") + "?",
+                "Confirm Status Change",
+                JOptionPane.YES_NO_OPTION
+                );
+
+                if (confirm != JOptionPane.YES_OPTION) {
+                    return; // User cancelled the action
+                }
+
+                String confirmPassword = JOptionPane.showInputDialog(
+                    null,
+                    "Enter your admin password to confirm:",
+                    "Admin Confirmation",
+                    JOptionPane.PLAIN_MESSAGE
+                );
+                if (confirmPassword == null) {
+                    return; // User cancelled the action
+                }
+                if (!confirmPassword.equals(user.getPassword())) {
+                    JOptionPane.showMessageDialog(null, "Incorrect admin password.");
+                    return;
+                }
+
+                if (status.equals("Active")) {
+                    if (DatabaseManager.deactivateUser(username)) {
+                        usermodel.setValueAt("Inactive", modelRow, 4); // Status is column 4
+                        JOptionPane.showMessageDialog(null, username + " has been deactivated.");
+                    }
+                } else {
+                    if (DatabaseManager.activateUser(username)) {
+                        usermodel.setValueAt("Active", modelRow, 4); // Status is column 4
+                        JOptionPane.showMessageDialog(null, username + " has been activated.");
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Please select a user to change status.");
+            }
+                
+        });
+
+        viewDetails.addActionListener(e -> {
+            int selectedRow = usertable.getSelectedRow();
+
+            if (selectedRow >= 0) {
+                int modelRow = usertable.convertRowIndexToModel(selectedRow);
+                String username = (String) usermodel.getValueAt(modelRow, 0);
+                User selectedUser = DatabaseManager.getUserByUsername(username);
+
+                new StaffDetailFrame(username);
+                
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Please select a user to view details.");
+            }
+
+
+                
+        });
+
+        searchField2.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String query = searchField2.getText().toLowerCase();
+                if (query.trim().length() == 0) {
+                    // If search is empty, show everything
+                    userSorter.setRowFilter(null);
+                    
+
+                } else {
+                    // Filter by the first column (Username). 
+                    // Use "(?i)" for case-insensitive searching
+                    userSorter.setRowFilter(RowFilter.regexFilter("(?i)" + query, 0));
+                }
+
+            }
+        });
+
+
+        
+
 
         canvas.add(addstaff);
+
+
 
         // TRANSACTION PANEL
 
@@ -828,8 +1135,12 @@ JTextField searchField1 = new JTextField() {
         date.setForeground(Color.WHITE);
         date.setBounds(980, 125, 150, 30);
         transactionpanel.add(date); 
+        
 
         
+
+
+
 
         canvas.add(transactionpanel);
 

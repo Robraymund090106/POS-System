@@ -311,10 +311,66 @@ public static List<Product> getProductsByCategory(String category) {
     }
     
 
- 
+    public static void deleteProduct(String productName) {
+        String sql = "DELETE FROM Product WHERE name = ?";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, productName);
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.err.println("Error deleting product: " + e.getMessage());
+        }
+
+    }
+
+    public static List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM User";
+        
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                users.add(new User(
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("fullName"),
+                rs.getString("gender"),
+                rs.getString("birthday"),
+                rs.getString("email"),
+                rs.getString("role"),
+                rs.getInt("isActive") == 1,
+                rs.getInt("userId"),
+                rs.getInt("age")
+            ));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching users: " + e.getMessage());
+        }
+        return users;
+    }
+
+    public static boolean deactivateUser(String username) {
+        String sql = "UPDATE User SET isActive = 0 WHERE username = ?";
+
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, username);
+            int rowsAffected = pstmt.executeUpdate();
+            
+            return rowsAffected > 0; 
+        } catch (SQLException e) {
+            System.err.println("Deactivation Error: " + e.getMessage());
+            return false;
+        }
 
 
-
+    }
+    
 
 
     public static boolean activateUser(String username) {
@@ -333,6 +389,35 @@ public static List<Product> getProductsByCategory(String category) {
         return false;
     }
 }
+
+public static User getUserByUsername(String username) {
+    String sql = "SELECT * FROM User WHERE username = ?";
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, username);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            return new User(
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("fullName"),
+                rs.getString("gender"),
+                rs.getString("birthday"),
+                rs.getString("email"),
+                rs.getString("role"),
+                rs.getInt("isActive") == 1,
+                rs.getInt("userId"),
+                rs.getInt("age")
+            );
+        }
+    } catch (SQLException e) {
+        System.err.println("Error fetching user: " + e.getMessage());
+    }
+    return null;
+}
+
 
 public static boolean recordSale(int userId, double total, double cash, double change, List<String> itemNames, List<Double> itemPrices, String paymentmethod) {
     String saleSql = "INSERT INTO Sales (userId, totalPrice, cashGiven, change, paymentMethod) VALUES (?, ?, ?, ?, ?)";
