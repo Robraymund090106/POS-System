@@ -324,8 +324,8 @@ JTextField searchField1 = new JTextField() {
         }
     };
        
-        addmenuitem.setBounds(197, 125, 1210, 789);
-        //addmenuitem.setBounds(197, 15, 1210, 789);
+        //addmenuitem.setBounds(197, 125, 1210, 789);
+        addmenuitem.setBounds(197, 15, 1210, 789);
         addmenuitem.setOpaque(false);
         addmenuitem.setVisible(false);
 
