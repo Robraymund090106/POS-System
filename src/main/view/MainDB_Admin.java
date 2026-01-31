@@ -647,6 +647,8 @@ JTextField searchField1 = new JTextField() {
                 // Update the table model
                 Object[] rowData = {name, price, category, stock};
                 modelbottom.addRow(rowData);
+
+                model.addRow(rowData);
             
 
 
