@@ -663,6 +663,7 @@ JTextField searchField1 = new JTextField() {
             // Convert sorter index to model index (important because of your search bar!)
             int modelRow = tablebottom.convertRowIndexToModel(selectedRow);
             String itemName = (String) modelbottom.getValueAt(modelRow, 0);
+            int modelrow = table.convertRowIndexToModel(selectedRow);
 
             int confirm = JOptionPane.showConfirmDialog(null, 
                 "Are you sure you want to delete " + itemName + "?", "Delete", JOptionPane.YES_NO_OPTION);
@@ -671,6 +672,7 @@ JTextField searchField1 = new JTextField() {
                 DatabaseManager.deleteProduct(itemName);
                 modelbottom.removeRow(modelRow);
                 JOptionPane.showMessageDialog(null, "Item Deleted");
+                model.removeRow(modelrow);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Please select a row first!");
