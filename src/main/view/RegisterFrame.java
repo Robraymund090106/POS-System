@@ -31,6 +31,7 @@ public class RegisterFrame extends JFrame {
         };
 
         backgroundPanel.setLayout(null);
+        setResizable(false);
 
         JLabel title = new JLabel("Sign Up", SwingConstants.CENTER);
         title.setSize(500, 60);

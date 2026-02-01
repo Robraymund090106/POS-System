@@ -24,6 +24,8 @@ public class StaffDetailFrame extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
 
+        setVisible(true);
+
      
     }
 }

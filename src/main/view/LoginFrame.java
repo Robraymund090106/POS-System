@@ -15,7 +15,7 @@ public class LoginFrame extends JFrame {
         
         setExtendedState(JFrame.MAXIMIZED_BOTH); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(true);
+        setResizable(false);
 
         // Full screen bg
         JPanel backgroundPanel = new JPanel() {
