@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "sales_staffFrame",
+            "request": "launch",
+            "mainClass": "main.view.sales_staffFrame",
+            "projectName": "POS-System_964457df"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "main.Main",

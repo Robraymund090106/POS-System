@@ -1,11 +1,10 @@
 package main.view;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.*;
-import java.awt.*;
-import main.model.*;
 import main.backend.*;
+import main.model.*;
 
 public class UserDetailFrame extends JFrame {
 
@@ -135,7 +134,7 @@ public class UserDetailFrame extends JFrame {
     }
 
     private void handleLogout() {
-        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure?", "Logout", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to log out?", "Logout", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             for (Window window : Window.getWindows()) window.dispose();
             new LoginFrame();

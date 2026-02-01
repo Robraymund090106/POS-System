@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-
 import main.database.*;
 import main.model.Product;
 import main.model.User;
@@ -170,7 +169,7 @@ public class MainDB_Admin extends JFrame {
         }
     };
         listpanelitem.setBackground(Color.MAGENTA);
-        listpanelitem.setBounds(199, 140, 1210, 700);
+        listpanelitem.setBounds(199, 139, 1208, 700);
         listpanelitem.setOpaque(false);
         listpanelitem.setVisible(true);
 
@@ -221,7 +220,7 @@ public class MainDB_Admin extends JFrame {
      
         JScrollPane scrollPane = new JScrollPane(table);
      
-        scrollPane.setBounds(30, 169, 1050, 480); 
+        scrollPane.setBounds(50, 169, 1030, 480); 
         scrollPane.setBorder(BorderFactory.createEmptyBorder()); // Keeps it clean
 
         // 4. Add to the panel
@@ -324,7 +323,7 @@ JTextField searchField1 = new JTextField() {
         }
     };
        
-        addmenuitem.setBounds(197, 125, 1210, 789);
+        addmenuitem.setBounds(197, 129, 1210, 807);
         //addmenuitem.setBounds(197, 15, 1210, 789);
         addmenuitem.setOpaque(false);
         addmenuitem.setVisible(false);
@@ -363,7 +362,7 @@ JTextField searchField1 = new JTextField() {
     }
 };
 
-  sbar.setBounds(800, 489, 387, 69);
+  sbar.setBounds(800, 500, 387, 69);
   sbar.setOpaque(false); 
   addmenuitem.add(sbar);
 
@@ -592,7 +591,7 @@ JTextField searchField1 = new JTextField() {
         tablebottom.setRowSorter(sorter2);
      
         JScrollPane scrollPanebottom = new JScrollPane(tablebottom);
-        scrollPanebottom.setBounds(130, 560, 645, 200);
+        scrollPanebottom.setBounds(133, 564, 645, 200);
         //scrollPanebottom.setBorder(BorderFactory.createEmptyBorder()); 
         addmenuitem.add(scrollPanebottom);
 
@@ -615,7 +614,7 @@ JTextField searchField1 = new JTextField() {
         });
 
         JButton btnDelete = new JButton("Delete Selected");
-        btnDelete.setBounds(780, 560, 150, 40); // Position it next to your scrollPanebottom
+        btnDelete.setBounds(780, 700, 150, 40); // Position it next to your scrollPanebottom
         btnDelete.setBackground(new Color(255, 102, 102)); // Reddish
         btnDelete.setForeground(Color.WHITE);
         btnDelete.setFont(new Font("Arial", Font.BOLD, 14));
@@ -704,7 +703,7 @@ JTextField searchField1 = new JTextField() {
         }
     }
 };
-        addstaff.setBounds(198, 130, 1207, 780);
+        addstaff.setBounds(198, 134, 1207, 780);
         addstaff.setOpaque(false);
         addstaff.setVisible(false);
 
@@ -796,26 +795,32 @@ JTextField searchField1 = new JTextField() {
         JLabel usernamelLabel = new JLabel("Username");
         usernamelLabel.setFont(new Font("Arial", Font.BOLD, 23));
         usernamelLabel.setForeground(Color.WHITE);
-        usernamelLabel.setBounds(117, 140, 150, 30);
+        usernamelLabel.setBounds(101, 140, 150, 30);
         addstaff.add(usernamelLabel); 
 
         JLabel firstnamelLabel = new JLabel("First Name");
         firstnamelLabel.setFont(new Font("Arial", Font.BOLD, 23));
         firstnamelLabel.setForeground(Color.WHITE);
-        firstnamelLabel.setBounds(350, 140, 150, 30);
+        firstnamelLabel.setBounds(318, 140, 150, 30);
         addstaff.add(firstnamelLabel); 
 
         JLabel lastnamelLabel = new JLabel("Last Name");
         lastnamelLabel.setFont(new Font("Arial", Font.BOLD, 23));
         lastnamelLabel.setForeground(Color.WHITE);
-        lastnamelLabel.setBounds(620, 140, 150, 30);
+        lastnamelLabel.setBounds(530, 140, 150, 30);
         addstaff.add(lastnamelLabel); 
 
         JLabel genderlLabel = new JLabel("Gender");
         genderlLabel.setFont(new Font("Arial", Font.BOLD, 23));
         genderlLabel.setForeground(Color.WHITE);
-        genderlLabel.setBounds(870, 140, 150, 30);
+        genderlLabel.setBounds(753, 140, 150, 30);
         addstaff.add(genderlLabel); 
+
+        JLabel statuslLabel = new JLabel("Status");
+        statuslLabel.setFont(new Font("Arial", Font.BOLD, 23));
+        statuslLabel.setForeground(Color.WHITE);
+        statuslLabel.setBounds(972, 140, 150, 30);
+        addstaff.add(statuslLabel); 
 
         //JButton bck = new JButton("Delete");
        //bck.setSize(100, 40);
@@ -862,7 +867,7 @@ JTextField searchField1 = new JTextField() {
         String[] usercolumnname = {"Username", "First Name", "Last Name", "Gender","Status"};
         Object[][] userdatalist = {};
 
-        DefaultTableModel usermodel = new DefaultTableModel(userdatalist, usercolumnname) {
+        DefaultTableModel usermodel = new DefaultTableModel(userdatalist,usercolumnname) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Makes the table read-only
@@ -897,7 +902,7 @@ JTextField searchField1 = new JTextField() {
         usertable.setRowSorter(userSorter);
         
         JScrollPane userscrollPane = new JScrollPane(usertable);
-        userscrollPane.setBounds(40, 190, 1100, 400);
+        userscrollPane.setBounds(40, 190, 1070, 400);
         addstaff.add(userscrollPane);
 
         changeStatus.addActionListener(e -> {
@@ -1009,7 +1014,7 @@ JTextField searchField1 = new JTextField() {
         }
     }
 };
-        transactionpanel.setBounds(200, 134, 1207, 700);
+        transactionpanel.setBounds(200, 134, 1207, 780);
         transactionpanel.setOpaque(false);
         transactionpanel.setVisible(false);
 
@@ -1056,8 +1061,8 @@ JTextField searchField1 = new JTextField() {
             g2.setColor(new Color(180, 180, 180)); 
             g2.setFont(new Font("SansSerif", Font.ITALIC, 22));
             FontMetrics fm = g2.getFontMetrics();
-            int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
-            g2.drawString("Search here", 15, y); 
+            //int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
+            g2.drawString("Search here", 15,43); 
             g2.dispose();
         }
     }
@@ -1110,38 +1115,38 @@ JTextField searchField1 = new JTextField() {
          JLabel usernamelLabel1 = new JLabel("Staff");
         usernamelLabel1.setFont(new Font("Arial", Font.BOLD, 23));
         usernamelLabel1.setForeground(Color.WHITE);
-        usernamelLabel1.setBounds(117, 125, 150, 30);
+        usernamelLabel1.setBounds(117, 137, 150, 30);
         transactionpanel.add(usernamelLabel1); 
 
         JLabel firstnamelLabel1 = new JLabel("Product");
         firstnamelLabel1.setFont(new Font("Arial", Font.BOLD, 23));
         firstnamelLabel1.setForeground(Color.WHITE);
-        firstnamelLabel1.setBounds(350, 125, 150, 30);
+        firstnamelLabel1.setBounds(295, 137, 150, 30);
         transactionpanel.add(firstnamelLabel1); 
 
         JLabel lastnamelLabel1 = new JLabel("Qty");
         lastnamelLabel1.setFont(new Font("Arial", Font.BOLD, 23));
         lastnamelLabel1.setForeground(Color.WHITE);
-        lastnamelLabel1.setBounds(570, 125, 150, 30);
+        lastnamelLabel1.setBounds(480, 137, 150, 30);
         transactionpanel.add(lastnamelLabel1); 
 
         JLabel genderlLabel1 = new JLabel("Price");
         genderlLabel1.setFont(new Font("Arial", Font.BOLD, 23));
         genderlLabel1.setForeground(Color.WHITE);
-        genderlLabel1.setBounds(670, 125, 150, 30);
+        genderlLabel1.setBounds(590, 137, 150, 30);
         transactionpanel.add(genderlLabel1); 
 
            JLabel tot = new JLabel("Total");
         tot.setFont(new Font("Arial", Font.BOLD, 23));
         tot.setForeground(Color.WHITE);
-        tot.setBounds(800, 125, 150, 30);
+        tot.setBounds(700, 137, 137, 30);
         transactionpanel.add(tot); 
 
 
-          JLabel date = new JLabel("Date");
+          JLabel date = new JLabel("Date/Time");
         date.setFont(new Font("Arial", Font.BOLD, 23));
         date.setForeground(Color.WHITE);
-        date.setBounds(980, 125, 150, 30);
+        date.setBounds(870, 137, 150, 30);
         transactionpanel.add(date); 
         
 
@@ -1164,7 +1169,7 @@ JTextField searchField1 = new JTextField() {
         }
     }
 };
-        salespanel.setBounds(196, 134, 1211, 780);
+        salespanel.setBounds(196, 134, 1211, 800);
         salespanel.setOpaque(false);
         salespanel.setVisible(false);
 

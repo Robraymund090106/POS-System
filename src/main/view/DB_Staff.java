@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.*;
 import main.database.*;
 import main.model.*;
@@ -323,7 +322,7 @@ salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
         //JOptionPane.showMessageDialog(null, "Sales button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
-        new sales_staffFrame();
+       //  new sales_staffFrame(); // Pa fix maaa, dili macall yung sales staff framee 
         dispose();
     }
     @Override
@@ -501,23 +500,35 @@ searchField.addKeyListener(new KeyAdapter() {
 
             public void mousePressed(MouseEvent e) {
 
-                int option =JOptionPane.showConfirmDialog(null, "Are you sure you want to clear all items?", "Confirm Clear All", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-                if (option == JOptionPane.YES_OPTION) {
-                    JOptionPane.showMessageDialog(null, "Items deleted!", "clear all Button", JOptionPane.INFORMATION_MESSAGE);
-                    OrderName.clear();
-                    OrderPrice.clear();
-                    plorJPanel.removeAll();
-                    plorJPanel.revalidate();
-                    plorJPanel.repaint();
-                    totalValueLabel.setText("₱ 0.00");
-                    totalprice = 0.0;
+               JOptionPane.showMessageDialog(null, 
+             "Administrator authorization is required.", 
+            "Clear Order", 
+            JOptionPane.INFORMATION_MESSAGE);
 
-                }
+         // Admin Password 
+        JPasswordField pf = new JPasswordField();
+        int okCxl = JOptionPane.showConfirmDialog(null, pf, "Enter Admin Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
+        if (okCxl == JOptionPane.OK_OPTION) {
+            String password = new String(pf.getPassword());
+      
+            if (password.equals("admin123")) { 
+    int choice = JOptionPane.showConfirmDialog(null, 
+            "Are you sure you want to clear all items?", 
+            "Confirm Action", 
+            JOptionPane.YES_NO_OPTION);
+      if (choice == JOptionPane.YES_OPTION) {
+        new DB_Staff(user);
+    } 
+    
+} else {
+    JOptionPane.showMessageDialog(null, "Invalid Password", "Error", JOptionPane.ERROR_MESSAGE);
+}
+             
                
             }
-
+        }
             @Override
 
             public void mouseEntered(MouseEvent e) {

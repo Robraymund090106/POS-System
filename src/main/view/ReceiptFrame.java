@@ -96,39 +96,39 @@ this.setVisible(true);
         JLabel receiptLabel = new JLabel("Receipt");
         receiptLabel.setFont(new Font("SansSerif", Font.PLAIN, 40));
         receiptLabel.setForeground(new Color(58, 83, 155));
-        receiptLabel.setBounds(0, 10, 200, 50);
+        receiptLabel.setBounds(27, 10, 200, 50);
         detailsPanel.add(receiptLabel);
 
         JLabel receiptNumber = new JLabel("Receipt No.: (Pending)");
         receiptNumber.setFont(new Font("SansSerif", Font.PLAIN, 20));
         receiptNumber.setForeground(new Color(58, 83, 155));
-        receiptNumber.setBounds(0, 60, 200, 30);
+        receiptNumber.setBounds(27, 60, 200, 30);
         detailsPanel.add(receiptNumber);
 
 
         JLabel lineSeparator = new JLabel("---------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         lineSeparator.setFont(new Font("SansSerif", Font.PLAIN, 20));
         lineSeparator.setForeground(new Color(58, 83, 155));
-        lineSeparator.setBounds(0, 90, 817, 30);
+        lineSeparator.setBounds(10, 90, 817, 30);
         detailsPanel.add(lineSeparator);
 
         JLabel lineSeparator2 = new JLabel("---------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         lineSeparator2.setFont(new Font("SansSerif", Font.PLAIN, 20));
         lineSeparator2.setForeground(new Color(58, 83, 155));
-        lineSeparator2.setBounds(0, 505, 817, 30);
+        lineSeparator2.setBounds(10, 505, 817, 30);
         detailsPanel.add(lineSeparator2);
 
 
         JLabel total = new JLabel("Total Amount:                                                                                         " + String.format("%.2f", this.totalprice));
         total.setFont(new Font("SansSerif", Font.PLAIN, 20));
         total.setForeground(new Color(58, 83, 155));
-        total.setBounds(0, 530, 817, 30);
+        total.setBounds(10, 530, 817, 30);
         detailsPanel.add(total);
 
         JLabel lineSeparator3 = new JLabel("---------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         lineSeparator3.setFont(new Font("SansSerif", Font.PLAIN, 20));
         lineSeparator3.setForeground(new Color(58, 83, 155));
-        lineSeparator3.setBounds(0, 550, 817, 30);
+        lineSeparator3.setBounds(10, 550, 817, 30);
         detailsPanel.add(lineSeparator3);
 
         //receiptContent = new JPanel();
@@ -430,7 +430,7 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
     JPanel receiptContainer = new JPanel();
     receiptContainer.setLayout(new BoxLayout(receiptContainer, BoxLayout.Y_AXIS));
     receiptContainer.setBackground(Color.WHITE);
-    //receiptContainer.setOpaque(false);
+    receiptContainer.setOpaque(false);
     // Set position within detailsPanel (Panel 2)
     receiptContainer.setBounds(00, 120, 740, 400); 
 
