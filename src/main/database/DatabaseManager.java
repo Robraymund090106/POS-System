@@ -463,4 +463,44 @@ public static boolean recordSale(int userId, double total, double cash, double c
     }
 }
 
+
+
+public static boolean updatePassword(String username, String newPassword) {
+    String sql = "UPDATE User SET password = ? WHERE username = ?";
+
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, newPassword);
+        pstmt.setString(2, username);
+        
+        int rowsAffected = pstmt.executeUpdate();
+        return rowsAffected > 0; 
+        
+    } catch (SQLException e) {
+        System.err.println("Password Update Error: " + e.getMessage());
+        return false;
+    }
 }
+
+public static boolean isValidAdminPassword(String enteredPassword) {
+    // This query asks: "Is there ANY admin with this password?"
+    String sql = "SELECT 1 FROM User WHERE password = ? AND role = 'ADMIN' LIMIT 1";
+
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setString(1, enteredPassword);
+        
+        try (ResultSet rs = pstmt.executeQuery()) {
+            // If rs.next() is true, it means at least one admin matched
+            return rs.next();
+        }
+    } catch (SQLException e) {
+        System.err.println("Admin override error: " + e.getMessage());
+        return false;
+    }
+}
+
+}
+

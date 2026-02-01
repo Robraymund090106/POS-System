@@ -513,7 +513,7 @@ searchField.addKeyListener(new KeyAdapter() {
         if (okCxl == JOptionPane.OK_OPTION) {
             String password = new String(pf.getPassword());
       
-            if (password.equals("admin123")) { 
+            if (DatabaseManager.isValidAdminPassword(password)) { 
     int choice = JOptionPane.showConfirmDialog(null, 
             "Are you sure you want to clear all items?", 
             "Confirm Action", 
@@ -766,56 +766,109 @@ searchField.addKeyListener(new KeyAdapter() {
     return new ImageIcon(buffered);
 }
 
-private void updateOrderDisplay(){
+private void updateOrderDisplay() {
     plorJPanel.removeAll();
-    for(String name : counts.keySet()){
+    double totalSum = 0;
 
+    for (String name : counts.keySet()) {
         int qty = counts.get(name);
         double unitP = unitprice.get(name);
         double lineTotal = qty * unitP;
+        totalSum += lineTotal;
+
         JPanel itemRow = new JPanel(new BorderLayout());
-        itemRow.setMaximumSize(new Dimension(450, 40));
+        itemRow.setMaximumSize(new Dimension(450, 50));
         itemRow.setBackground(Color.WHITE);
         itemRow.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 
-        // Display as "4x Coffee" instead of 4 separate lines
-        JLabel nameLbl = new JLabel("  " + qty + "x  " + name);
-        nameLbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        // LEFT SIDE: Subtraction button and Name
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.setOpaque(false);
         
-        JLabel priceLbl = new JLabel("₱ " + (int)lineTotal + "  ");
-        priceLbl.setFont(new Font("SansSerif", Font.BOLD, 16));
-
-        JButton removeBtn = new JButton("x");
-        removeBtn.setForeground(Color.RED);
-        removeBtn.setBorderPainted(false);
-        removeBtn.setContentAreaFilled(false);
-        
-        // Remove logic: clears all of that item type
-        removeBtn.addActionListener(e -> {
-            counts.remove(name);
-            unitprice.remove(name);
-            // Re-sync your OrderName/Price lists for the Database/Receipt logic
-            OrderName.removeIf(n -> n.equals(name));
-            OrderPrice.removeIf(p -> p.equals(unitP));
-            updateOrderDisplay(); // Refresh UI
+        JButton subBtn = new JButton("-");
+        styleSmallButton(subBtn, Color.RED);
+        subBtn.addActionListener(e -> {
+            if (counts.get(name) > 1) {
+                counts.put(name, counts.get(name) - 1);
+                // Remove exactly one instance from the backend lists
+                OrderName.remove(name);
+                OrderPrice.remove(unitP);
+            } else {
+                counts.remove(name);
+                unitprice.remove(name);
+                OrderName.remove(name);
+                OrderPrice.remove(unitP);
+            }
+            updateOrderDisplay();
         });
 
-        itemRow.add(nameLbl, BorderLayout.WEST);
-        itemRow.add(priceLbl, BorderLayout.CENTER);
-        itemRow.add(removeBtn, BorderLayout.EAST);
+        JLabel nameLbl = new JLabel(qty + "x " + name);
+        nameLbl.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        
+        leftPanel.add(subBtn);
+        leftPanel.add(nameLbl);
 
+        // RIGHT SIDE: Price and Full Remove
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rightPanel.setOpaque(false);
+        
+        JLabel priceLbl = new JLabel("₱" + (int)lineTotal);
+        priceLbl.setFont(new Font("SansSerif", Font.BOLD, 16));
+        
+        JButton delBtn = new JButton("x");
+        styleSmallButton(delBtn, Color.GRAY);
+        delBtn.addActionListener(e -> {
+
+            JOptionPane.showMessageDialog(null, "Administrator authorization is required.", 
+            "Clear Order", 
+            JOptionPane.INFORMATION_MESSAGE);
+
+        // Admin Password
+        JPasswordField pf = new JPasswordField();
+        int okCxl = JOptionPane.showConfirmDialog(null, pf, "Enter Admin Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (okCxl == JOptionPane.OK_OPTION) {
+            String password = new String(pf.getPassword());
+            if (!DatabaseManager.isValidAdminPassword(password)) { 
+                JOptionPane.showMessageDialog(null, "Invalid Password", "Error", JOptionPane.ERROR_MESSAGE);
+                return; // Exit if password is invalid
+        }
+    }else {
+        return; // Exit if dialog was cancelled
+    }
+
+            counts.remove(name);
+            unitprice.remove(name);
+            // Remove all instances of this specific name
+            while(OrderName.contains(name)) {
+                int index = OrderName.indexOf(name);
+                OrderName.remove(index);
+                OrderPrice.remove(index);
+            }
+            updateOrderDisplay();
+        });
+
+        rightPanel.add(priceLbl);
+        rightPanel.add(delBtn);
+
+        itemRow.add(leftPanel, BorderLayout.WEST);
+        itemRow.add(rightPanel, BorderLayout.EAST);
         plorJPanel.add(itemRow);
     }
 
-    // Update the visual Total
-    double currentTotal = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
-    totalValueLabel.setText("₱ " + String.format("%.2f", currentTotal));
-
+    totalValueLabel.setText("₱ " + String.format("%.2f", totalSum));
     plorJPanel.revalidate();
     plorJPanel.repaint();
-  
-        
-    }
+}
+
+
+private void styleSmallButton(JButton btn, Color color) {
+    btn.setForeground(color);
+    btn.setBorderPainted(false);
+    btn.setContentAreaFilled(false);
+    btn.setFocusPainted(false);
+    btn.setFont(new Font("Arial", Font.BOLD, 18));
+}
 
         public static void main(String[] args) {
             User testUser = new User("rob", "hi", "raymundo", "Male", null, null, "staff", true, 00, 19);
