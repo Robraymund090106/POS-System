@@ -13,15 +13,19 @@ public class UserDetailFrame extends JFrame {
 
     public UserDetailFrame(User user) {
         this.user = user;
+        
+        Color modernNavy = new Color(15, 35, 80);
+        
         setTitle("User Profile");
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        setResizable(false);
         
         JPanel sidebar = new JPanel();
         sidebar.setPreferredSize(new Dimension(280, 500));
-        sidebar.setBackground(new Color(0, 0, 128)); 
+        sidebar.setBackground(modernNavy); // <--- APPLIED HERE
         sidebar.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 5, new Color(255, 215, 0)));
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
 
@@ -51,16 +55,11 @@ public class UserDetailFrame extends JFrame {
         changePassBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         changePassBtn.setForeground(Color.WHITE);
 
-        // --- UPDATED LOGOUT BUTTON ---
         JButton logoutBtn = createStyledButton("Logout");
-        logoutBtn.setBorder(BorderFactory.createLineBorder(new Color(255, 120, 120), 1));
-        logoutBtn.setForeground(new Color(255, 120, 120));
-        logoutBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleLogout();
-            }
-        });
+        logoutBtn.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        logoutBtn.setForeground(new Color(220, 100, 100)); // Soft red color
+        
+        logoutBtn.addActionListener(e -> handleLogout());
 
         sidebar.add(roleLabel);
         sidebar.add(profileIcon);
@@ -73,7 +72,7 @@ public class UserDetailFrame extends JFrame {
         sidebar.add(logoutBtn);
 
         JPanel mainContent = new JPanel(null);
-        mainContent.setBackground(new Color(0, 0, 128)); 
+        mainContent.setBackground(modernNavy); // BG COLOR PARA DI MALITO
 
         JLabel goBack = new JLabel("Go Back");
         goBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -116,42 +115,19 @@ public class UserDetailFrame extends JFrame {
         detailCard.add(lblUser);
         detailCard.add(passwordValLabel);
 
-        privacyBtn.addActionListener(new ActionListener() {
-            private boolean isVisible = false;
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!isVisible) {
-                    passwordValLabel.setText("Password: " + user.getPassword());
-                    privacyBtn.setText("Hide Privacy Details");
-                    isVisible = true;
-                } else {
-                    passwordValLabel.setText("Password: ********");
-                    privacyBtn.setText("Privacy Details");
-                    isVisible = false;
-                }
+        privacyBtn.addActionListener(e -> {
+            if (passwordValLabel.getText().contains("*")) {
+                passwordValLabel.setText("Password: " + user.getPassword());
+                privacyBtn.setText("Hide Privacy Details");
+            } else {
+                passwordValLabel.setText("Password: ********");
+                privacyBtn.setText("Privacy Details");
             }
         });
 
-        changePassBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ChangePasswordFrame(user);
-            }
-        });
+        changePassBtn.addActionListener(e -> new ChangePasswordFrame(user));
 
         mainContent.add(detailCard);
-
-        JLabel logoutIcon = new JLabel("⍈");
-        logoutIcon.setFont(new Font("Arial", Font.PLAIN, 40));
-        logoutIcon.setForeground(Color.WHITE);
-        logoutIcon.setBounds(430, 400, 50, 50);
-        logoutIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        logoutIcon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                handleLogout();
-            }
-        });
-        mainContent.add(logoutIcon);
 
         add(sidebar, BorderLayout.WEST);
         add(mainContent, BorderLayout.CENTER);
@@ -159,18 +135,9 @@ public class UserDetailFrame extends JFrame {
     }
 
     private void handleLogout() {
-        int confirm = JOptionPane.showConfirmDialog(
-            this, 
-            "Are you sure you want to log out?", 
-            "Logout Confirmation", 
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-        );
-
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure?", "Logout", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            for (Window window : Window.getWindows()) {
-                window.dispose(); 
-            }
+            for (Window window : Window.getWindows()) window.dispose();
             new LoginFrame();
         }
     }
@@ -179,9 +146,9 @@ public class UserDetailFrame extends JFrame {
         JButton btn = new JButton(text);
         btn.setMaximumSize(new Dimension(220, 50)); 
         btn.setFont(new Font("Arial", Font.BOLD, 14));
-        btn.setContentAreaFilled(false);
         btn.setFocusPainted(false);
-        btn.setOpaque(false);
+        btn.setOpaque(true); 
+        btn.setContentAreaFilled(false); 
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
         return btn;
     }

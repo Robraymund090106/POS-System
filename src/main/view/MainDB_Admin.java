@@ -850,7 +850,11 @@ JTextField searchField1 = new JTextField() {
         viewDetails.setFont(new Font("Arial", Font.BOLD, 15));
         viewDetails.setBounds(820, 600, 150, 40);
         viewDetails.setFocusPainted(false);
+
+
+
         addstaff.add(viewDetails);
+
 
 
         addstaff.add(changeStatus);

@@ -222,8 +222,9 @@ public class RegisterFrame extends JFrame {
         femaleCheckBox.setForeground(Color.WHITE);
         femaleCheckBox.setOpaque(false);
         backgroundPanel.add(femaleCheckBox);
-JButton cnfm = new JButton("Confirm");
-        cnfm.setSize(150, 60);
+
+        JButton cnfm = new JButton("Confirm");
+        cnfm.setBounds(750, 560, 150, 60);
         cnfm.setFont(new Font("Arial", Font.BOLD, 20));
         cnfm.setBackground(new Color(165, 215, 155));
         cnfm.setForeground(Color.WHITE);

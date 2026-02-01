@@ -16,7 +16,7 @@ public class ChangePasswordFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        Color navy = new Color(0, 0, 128);
+        Color navy = new Color(15, 35, 80);
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(navy);
@@ -62,14 +62,14 @@ public class ChangePasswordFrame extends JFrame {
         panel.add(confirmPassword, gbc);
 
         JButton changePasswordButton = new JButton("Change Password");
-        changePasswordButton.setBackground(Color.GREEN);
+        changePasswordButton.setBackground(new Color(165, 215, 155));
         changePasswordButton.setForeground(Color.WHITE);
         changePasswordButton.setPreferredSize(new Dimension(150, 40));
         gbc.gridx = 0; gbc.gridy = 3;
         panel.add(changePasswordButton, gbc);
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.setBackground(Color.RED);
+        cancelButton.setBackground(new Color(220, 100, 100)); // Soft red color
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setPreferredSize(new Dimension(150, 40));
         gbc.gridx = 1; gbc.gridy = 3;
