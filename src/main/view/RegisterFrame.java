@@ -58,6 +58,16 @@ public class RegisterFrame extends JFrame {
         fname.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(fname);
         fname.setDocument(new UsernameLimit(30, fname));
+        fname.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(emailvalidator.isValidName(fname.getText())) {
+                    fname.setForeground(Color.GREEN);
+                } else {
+                    fname.setForeground(Color.RED);
+                }
+            }
+        });
 
         // Last Name
         JLabel lnLabel = new JLabel("Last Name");
@@ -72,6 +82,16 @@ public class RegisterFrame extends JFrame {
         lname.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(lname);
         lname.setDocument(new UsernameLimit(30, lname));
+        lname.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(emailvalidator.isValidName(lname.getText())) {
+                    lname.setForeground(Color.GREEN);
+                } else {
+                    lname.setForeground(Color.RED);
+                }
+            }
+        });
 
         // Username
         JLabel userLabel = new JLabel("Username");
@@ -86,6 +106,16 @@ public class RegisterFrame extends JFrame {
         username.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(username);
         username.setDocument(new UsernameLimit(30, username));
+        username.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(emailvalidator.isValidUsername(username.getText())) {
+                    username.setForeground(Color.GREEN);
+                } else {
+                    username.setForeground(Color.RED);
+                }
+            }
+        });
 
         // Password
         JLabel psswordLabel = new JLabel("Password");
@@ -116,6 +146,16 @@ public class RegisterFrame extends JFrame {
         psswordField.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(psswordField);
         psswordField.setDocument(new UsernameLimit(30, psswordField));
+        psswordField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(emailvalidator.isValidPassword(new String(psswordField.getPassword()))) {
+                    psswordField.setForeground(Color.GREEN);
+                } else {
+                    psswordField.setForeground(Color.RED);
+                }
+            }
+        });
 
         char defaultEcho = psswordField.getEchoChar();
 
@@ -132,7 +172,16 @@ public class RegisterFrame extends JFrame {
         cnpassword.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         backgroundPanel.add(cnpassword);
         cnpassword.setDocument(new PasswordLimit(20, cnpassword));
-
+        cnpassword.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if(emailvalidator.isValidPassword(new String(cnpassword.getPassword()))) {
+                    cnpassword.setForeground(Color.GREEN);
+                } else {
+                    cnpassword.setForeground(Color.RED);
+                }
+            }
+        });
         JCheckBox cnshowPass = new JCheckBox("Show Password");
         cnshowPass.setSize(200, 30);
         cnshowPass.setOpaque(false);
