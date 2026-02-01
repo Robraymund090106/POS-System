@@ -318,54 +318,71 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
             return;
         }
 
-        double cashGiven;
-        JPanel optionPanel = new JPanel(new GridLayout(3, 1, 5, 5));
+        // Setup Selection Panel
+        JPanel optionPanel = new JPanel(new GridLayout(0, 1, 5, 5));
         JComboBox<String> methodCombo = new JComboBox<>(new String[]{"Cash", "GCash", "Maya"});
         JCheckBox seniorCheck = new JCheckBox("Apply Senior/PWD Discount (20%)");
         
         optionPanel.add(new JLabel("Select Payment Method:"));
         optionPanel.add(methodCombo);
         optionPanel.add(seniorCheck);
+
         int result = JOptionPane.showConfirmDialog(null, optionPanel, "Payment Details", JOptionPane.OK_CANCEL_OPTION);
-        if (result != JOptionPane.OK_OPTION) {
-            return; 
-        }
-            if (seniorCheck.isSelected()) {
-                ReceiptFrame.this.totalprice *= 0.8;
-                total.setText("Total Amount: " + String.format("   %.2f", totalprice));
-                // Update the big Total display on the right
-                TotalPrice.setText(String.format("%.2f", totalprice));
+        if (result != JOptionPane.OK_OPTION) return;
 
-                JOptionPane.showMessageDialog(null, "Senior Discount Applied!");
+        // Apply Discount Logic
+        if (seniorCheck.isSelected()) {
+            ReceiptFrame.this.totalprice *= 0.8;
+            total.setText("Total Amount: " + String.format("%.2f", totalprice));
+            TotalPrice.setText(String.format("%.2f", totalprice));
+        }
+
+        String paymentMethod = (String) methodCombo.getSelectedItem();
+        String referenceNumber = "N/A"; // Default for Cash
+
+        // NEW: Check for GCash or Maya Number
+        if (paymentMethod.equals("GCash") || paymentMethod.equals("Maya")) {
+            referenceNumber = JOptionPane.showInputDialog(null, 
+                "Enter " + paymentMethod + " Phone Number (11-digits):", 
+                paymentMethod + " Verification", 
+                JOptionPane.QUESTION_MESSAGE);
+
+            // Validation for the number
+            if (referenceNumber == null || referenceNumber.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Transaction cancelled. Mobile number is required for " + paymentMethod, "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-        
-        
-        String paymentmethod = (String) methodCombo.getSelectedItem();
+        }
 
+        // Processing Transaction
         try {
-            cashGiven = Double.parseDouble(calcDisplay.getText());
+            double cashAmountInput = Double.parseDouble(calcDisplay.getText());
+            
+            if (cashAmountInput < totalprice) {
+                JOptionPane.showMessageDialog(null, "Insufficient amount.", "Payment Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            double changeAmount = cashAmountInput - totalprice;
+            
+            // Show Success with Method Details
+            String successMsg = String.format("Payment Successful!\nMethod: %s\nRef: %s\nChange: ₱%.2f", 
+                                              paymentMethod, referenceNumber, changeAmount);
+            JOptionPane.showMessageDialog(null, successMsg);
+
+            // Record to Database (Pass referenceNumber if your recordSale method supports it)
+            DatabaseManager.recordSale(user.getUserId(), totalprice, cashAmountInput, changeAmount, orderItems, orderPrices, paymentMethod);
+            
+            for (String itemName : orderItems) {
+                DatabaseManager.updateProductStock(itemName, 1);
+            }
+
+            ReceiptFrame.this.dispose();
+            new DB_Staff(user);
+
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Invalid cash amount entered.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            return;
+            JOptionPane.showMessageDialog(null, "Invalid amount entered.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        if (cashGiven < totalprice) {
-            JOptionPane.showMessageDialog(null, "Insufficient cash given.", "Payment Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        double change = cashGiven - ReceiptFrame.this.totalprice;
-        JOptionPane.showMessageDialog(null, "Change: ₱" + String.format("%.2f", change), "Payment Successful", JOptionPane.INFORMATION_MESSAGE);
-        DatabaseManager.recordSale(user.getUserId(), totalprice, cashGiven, change, orderItems, orderPrices, paymentmethod);
-        for (String itemName : orderItems) {
-                        // Decrement stock by 1 for every instance in the list
-                        DatabaseManager.updateProductStock(itemName, 1);
-                    }
-        ReceiptFrame.this.dispose(); 
-        new DB_Staff(user);
-
-        // --- CLEAR EVERYTHING AFTER SUCCESS ---
-        calcDisplay.setText("0");
     }
 });
 
