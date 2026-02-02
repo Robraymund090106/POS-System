@@ -678,10 +678,17 @@ JTextField searchField1 = new JTextField() {
         }
     });
 
+      // for add stock 
 
-        //KULANG PA NG SCROLL BAR SA TABI NG MGA LABELS TO SHOW ADDED ITEMS - que
+       JButton btnAdd = new JButton("Add Stock");
+        btnAdd.setBounds(780, 650, 150, 40); 
+        btnAdd.setBackground(new Color(165, 215, 155)); 
+        btnAdd.setForeground(Color.WHITE);
+        btnAdd.setFont(new Font("Arial", Font.BOLD, 14));
+        addmenuitem.add(btnAdd);
+      
 
-        //important part for adding panel to canvas
+     
         canvas.add(addmenuitem);
 
 
