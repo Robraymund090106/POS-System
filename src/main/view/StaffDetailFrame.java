@@ -213,5 +213,6 @@ public class StaffDetailFrame extends JFrame {
         backgroundPanel.add(bck);
 
         setVisible(true);
+        
     }
 }
