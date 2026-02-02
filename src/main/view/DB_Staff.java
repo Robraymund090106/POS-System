@@ -321,9 +321,9 @@ salesiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
-       sales_staffFrame sales_Staff = new sales_staffFrame(null);
-               sales_Staff.setVisible(true); 
-               DB_Staff.this.dispose(); 
+                new sales_staffFrame(user);
+               
+               dispose(); 
     }
     @Override
     public void mouseEntered(MouseEvent e) {

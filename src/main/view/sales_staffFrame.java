@@ -2,36 +2,31 @@ package main.view;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
+import java.util.Map;
 
+import javax.swing.*;
+import main.model.*;
+import main.database.*;
+import java.util.List;
 public class sales_staffFrame extends JFrame {
 
 
-    // for dummy
-    static class User {
-        private String username;
-        private String role;
-        
-   
 
-        public User() {
-            this.username = "staff sales user";
-            this.role = "Sales Staff";
-        }
+    private User user; 
+    private JPanel bestsellingpanel;
+    private JPanel transPanel;
+    private JLabel totalsaleslabel;
 
-        public String getUsername() {
-            return username;
-        }
 
-        public String getRole() {
-            return role;
-        }
-    }
-
-    private main.model.User user; 
-
-    public sales_staffFrame(main.model.User user) {
+    public sales_staffFrame(User user) {
         this.user = user; 
+
+        this.addWindowFocusListener(new WindowAdapter() {
+    @Override
+    public void windowGainedFocus(WindowEvent e) {
+        refreshDashboard();
+    }
+});
     
 
       
@@ -168,6 +163,8 @@ public class sales_staffFrame extends JFrame {
             }
         };
         dashpanel.setBounds(196, 131, 1211, 804);
+        dashpanel.setBounds(196, 80, 1211, 804);
+
         dashpanel.setOpaque(false);
         dashpanel.setVisible(true); 
 
@@ -205,16 +202,99 @@ public class sales_staffFrame extends JFrame {
         totalsaleslabel.setBounds(799, 140, 300, 60);
         dashpanel.add(totalsaleslabel);
 
-       
+        JPanel bestsellingpanel = new JPanel();
+        bestsellingpanel.setLayout(new BoxLayout(bestsellingpanel, BoxLayout.Y_AXIS));
+        //bestsellingpanel.setBackground(Color.WHITE);
+        bestsellingpanel.setOpaque(false);
 
-     
-       
+        JScrollPane scrollPane = new JScrollPane(bestsellingpanel);
+        scrollPane.setBounds(50, 200, 280, 550); // Matches your layout
+        scrollPane.setBorder(null); // Optional: makes it look cleaner
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+
+        // Fetch the Top 10
+        Map<String, Integer> top10 = DatabaseManager.getTop10Bestsellers();
+
+        int rank = 1;
+        for (Map.Entry<String, Integer> entry : top10.entrySet()) {
+            JPanel row = new JPanel(new BorderLayout());
+            row.setMaximumSize(new Dimension(280, 45));
+            row.setBackground(Color.WHITE);
+            row.setOpaque(false);
+            row.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+
+            // Styling the Rank
+            String rankText = (rank == 1) ? "🏆 " + rank : String.valueOf(rank);
+            JLabel nameLabel = new JLabel("  " + rankText + ". " + entry.getKey());
+            nameLabel.setFont(new Font("SansSerif", rank == 1 ? Font.BOLD : Font.PLAIN, 16));
+            
+            // Styling the Quantity
+            JLabel qtyLabel = new JLabel(entry.getValue() + " sold  ");
+            qtyLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+            qtyLabel.setForeground(new Color(34, 139, 34)); // Forest Green
+
+            row.add(nameLabel, BorderLayout.WEST);
+            row.add(qtyLabel, BorderLayout.EAST);
+            
+            bestsellingpanel.add(row);
+            rank++;
+        }
+
+    
+        dashpanel.add(scrollPane);
         canvas.add(dashpanel);
         mainContainer.add(canvas);
         setContentPane(mainContainer);
 
+        JPanel transPanel = new JPanel();
+        transPanel.setLayout(new BoxLayout(transPanel, BoxLayout.Y_AXIS));
+        transPanel.setBackground(Color.WHITE);
+        transPanel.setOpaque(false);
+
+ 
+        JScrollPane transScroll = new JScrollPane(transPanel);
+        transScroll.setBounds(420, 180, 300, 550); // Aligned under "Transactions Made"
+        transScroll.setBorder(null);
+        transScroll.setOpaque(false);
+        transScroll.getViewport().setOpaque(false);
+
+        List<String[]> history = DatabaseManager.getDetailedTransactions(user.getUserId());
+
+        for (String[] entry : history) {
+    JPanel row = new JPanel(new BorderLayout());
+    
+    // This prevents the row from becoming shorter than 45 pixels
+    row.setMinimumSize(new Dimension(280, 45)); 
+    row.setPreferredSize(new Dimension(280, 45));
+    row.setMaximumSize(new Dimension(Short.MAX_VALUE, 45)); 
+    
+    row.setOpaque(false);
+    row.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+
+    // Name and Qty
+    JLabel itemLabel = new JLabel("<html><b>" + entry[0] + "</b> (x" + entry[1] + ")</html>");
+    itemLabel.setFont(new Font("SansSerif", Font.PLAIN, 13));
+
+    // Date and Time (e.g., 02-02 22:30)
+    // We use substring(5) to skip the year "2026-" to save space
+    String displayTime = entry[2].substring(5); 
+    JLabel dateLabel = new JLabel(displayTime); 
+    dateLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
+    dateLabel.setForeground(Color.DARK_GRAY);
+
+    row.add(itemLabel, BorderLayout.WEST);
+    row.add(dateLabel, BorderLayout.EAST);
+
+    transPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+    transPanel.add(row);
+    
+}
+
+dashpanel.add(transScroll);
+
       
-        setVisible(true);
+        
     
 
    
@@ -235,8 +315,7 @@ public class sales_staffFrame extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
              
-           DB_Staff db_Staff = new DB_Staff(null);
-          db_Staff.setVisible(true); 
+           new DB_Staff(user);
           sales_staffFrame.this.dispose(); 
 
 
@@ -254,8 +333,7 @@ public class sales_staffFrame extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                
-                 DB_Staff db_Staff = new DB_Staff(null);
-              db_Staff.setVisible(true); 
+                 new DB_Staff(user);
               sales_staffFrame.this.dispose(); 
 
             }
@@ -271,8 +349,7 @@ public class sales_staffFrame extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 
-                DB_Staff db_Staff = new DB_Staff(null);
-               db_Staff.setVisible(true); 
+                new DB_Staff(user);
                sales_staffFrame.this.dispose(); 
 
             }
@@ -287,9 +364,8 @@ public class sales_staffFrame extends JFrame {
         mealiconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-            DB_Staff db_Staff = new DB_Staff(null);
-               db_Staff.setVisible(true); 
-               sales_staffFrame.this.dispose(); 
+            new DB_Staff(user);
+               dispose(); 
             }
         });
         sidebar.add(mealiconLabel);
@@ -302,9 +378,8 @@ public class sales_staffFrame extends JFrame {
         salesiconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                DB_Staff db_Staff = new DB_Staff(null);
-               db_Staff.setVisible(true); 
-               sales_staffFrame.this.dispose(); 
+                new DB_Staff(user);
+               dispose(); 
             }
         });
         sidebar.add(salesiconLabel); 
@@ -324,6 +399,36 @@ public class sales_staffFrame extends JFrame {
         label.setBounds(x, y, 150, 30);
         panel.add(label);
     }
+
+    public void refreshDashboard() {
+    // 1. Clear existing components to avoid duplicates
+    bestsellingpanel.removeAll();
+    transPanel.removeAll();
+
+    // 2. Re-fetch and re-populate Best Sellers
+    Map<String, Integer> top10 = DatabaseManager.getTop10Bestsellers();
+    int rank = 1;
+    for (Map.Entry<String, Integer> entry : top10.entrySet()) {
+        // ... (Insert your existing row creation logic here) ...
+        rank++;
+    }
+
+    // 3. Re-fetch and re-populate Transactions
+    List<String[]> history = DatabaseManager.getDetailedTransactions(user.getUserId());
+    for (String[] entry : history) {
+        // ... (Insert your existing row creation logic here) ...
+    }
+    
+    // 4. Update the Total Sales Label
+    //double totalSalesVal = DatabaseManager.getUserTotalSales(user.getUserId());
+    //totalsaleslabel.setText("Total Sales: ₱" + String.format("%.2f", totalSalesVal));
+
+    // 5. Tell Swing to redraw the UI
+    bestsellingpanel.revalidate();
+    bestsellingpanel.repaint();
+    transPanel.revalidate();
+    transPanel.repaint();
+}
       
        
 
@@ -332,8 +437,8 @@ public class sales_staffFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                main.model.User dummy = null;
-                new sales_staffFrame(dummy);
+                User testUser = new User("rob", "hi", "raymundo", "Male", null, null, "staff", true, 00, 19);
+                new sales_staffFrame(testUser);
             }
         });
     }

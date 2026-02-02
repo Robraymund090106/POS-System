@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import main.model.Product;
 import main.model.User;
@@ -502,5 +503,59 @@ public static boolean isValidAdminPassword(String enteredPassword) {
     }
 }
 
+
+
+public static Map<String, Integer> getTop10Bestsellers() {
+    Map<String, Integer> map = new java.util.LinkedHashMap<>();
+    // Added LIMIT 10 to the end of the query
+    String sql = "SELECT p.name, SUM(si.quantity) as total " +
+                 "FROM Product p " +
+                 "JOIN SaleItems si ON p.productId = si.productId " +
+                 "GROUP BY p.productId " +
+                 "ORDER BY total DESC " +
+                 "LIMIT 10"; 
+    
+    try (Connection conn = connect();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+        while (rs.next()) {
+            map.put(rs.getString("name"), rs.getInt("total"));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return map;
+}
+
+public static List<String[]> getDetailedTransactions(int userId) {
+    List<String[]> transactions = new ArrayList<>();
+    // %Y-%m-%d %H:%M ignores seconds so items in the same minute stay grouped
+    String sql = "SELECT p.name, SUM(si.quantity) as totalQty, " +
+                 "strftime('%Y-%m-%d %H:%M', s.timestamp) as saleTime " +
+                 "FROM Sales s " +
+                 "JOIN SaleItems si ON s.saleId = si.saleId " +
+                 "JOIN Product p ON si.productId = p.productId " +
+                 "WHERE s.userId = ? " +
+                 "GROUP BY p.name, saleTime " +
+                 "ORDER BY s.timestamp DESC";
+
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, userId);
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            transactions.add(new String[]{
+                rs.getString("name"),
+                String.valueOf(rs.getInt("totalQty")),
+                rs.getString("saleTime") // Now contains Date + Time
+            });
+        }
+    } catch (SQLException e) {
+        System.err.println("Error fetching timed transactions: " + e.getMessage());
+    }
+    return transactions;
+}
 }
 
