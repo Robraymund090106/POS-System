@@ -321,9 +321,9 @@ salesiconLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 salesiconLabel.addMouseListener(new java.awt.event.MouseAdapter() {
     @Override
     public void mousePressed(MouseEvent e) {
-        //JOptionPane.showMessageDialog(null, "Sales button pressed!", "Menu Button", JOptionPane.INFORMATION_MESSAGE);
-       //  new sales_staffFrame(); // Pa fix maaa, dili macall yung sales staff framee 
-        dispose();
+       sales_staffFrame sales_Staff = new sales_staffFrame(null);
+               sales_Staff.setVisible(true); 
+               DB_Staff.this.dispose(); 
     }
     @Override
     public void mouseEntered(MouseEvent e) {

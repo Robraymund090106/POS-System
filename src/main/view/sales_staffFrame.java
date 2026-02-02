@@ -6,10 +6,13 @@ import javax.swing.*;
 
 public class sales_staffFrame extends JFrame {
 
+
     // for dummy
     static class User {
         private String username;
         private String role;
+        
+   
 
         public User() {
             this.username = "staff sales user";
@@ -24,14 +27,14 @@ public class sales_staffFrame extends JFrame {
             return role;
         }
     }
-    // =========================================
 
-    User user;
-   
-  
+    private main.model.User user; 
 
-    public sales_staffFrame(User user) {
-        this.user = user;
+    public sales_staffFrame(main.model.User user) {
+        this.user = user; 
+    
+
+      
 
         setTitle("Sales Frame");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,8 +97,8 @@ public class sales_staffFrame extends JFrame {
         staffLogo.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                // UserDetailFrame userDetailFrame = new UserDetailFrame(user);
-              //  userDetailFrame.setVisible(true);
+               UserDetailFrame userDetailFrame = new UserDetailFrame(user);
+                 userDetailFrame.setVisible(true);
             }
 
             @Override
@@ -119,9 +122,10 @@ public class sales_staffFrame extends JFrame {
         staffText.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-              //   UserDetailFrame userDetailFrame = new UserDetailFrame(user);
-             //    userDetailFrame.setVisible(true);
-            } // AYAW MAG WORKK TwT
+              // UserDetailFrame userDetailFrame = new UserDetailFrame(user);
+              // userDetailFrame.setVisible(true);
+               new UserDetailFrame(user).setVisible(true);
+            }
 
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -231,9 +235,9 @@ public class sales_staffFrame extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
              
-           // DB_Staff nextFrame = new DB_Staff(); 
-       //  nextFrame.setVisible(true); // ayaw tlgaaaa T-----T
-        sales_staffFrame.this.dispose(); 
+           DB_Staff db_Staff = new DB_Staff(null);
+          db_Staff.setVisible(true); 
+          sales_staffFrame.this.dispose(); 
 
 
 
@@ -250,9 +254,10 @@ public class sales_staffFrame extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                
-                // DB_Staff nextFrame = new DB_Staff(); 
-               //  nextFrame.setVisible(true); // ayaw tlgaaaa 
-                sales_staffFrame.this.dispose(); 
+                 DB_Staff db_Staff = new DB_Staff(null);
+              db_Staff.setVisible(true); 
+              sales_staffFrame.this.dispose(); 
+
             }
         });
         sidebar.add(foodiconLabel);
@@ -266,9 +271,10 @@ public class sales_staffFrame extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 
-                 // DB_Staff nextFrame = new DB_Staff(); 
-               //  nextFrame.setVisible(true); // ayaw tlgaaaa 
-                sales_staffFrame.this.dispose(); 
+                DB_Staff db_Staff = new DB_Staff(null);
+               db_Staff.setVisible(true); 
+               sales_staffFrame.this.dispose(); 
+
             }
         });
         sidebar.add(drinkiconLabel);
@@ -281,9 +287,9 @@ public class sales_staffFrame extends JFrame {
         mealiconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-            // DB_Staff nextFrame = new DB_Staff(); 
-               //  nextFrame.setVisible(true); // ayaw tlgaaaa 
-                sales_staffFrame.this.dispose(); 
+            DB_Staff db_Staff = new DB_Staff(null);
+               db_Staff.setVisible(true); 
+               sales_staffFrame.this.dispose(); 
             }
         });
         sidebar.add(mealiconLabel);
@@ -296,9 +302,9 @@ public class sales_staffFrame extends JFrame {
         salesiconLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                // DB_Staff nextFrame = new DB_Staff(); 
-               //  nextFrame.setVisible(true); // ayaw tlgaaaa 
-                sales_staffFrame.this.dispose(); 
+                DB_Staff db_Staff = new DB_Staff(null);
+               db_Staff.setVisible(true); 
+               sales_staffFrame.this.dispose(); 
             }
         });
         sidebar.add(salesiconLabel); 
@@ -323,9 +329,12 @@ public class sales_staffFrame extends JFrame {
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            User dummy = new User();
-            new sales_staffFrame(dummy);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                main.model.User dummy = null;
+                new sales_staffFrame(dummy);
+            }
         });
     }
 }
