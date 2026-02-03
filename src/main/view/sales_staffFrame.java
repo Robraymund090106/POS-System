@@ -163,7 +163,7 @@ public class sales_staffFrame extends JFrame {
             }
         };
         dashpanel.setBounds(196, 131, 1211, 804);
-        dashpanel.setBounds(196, 80, 1211, 804);
+       // dashpanel.setBounds(196, 80, 1211, 804);
 
         dashpanel.setOpaque(false);
         dashpanel.setVisible(true); 

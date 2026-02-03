@@ -1,15 +1,13 @@
 package main.view;
 
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
-
 import main.backend.PasswordLimit;
 import main.backend.UsernameLimit;
 import main.backend.emailvalidator;
 import main.database.DatabaseManager;
 import main.model.User;
-
-import java.awt.*;
-import java.awt.event.*;
 
 public class RegisterFrame extends JFrame {
 
@@ -175,7 +173,7 @@ public class RegisterFrame extends JFrame {
         cnpassword.setDocument(new PasswordLimit(20, cnpassword));
         cnpassword.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void keyReleased(KeyEvent e) {
                 if(emailvalidator.isValidPassword(new String(cnpassword.getPassword()))) {
                     cnpassword.setForeground(Color.GREEN);
                 } else {
