@@ -44,7 +44,7 @@ public class StaffDetailFrame extends JFrame {
         fnLabel.setForeground(Color.BLACK);
         backgroundPanel.add(fnLabel);
 
-        JTextField fname = new JTextField();
+        JLabel fname = new JLabel("   ");
         fname.setBounds(320, 210, 250, 50); 
         fname.setFont(new Font("Arial", Font.PLAIN, 18));
         fname.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -56,7 +56,7 @@ public class StaffDetailFrame extends JFrame {
         lstLabel.setForeground(Color.BLACK);
         backgroundPanel.add(lstLabel);
 
-        JTextField lastname = new JTextField();
+        JLabel lastname = new JLabel("   ");
         lastname.setBounds(640, 210, 250, 50);
         lastname.setFont(new Font("Arial", Font.PLAIN, 18));
         lastname.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -68,7 +68,7 @@ public class StaffDetailFrame extends JFrame {
         fullnmLabel.setForeground(Color.BLACK);
         backgroundPanel.add(fullnmLabel);
         
-        JTextField fullname = new JTextField();
+        JLabel fullname = new JLabel("   ");
         fullname.setBounds(950, 210, 250, 50);
         fullname.setFont(new Font("Arial", Font.PLAIN, 18));
         fullname.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -121,7 +121,7 @@ public class StaffDetailFrame extends JFrame {
         usnLabel.setForeground(Color.BLACK);
         backgroundPanel.add(usnLabel);
 
-        JTextField usnfield = new JTextField();
+        JLabel usnfield = new JLabel("   ");
         usnfield.setBounds(320, 360, 250, 50);
         usnfield.setFont(new Font("Arial", Font.PLAIN, 18));
         usnfield.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -133,7 +133,7 @@ public class StaffDetailFrame extends JFrame {
         bdayLabel.setForeground(Color.BLACK);
         backgroundPanel.add(bdayLabel);
 
-        JTextField bdayField = new JTextField();
+        JLabel bdayField = new JLabel("   ");
         bdayField.setBounds(640, 360, 250, 50);
         bdayField.setFont(new Font("Arial", Font.PLAIN, 18));
         bdayField.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -145,7 +145,7 @@ public class StaffDetailFrame extends JFrame {
         statsLabel.setForeground(Color.BLACK);
         backgroundPanel.add(statsLabel);
 
-        JTextField statsField = new JTextField();
+        JLabel statsField = new JLabel("   ");
         statsField.setBounds(640, 490, 250, 50);
         statsField.setFont(new Font("Arial", Font.PLAIN, 18));
         statsField.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -213,6 +213,6 @@ public class StaffDetailFrame extends JFrame {
         backgroundPanel.add(bck);
 
         setVisible(true);
-        
+
     }
 }
