@@ -1166,7 +1166,7 @@ JTextField searchField1 = new JTextField() {
 
         // SALES PANEL
        salespanel = new JPanel(null) {
-        private Image sImage = new ImageIcon("src/main/image/SalesRepBTN.png").getImage();
+        private Image sImage = new ImageIcon("src/main/image/salesrep.png").getImage();
 
         @Override
          protected void paintComponent(Graphics g) {
@@ -1176,7 +1176,7 @@ JTextField searchField1 = new JTextField() {
         }
     }
 };
-        salespanel.setBounds(196, 134, 1211, 800);
+        salespanel.setBounds(196, 129, 1211, 807);
         salespanel.setOpaque(false);
         salespanel.setVisible(false);
 
@@ -1198,34 +1198,34 @@ JTextField searchField1 = new JTextField() {
     head4.setOpaque(true); 
     salespanel.add(head4);
 
-        JLabel tranlabel = new JLabel("Transaction");
-        tranlabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel tranlabel = new JLabel("Active Staff");
+        tranlabel.setFont(new Font("Arial", Font.BOLD, 25));
         tranlabel.setForeground(Color.BLACK);
-        tranlabel.setBounds(85, 105, 150, 30);
+        tranlabel.setBounds(85, 126, 300, 30);
         salespanel.add(tranlabel);
 
-        JLabel onlinestafflabel = new JLabel("Online Staff");
-        onlinestafflabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel onlinestafflabel = new JLabel("Inactive Staff");
+        onlinestafflabel.setFont(new Font("Arial", Font.BOLD, 25));
         onlinestafflabel.setForeground(Color.BLACK);
-        onlinestafflabel.setBounds(404, 105, 150, 30);
+        onlinestafflabel.setBounds(398, 126, 300, 30);
         salespanel.add(onlinestafflabel);
 
-        JLabel totalsaleslabel = new JLabel("Total Sales");
-        totalsaleslabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel totalsaleslabel = new JLabel("Best Selling");
+        totalsaleslabel.setFont(new Font("Arial", Font.BOLD, 30));
         totalsaleslabel.setForeground(Color.BLACK);
-        totalsaleslabel.setBounds(710, 105, 150, 30);
+        totalsaleslabel.setBounds(781, 113, 300, 70);
         salespanel.add(totalsaleslabel);
 
-        JLabel bestsellinglabel = new JLabel("Best Selling");
-        bestsellinglabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel bestsellinglabel = new JLabel("Total Sales");
+        bestsellinglabel.setFont(new Font("Arial", Font.BOLD, 26));
         bestsellinglabel.setForeground(Color.BLACK);
-        bestsellinglabel.setBounds(85, 300, 150, 30);
+        bestsellinglabel.setBounds(140, 317, 300, 30);
         salespanel.add(bestsellinglabel);
 
-        JLabel saleschartlabel = new JLabel("Sales Chart");
-        saleschartlabel.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel saleschartlabel = new JLabel("Transactions");
+        saleschartlabel.setFont(new Font("Arial", Font.BOLD, 26));
         saleschartlabel.setForeground(Color.BLACK);
-        saleschartlabel.setBounds(628, 300, 150, 30);
+        saleschartlabel.setBounds(440, 317, 300, 30);
         salespanel.add(saleschartlabel);
         canvas.add(salespanel);
 

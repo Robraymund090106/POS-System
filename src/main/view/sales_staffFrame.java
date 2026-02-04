@@ -196,10 +196,10 @@ public class sales_staffFrame extends JFrame {
         onlinestafflabel.setBounds(430, 126, 300, 60);
         dashpanel.add(onlinestafflabel);
 
-        JLabel totalsaleslabel = new JLabel("Total Sales: ");
-        totalsaleslabel.setFont(new Font("Arial", Font.BOLD, 34));
+        JLabel totalsaleslabel = new JLabel("Total Sales");
+        totalsaleslabel.setFont(new Font("Arial", Font.BOLD, 30));
         totalsaleslabel.setForeground(Color.BLACK);
-        totalsaleslabel.setBounds(799, 140, 300, 60);
+        totalsaleslabel.setBounds(870, 126, 300, 60);
         dashpanel.add(totalsaleslabel);
 
         JPanel bestsellingpanel = new JPanel();
