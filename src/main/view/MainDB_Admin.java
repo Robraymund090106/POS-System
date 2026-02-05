@@ -1043,6 +1043,44 @@ JTextField searchField1 = new JTextField() {
     head3.setOpaque(true); 
     transactionpanel.add(head3);
 
+        String[] transactioncolumnname = {"", "", "", "", "", ""};
+        Object[][] transactiondatalist = {};
+
+        DefaultTableModel transactionmodel = new DefaultTableModel(transactiondatalist, transactioncolumnname) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Makes the table read-only
+            }
+        };
+
+
+       // 2. Fetch the data from the database
+        List<Object[]> allTransactions = DatabaseManager.getFullSalesReport();
+
+        // 3. Populate the model with the transaction data
+        for (Object[] row : allTransactions) {
+            transactionmodel.addRow(row);
+        }
+
+        JTable transactiontable = new JTable(transactionmodel);
+        transactiontable.setRowHeight(30);
+        transactiontable.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        transactiontable.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 18));
+        transactiontable.getTableHeader().setBackground(Color.WHITE);
+        transactiontable.getTableHeader().setForeground(Color.WHITE);
+        TableRowSorter<DefaultTableModel> sorter3 = new TableRowSorter<>(transactionmodel);
+        transactiontable.setRowSorter(sorter3);
+     
+        JScrollPane transscrollPane = new JScrollPane(transactiontable);
+        transscrollPane.setBounds(50, 190, 1030, 480);
+        //scrollPanebottom.setBorder(BorderFactory.createEmptyBorder()); 
+        transactionpanel.add(transscrollPane);
+
+  
+
+
+    
+
 
 
       //searchbarr

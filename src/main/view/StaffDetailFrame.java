@@ -3,10 +3,16 @@ package main.view;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.*;
+
+import main.model.User;
+
 import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import main.database.DatabaseManager;
+import main.model.User;
+
 public class StaffDetailFrame extends JFrame {
 
     private JComboBox<String> positionCombo;
@@ -17,6 +23,10 @@ public class StaffDetailFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setUndecorated(true); 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        User user = DatabaseManager.getUserByUsername(staffName);
+        String firstName = user.getFullname().split(" ")[0];
+        String lastName = user.getFullname().split(" ")[1];
         
         JPanel backgroundPanel = new JPanel();
         backgroundPanel.setLayout(null);
@@ -44,7 +54,7 @@ public class StaffDetailFrame extends JFrame {
         fnLabel.setForeground(Color.BLACK);
         backgroundPanel.add(fnLabel);
 
-        JLabel fname = new JLabel("   ");
+        JLabel fname = new JLabel(firstName);
         fname.setBounds(320, 210, 250, 50); 
         fname.setFont(new Font("Arial", Font.PLAIN, 18));
         fname.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -56,7 +66,7 @@ public class StaffDetailFrame extends JFrame {
         lstLabel.setForeground(Color.BLACK);
         backgroundPanel.add(lstLabel);
 
-        JLabel lastname = new JLabel("   ");
+        JLabel lastname = new JLabel(lastName);
         lastname.setBounds(640, 210, 250, 50);
         lastname.setFont(new Font("Arial", Font.PLAIN, 18));
         lastname.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -68,7 +78,7 @@ public class StaffDetailFrame extends JFrame {
         fullnmLabel.setForeground(Color.BLACK);
         backgroundPanel.add(fullnmLabel);
         
-        JLabel fullname = new JLabel("   ");
+        JLabel fullname = new JLabel(user.getFullname());
         fullname.setBounds(950, 210, 250, 50);
         fullname.setFont(new Font("Arial", Font.PLAIN, 18));
         fullname.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -90,30 +100,18 @@ public class StaffDetailFrame extends JFrame {
         positionCombo.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
         backgroundPanel.add(positionCombo);
 
-        JLabel genderLabel = new JLabel("Gender: ");
-        genderLabel.setSize(100, 30);
-        genderLabel.setBounds(320, 440, 100, 30);
-        genderLabel.setFont(new Font("Arial ", Font.BOLD, 18));
+  
+        JLabel genderLabel = new JLabel("Gender");
+        genderLabel.setBounds(320, 450, 150, 30); 
+        genderLabel.setFont(new Font("Arial", Font.BOLD, 20));
         genderLabel.setForeground(Color.BLACK);
         backgroundPanel.add(genderLabel);
 
-        JRadioButton maleCheckBox = new JRadioButton("Male");
-        maleCheckBox.setBounds(389, 438, 70, 40);
-        maleCheckBox.setFont(new Font("Arial", Font.PLAIN, 18));
-        maleCheckBox.setForeground(Color.BLACK);
-        maleCheckBox.setOpaque(false);
-        backgroundPanel.add(maleCheckBox);
-
-        JRadioButton femaleCheckBox = new JRadioButton("Female");
-        femaleCheckBox.setBounds(458, 438, 90, 40);
-        femaleCheckBox.setFont(new Font("Arial", Font.PLAIN, 18));
-        femaleCheckBox.setForeground(Color.BLACK);
-        femaleCheckBox.setOpaque(false);
-        backgroundPanel.add(femaleCheckBox);
-
-        ButtonGroup genderGroup = new ButtonGroup();
-        genderGroup.add(maleCheckBox);
-        genderGroup.add(femaleCheckBox);
+        JLabel genderField = new JLabel(user.getgender()); 
+        genderField.setBounds(320, 490, 250, 50);
+        genderField.setFont(new Font("Arial", Font.PLAIN, 18));
+        genderField.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
+        backgroundPanel.add(genderField);
 
         JLabel usnLabel = new JLabel("Username");
         usnLabel.setBounds(320, 330, 150, 30); 
@@ -121,7 +119,7 @@ public class StaffDetailFrame extends JFrame {
         usnLabel.setForeground(Color.BLACK);
         backgroundPanel.add(usnLabel);
 
-        JLabel usnfield = new JLabel("   ");
+        JLabel usnfield = new JLabel(user.getUsername());
         usnfield.setBounds(320, 360, 250, 50);
         usnfield.setFont(new Font("Arial", Font.PLAIN, 18));
         usnfield.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -133,7 +131,7 @@ public class StaffDetailFrame extends JFrame {
         bdayLabel.setForeground(Color.BLACK);
         backgroundPanel.add(bdayLabel);
 
-        JLabel bdayField = new JLabel("   ");
+        JLabel bdayField = new JLabel(user.getBday());
         bdayField.setBounds(640, 360, 250, 50);
         bdayField.setFont(new Font("Arial", Font.PLAIN, 18));
         bdayField.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -145,7 +143,9 @@ public class StaffDetailFrame extends JFrame {
         statsLabel.setForeground(Color.BLACK);
         backgroundPanel.add(statsLabel);
 
-        JLabel statsField = new JLabel("   ");
+        String status = user.isActive() ? "Active" : "Inactive";
+
+        JLabel statsField = new JLabel(status);
         statsField.setBounds(640, 490, 250, 50);
         statsField.setFont(new Font("Arial", Font.PLAIN, 18));
         statsField.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
@@ -186,6 +186,32 @@ public class StaffDetailFrame extends JFrame {
         cnfm.setForeground(Color.WHITE);
         cnfm.setFocusPainted(false);
         backgroundPanel.add(cnfm);
+
+        cnfm.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               
+
+                int option = JOptionPane.showConfirmDialog(
+                    null, 
+                    "Are you sure you want to apply these changes?", 
+                    "Confirm Changes", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+                );
+                if (option != JOptionPane.YES_OPTION) {
+                    return; 
+                }
+                JOptionPane.showMessageDialog(null, "Changes applied successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                String selectedPosition = (String) positionCombo.getSelectedItem();
+                selectedPosition.toUpperCase();
+                
+                String newPassword = new String(passField.getPassword());
+                user.setRole(selectedPosition);
+                DatabaseManager.updateUserRole(user.getUserId(), selectedPosition);
+            }
+        });
+          
 
         JButton bck = new JButton("Back");
         bck.setBounds(500, 640, 150, 60);

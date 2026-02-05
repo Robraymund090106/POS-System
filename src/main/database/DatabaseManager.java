@@ -557,5 +557,58 @@ public static List<String[]> getDetailedTransactions(int userId) {
     }
     return transactions;
 }
+
+    public static boolean updateUserRole(int userId, String newRole) {
+    String sql = "UPDATE User SET role = ? WHERE userId = ?";
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, newRole);
+        pstmt.setInt(2, userId);
+        
+        int rowsAffected = pstmt.executeUpdate();
+        return rowsAffected > 0; 
+        
+    } catch (SQLException e) {
+        System.err.println("Role Update Error: " + e.getMessage());
+        return false;
+
+
+}
+}
+
+    public static List<Object[]> getFullSalesReport() {
+    List<Object[]> report = new ArrayList<>();
+    
+    // Updated SQL: Added SUM(si.quantity) and GROUP BY
+    String sql = "SELECT u.username, p.name, SUM(si.quantity) AS totalQty, si.price, " +
+                 "SUM(si.quantity * si.price) AS total, s.timestamp " +
+                 "FROM SaleItems si " +
+                 "JOIN Sales s ON si.saleId = s.saleId " +
+                 "JOIN User u ON s.userId = u.userId " +
+                 "JOIN Product p ON si.productId = p.productId " +
+                 "GROUP BY s.timestamp, u.username, p.name " + // Groups same items at same time
+                 "ORDER BY s.timestamp DESC";
+
+    try (Connection conn = connect();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+
+        while (rs.next()) {
+            report.add(new Object[]{
+                rs.getString("username"),
+                rs.getString("name"),
+                rs.getInt("totalQty"), // Now shows the incremented quantity
+                rs.getDouble("price"),
+                rs.getDouble("total"),
+                rs.getString("timestamp")
+            });
+        }
+    } catch (SQLException e) {
+        System.err.println("Error generating grouped sales report: " + e.getMessage());
+    }
+    return report;
+}
+    
 }
 
