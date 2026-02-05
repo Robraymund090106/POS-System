@@ -419,13 +419,12 @@ public static User getUserByUsername(String username) {
     return null;
 }
 
-
-public static boolean recordSale(int userId, double total, double cash, double change, List<String> itemNames, List<Double> itemPrices, String paymentmethod) {
+public static int recordSale(int userId, double total, double cash, double change, List<String> itemNames, List<Double> itemPrices, String paymentmethod) {
     String saleSql = "INSERT INTO Sales (userId, totalPrice, cashGiven, change, paymentMethod) VALUES (?, ?, ?, ?, ?)";
     String itemSql = "INSERT INTO SaleItems (saleId, productId, quantity, price) VALUES (?, (SELECT productId FROM Product WHERE name = ?), ?, ?)";
 
     try (Connection conn = connect()) {
-        conn.setAutoCommit(false); // Start transaction
+        conn.setAutoCommit(false); 
 
         try (PreparedStatement salePstmt = conn.prepareStatement(saleSql, Statement.RETURN_GENERATED_KEYS)) {
             salePstmt.setInt(1, userId);
@@ -435,33 +434,31 @@ public static boolean recordSale(int userId, double total, double cash, double c
             salePstmt.setString(5, paymentmethod); 
             salePstmt.executeUpdate();
 
-            // Get the saleId that was just created
             ResultSet rs = salePstmt.getGeneratedKeys();
             if (rs.next()) {
-                int saleId = rs.getInt(1);
+                int saleId = rs.getInt(1); // This is your Receipt Number
 
                 try (PreparedStatement itemPstmt = conn.prepareStatement(itemSql)) {
                     for (int i = 0; i < itemNames.size(); i++) {
                         itemPstmt.setInt(1, saleId);
                         itemPstmt.setString(2, itemNames.get(i));
-                        itemPstmt.setInt(3, 1); // Quantity is 1 per list entry
+                        itemPstmt.setInt(3, 1); 
                         itemPstmt.setDouble(4, itemPrices.get(i));
                         itemPstmt.addBatch();
                     }
                     itemPstmt.executeBatch();
                 }
+                conn.commit(); 
+                return saleId; // Return the ID for the Receipt frame
             }
-            conn.commit(); // Save everything
-            return true;
         } catch (SQLException e) {
-            conn.rollback(); // Undo if error occurs
+            conn.rollback();
             System.err.println("Transaction Rollback: " + e.getMessage());
-            return false;
         }
     } catch (SQLException e) {
         System.err.println("Database Connection Error: " + e.getMessage());
-        return false;
     }
+    return -1; // Indicates failure
 }
 
 
@@ -608,6 +605,44 @@ public static List<String[]> getDetailedTransactions(int userId) {
         System.err.println("Error generating grouped sales report: " + e.getMessage());
     }
     return report;
+}
+
+public static double getTotalSalesByPeriod(String username, String period) {
+    double totalSales = 0.0;
+    
+    // SQL uses strftime to filter based on the period relative to 'now'
+    String sql = "SELECT SUM(totalPrice) FROM Sales s " +
+                 "JOIN User u ON s.userId = u.userId " +
+                 "WHERE u.username = ? AND s.timestamp >= ";
+
+    // Append the specific SQLite date modifier based on the period
+    switch (period.toLowerCase()) {
+        case "day":
+            sql += "date('now', 'start of day')";
+            break;
+        case "week":
+            sql += "date('now', '-7 days')";
+            break;
+        case "month":
+            sql += "date('now', 'start of month')";
+            break;
+        default:
+            return 0.0;
+    }
+
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, username);
+        ResultSet rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            totalSales = rs.getDouble(1);
+        }
+    } catch (SQLException e) {
+        System.err.println("Error calculating " + period + " sales: " + e.getMessage());
+    }
+    return totalSales;
 }
     
 }

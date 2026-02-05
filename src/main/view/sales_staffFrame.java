@@ -291,7 +291,29 @@ public class sales_staffFrame extends JFrame {
     
 }
 
+
+
 dashpanel.add(transScroll);
+
+JLabel daysalesText = new JLabel("This Day's Sales: ₱" + DatabaseManager.getTotalSalesByPeriod(user.getUsername(), "day"));
+daysalesText.setFont(new Font("SansSerif", Font.BOLD, 20));
+daysalesText.setForeground(Color.BLACK);
+daysalesText.setBounds(800, 200, 400, 50);
+dashpanel.add(daysalesText);
+
+JLabel weeksalesText = new JLabel("This Week's Sales: ₱" + DatabaseManager.getTotalSalesByPeriod(user.getUsername(), "week"));
+weeksalesText.setFont(new Font("SansSerif", Font.BOLD, 20));
+weeksalesText.setForeground(Color.BLACK);
+weeksalesText.setBounds(800, 250, 400, 50);
+dashpanel.add(weeksalesText);
+
+JLabel monthsalesText = new JLabel("This Month's Sales: ₱" + DatabaseManager.getTotalSalesByPeriod(user.getUsername(), "month"));
+monthsalesText.setFont(new Font("SansSerif", Font.BOLD, 20));
+monthsalesText.setForeground(Color.BLACK);
+monthsalesText.setBounds(800, 300, 400, 50);
+dashpanel.add(monthsalesText);
+
+
 
       
         

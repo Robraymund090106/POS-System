@@ -371,15 +371,24 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
             JOptionPane.showMessageDialog(null, successMsg);
 
             // Record to Database (Pass referenceNumber if your recordSale method supports it)
-            DatabaseManager.recordSale(user.getUserId(), totalprice, cashAmountInput, changeAmount, orderItems, orderPrices, paymentMethod);
-            
-            for (String itemName : orderItems) {
-                DatabaseManager.updateProductStock(itemName, 1);
-            }
+            int saleId = DatabaseManager.recordSale(user.getUserId(), totalprice, cashAmountInput, (cashAmountInput - totalprice), orderItems, orderPrices, "Cash");
 
-            ReceiptFrame.this.dispose();
-            new DB_Staff(user);
+            if (saleId != -1) {
+        // 1. Update stock
+        for (String itemName : orderItems) {
+            DatabaseManager.updateProductStock(itemName, 1);
+        }
 
+        // 2. Open the NEW Frame
+        new FinalReceiptFrame(ReceiptFrame.this, user, saleId, totalprice, cashAmountInput, 
+                            (cashAmountInput - totalprice), paymentMethod, orderItems, orderPrices);
+        
+    
+        
+        // REMOVE THESE TWO LINES FROM HERE:
+        // ReceiptFrame.this.dispose(); 
+        // new DB_Staff(user);
+    }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Invalid amount entered.", "Error", JOptionPane.ERROR_MESSAGE);
         }
