@@ -1160,38 +1160,38 @@ JTextField searchField1 = new JTextField() {
          JLabel usernamelLabel1 = new JLabel("Staff");
         usernamelLabel1.setFont(new Font("Arial", Font.BOLD, 23));
         usernamelLabel1.setForeground(Color.WHITE);
-        usernamelLabel1.setBounds(117, 137, 150, 30);
+        usernamelLabel1.setBounds(70, 137, 150, 30);
         transactionpanel.add(usernamelLabel1); 
 
         JLabel firstnamelLabel1 = new JLabel("Product");
         firstnamelLabel1.setFont(new Font("Arial", Font.BOLD, 23));
         firstnamelLabel1.setForeground(Color.WHITE);
-        firstnamelLabel1.setBounds(295, 137, 150, 30);
+        firstnamelLabel1.setBounds(219, 137, 150, 30);
         transactionpanel.add(firstnamelLabel1); 
 
         JLabel lastnamelLabel1 = new JLabel("Qty");
         lastnamelLabel1.setFont(new Font("Arial", Font.BOLD, 23));
         lastnamelLabel1.setForeground(Color.WHITE);
-        lastnamelLabel1.setBounds(480, 137, 150, 30);
+        lastnamelLabel1.setBounds(398, 137, 150, 30);
         transactionpanel.add(lastnamelLabel1); 
 
         JLabel genderlLabel1 = new JLabel("Price");
         genderlLabel1.setFont(new Font("Arial", Font.BOLD, 23));
         genderlLabel1.setForeground(Color.WHITE);
-        genderlLabel1.setBounds(590, 137, 150, 30);
+        genderlLabel1.setBounds(560, 137, 150, 30);
         transactionpanel.add(genderlLabel1); 
 
            JLabel tot = new JLabel("Total");
         tot.setFont(new Font("Arial", Font.BOLD, 23));
         tot.setForeground(Color.WHITE);
-        tot.setBounds(700, 137, 137, 30);
+        tot.setBounds(723, 137, 137, 30);
         transactionpanel.add(tot); 
 
 
           JLabel date = new JLabel("Date/Time");
         date.setFont(new Font("Arial", Font.BOLD, 23));
         date.setForeground(Color.WHITE);
-        date.setBounds(870, 137, 150, 30);
+        date.setBounds(889, 137, 150, 30);
         transactionpanel.add(date); 
         
 
