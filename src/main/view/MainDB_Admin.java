@@ -2,6 +2,7 @@ package main.view;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.MessageFormat;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -157,6 +158,8 @@ public class MainDB_Admin extends JFrame {
 
         //PANELS
 
+        // #region ITEM LIST SETUP
+
         //ITEM LIST PANEL
 
         listpanelitem = new JPanel(null) {
@@ -306,9 +309,59 @@ JTextField searchField1 = new JTextField() {
     }
 });
 
+    JButton itemListPDF = new JButton("Export PDF");
+    itemListPDF.setFont(new Font("Arial", Font.BOLD, 14));
+    itemListPDF.setBackground(new Color(165, 215, 155));
+    itemListPDF.setForeground(Color.WHITE);
+    itemListPDF.setBounds(350, 20, 120, 40);
+    itemListPDF.setFocusPainted(false);
+    itemListPDF.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    itemListPDF.addActionListener(e -> {
+
+        JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Item List as PDF");
+            fileChooser.setSelectedFile(new java.io.File("ItemList.pdf"));
+
+            int userSelection = fileChooser.showSaveDialog(null);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                //JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Item List as PDF");
+            
+            // Set a default file name
+            fileChooser.setSelectedFile(new java.io.File("ItemList.pdf"));
+
+            //int userSelection = fileChooser.showSaveDialog(null);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                java.io.File fileToSave = fileChooser.getSelectedFile();
+                
+                try {
+                    
+                    MessageFormat headerr = new MessageFormat("NUCMS - Item List");
+                    MessageFormat footer = new MessageFormat("Page {0,number,integer}");
+                    
+                    boolean complete = table.print(JTable.PrintMode.FIT_WIDTH, headerr, footer);
+                    
+                    if (complete) {
+                        JOptionPane.showMessageDialog(null, "Report generated successfully!");
+                    }
+                    
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error generating report: " + ex.getMessage());
+                }
+            }
+            }
+    });
+        
+    listpanelitem.add(itemListPDF);
+
+
    sbarr.add(searchField1);
 
-                
+   // #endregion
+
+        // #region ADD MENU SETUP
 
         //ADD MENU PANEL
         addmenuitem = new JPanel(null) {
@@ -686,6 +739,67 @@ JTextField searchField1 = new JTextField() {
         btnAdd.setForeground(Color.WHITE);
         btnAdd.setFont(new Font("Arial", Font.BOLD, 14));
         addmenuitem.add(btnAdd);
+
+        btnAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+           
+        @Override
+    public void mousePressed(MouseEvent e) {
+        String name = tablebottom.getValueAt(tablebottom.getSelectedRow(), 0).toString();
+        
+        if (tablebottom.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(addmenuitem, "Please select an item first.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String inputAmount = JOptionPane.showInputDialog(
+            addmenuitem, 
+            "Enter amount of stock to add for " + name + ":", 
+            "Add Stock - NUCMS", 
+            JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (inputAmount != null && !inputAmount.trim().isEmpty()) {
+            try {
+                int additionalStock = Integer.parseInt(inputAmount.trim());
+                
+                if (additionalStock <= 0) {
+                    JOptionPane.showMessageDialog(addmenuitem, "Please enter a positive number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // 1. Update Database
+                DatabaseManager.addstock(name, additionalStock);
+                
+                // 2. Update UI Tables (modelbottom and model)
+                // We loop through the model to find the item by name and update its stock column
+                boolean found = false;
+                for (int i = 0; i < modelbottom.getRowCount(); i++) {
+                    if (modelbottom.getValueAt(i, 0).equals(name)) {
+                        int currentStock = (int) modelbottom.getValueAt(i, 3);
+                        modelbottom.setValueAt(currentStock + additionalStock, i, 3);
+                        found = true;
+                        break;
+                    }
+                }
+                
+                // Also update the main 'model' if it exists in this scope
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    if (model.getValueAt(i, 0).equals(name)) {
+                        int currentStock = (int) model.getValueAt(i, 3);
+                        model.setValueAt(currentStock + additionalStock, i, 3);
+                        break;
+                    }
+                }
+
+                JOptionPane.showMessageDialog(addmenuitem, "Successfully added " + additionalStock + " to " + name + ".");
+                
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(addmenuitem, "Invalid input. Please enter a whole number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+                
+        });
       
 
      
@@ -696,6 +810,9 @@ JTextField searchField1 = new JTextField() {
 
 
         //ADD STAFF PANEL
+
+        //#endregion
+        //#region ADD STAFF SETUP
 
         //kulang pa since nakita ko rin na may scrollbar, kapag gagawin ko baka mag ka conflict -que
 
@@ -1000,6 +1117,67 @@ JTextField searchField1 = new JTextField() {
             }
         });
 
+        JButton printstafftable = new JButton("Print");
+        printstafftable.setBounds(50, 600, 150, 40);
+        printstafftable.setBackground(new Color(165, 215, 155));
+        printstafftable.setForeground(Color.WHITE);
+        printstafftable.setFont(new Font("Arial", Font.BOLD, 15));
+        printstafftable.setFocusPainted(false);
+        printstafftable.addActionListener(e -> {
+            try {
+                usertable.print();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Error printing: " + ex.getMessage());
+            }
+        });
+
+        JButton downloadstaffpdf = new JButton("Download PDF");
+        downloadstaffpdf.setBounds(250, 600, 150, 40);
+        downloadstaffpdf.setBackground(new Color(165, 215, 155));
+        downloadstaffpdf.setForeground(Color.WHITE);
+        downloadstaffpdf.setFont(new Font("Arial", Font.BOLD, 15));
+        downloadstaffpdf.setFocusPainted(false);
+        downloadstaffpdf.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Staff List as PDF");
+            fileChooser.setSelectedFile(new java.io.File("StaffList.pdf"));
+
+            int userSelection = fileChooser.showSaveDialog(null);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                //JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Staff Report as PDF");
+            
+            // Set a default file name
+            fileChooser.setSelectedFile(new java.io.File("Staff_Report.pdf"));
+
+            //int userSelection = fileChooser.showSaveDialog(null);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                java.io.File fileToSave = fileChooser.getSelectedFile();
+                
+                try {
+                    
+                    MessageFormat headerr = new MessageFormat("NUCMS - Staff Management Report");
+                    MessageFormat footer = new MessageFormat("Page {0,number,integer}");
+                    
+                    boolean complete = usertable.print(JTable.PrintMode.FIT_WIDTH, headerr, footer);
+                    
+                    if (complete) {
+                        JOptionPane.showMessageDialog(null, "Report generated successfully!");
+                    }
+                    
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error generating report: " + ex.getMessage());
+                }
+            }
+            }
+    });
+        
+        addstaff.add(downloadstaffpdf);
+        addstaff.add(printstafftable);
+
+
 
         
 
@@ -1007,6 +1185,9 @@ JTextField searchField1 = new JTextField() {
         canvas.add(addstaff);
 
 
+    //#endregion
+
+    //#region Transaction PANEL
 
         // TRANSACTION PANEL
 
@@ -1193,15 +1374,52 @@ JTextField searchField1 = new JTextField() {
         date.setForeground(Color.WHITE);
         date.setBounds(889, 137, 150, 30);
         transactionpanel.add(date); 
-        
 
+        JButton downloadtransactionasPDF = new JButton("Download PDF");
+        downloadtransactionasPDF.setBounds(50, 700, 150, 40);
+        downloadtransactionasPDF.setBackground(new Color(165, 215, 155));
+        downloadtransactionasPDF.setForeground(Color.WHITE);
         
+        downloadtransactionasPDF.setFont(new Font("Arial", Font.BOLD, 15));
+        downloadtransactionasPDF.setFocusPainted(false);
+
+        downloadtransactionasPDF.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Transactions as PDF");
+            fileChooser.setSelectedFile(new java.io.File("Transactions.pdf"));
+
+            int userSelection = fileChooser.showSaveDialog(null);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                java.io.File fileToSave = fileChooser.getSelectedFile();
+                
+                try {
+                    
+                    MessageFormat headerr = new MessageFormat("NUCMS - Transaction Report");
+                    MessageFormat footer = new MessageFormat("Page {0,number,integer}");
+                    
+                    boolean complete = transactiontable.print(JTable.PrintMode.FIT_WIDTH, headerr, footer);
+                    
+                    if (complete) {
+                        JOptionPane.showMessageDialog(null, "Report generated successfully!");
+                    }
+                    
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error generating report: " + ex.getMessage());
+                }
+            }
+        });
+        transactionpanel.add(downloadtransactionasPDF);
+
 
 
 
 
         canvas.add(transactionpanel);
-
+        // END OF TRANSACTION PANEL
+        // START OF SALES PANEL
+        ////#endregion
+//#region SALES PANEL
         // SALES PANEL
        salespanel = new JPanel(null) {
         private Image sImage = new ImageIcon("src/main/image/salesrep.png").getImage();
@@ -1242,11 +1460,23 @@ JTextField searchField1 = new JTextField() {
         tranlabel.setBounds(85, 126, 300, 30);
         salespanel.add(tranlabel);
 
+        JLabel totalActivestaff = new JLabel(String.valueOf(DatabaseManager.numberofactivestaff()));
+        totalActivestaff.setFont(new Font("Arial", Font.BOLD, 25));
+        totalActivestaff.setForeground(Color.BLACK);
+        totalActivestaff.setBounds(85, 166, 300, 30);
+        salespanel.add(totalActivestaff);
+
         JLabel onlinestafflabel = new JLabel("Inactive Staff");
         onlinestafflabel.setFont(new Font("Arial", Font.BOLD, 25));
         onlinestafflabel.setForeground(Color.BLACK);
         onlinestafflabel.setBounds(398, 126, 300, 30);
         salespanel.add(onlinestafflabel);
+
+        JLabel totalinactivestaff = new JLabel(String.valueOf(DatabaseManager.numberofinactivestaff()));
+        totalinactivestaff.setFont(new Font("Arial", Font.BOLD, 25));
+        totalinactivestaff.setForeground(Color.BLACK);
+        totalinactivestaff.setBounds(398, 166, 300, 30);
+        salespanel.add(totalinactivestaff);
 
         JLabel totalsaleslabel = new JLabel("Best Selling");
         totalsaleslabel.setFont(new Font("Arial", Font.BOLD, 30));
@@ -1254,17 +1484,83 @@ JTextField searchField1 = new JTextField() {
         totalsaleslabel.setBounds(781, 113, 300, 70);
         salespanel.add(totalsaleslabel);
 
+        
+
+
         JLabel bestsellinglabel = new JLabel("Total Sales");
         bestsellinglabel.setFont(new Font("Arial", Font.BOLD, 26));
         bestsellinglabel.setForeground(Color.BLACK);
         bestsellinglabel.setBounds(140, 317, 300, 30);
         salespanel.add(bestsellinglabel);
 
+        JLabel totaldailysales = new JLabel("Today's Sales: " + String.valueOf(DatabaseManager.getTotalSalesbyPeriod("day")));
+        totaldailysales.setFont(new Font("Arial", Font.BOLD, 25));
+        totaldailysales.setForeground(Color.BLACK);
+        totaldailysales.setBounds(70, 375, 300, 30);
+        salespanel.add(totaldailysales);
+
+        JLabel totalweeklysales = new JLabel("Weekly Sales: " + String.valueOf(DatabaseManager.getTotalSalesbyPeriod("week")));
+        totalweeklysales.setFont(new Font("Arial", Font.BOLD, 25));
+        totalweeklysales.setForeground(Color.BLACK);
+        totalweeklysales.setBounds(70, 475, 300, 30);
+        salespanel.add(totalweeklysales);
+
+        JLabel totalmonthlysales = new JLabel("Monthly Sales: " + String.valueOf(DatabaseManager.getTotalSalesbyPeriod("month")));
+        totalmonthlysales.setFont(new Font("Arial", Font.BOLD, 25));
+        totalmonthlysales.setForeground(Color.BLACK);
+        totalmonthlysales.setBounds(70, 575, 300, 30);
+        salespanel.add(totalmonthlysales);
+
         JLabel saleschartlabel = new JLabel("Transactions");
         saleschartlabel.setFont(new Font("Arial", Font.BOLD, 26));
         saleschartlabel.setForeground(Color.BLACK);
         saleschartlabel.setBounds(440, 317, 300, 30);
         salespanel.add(saleschartlabel);
+
+        JPanel transactionList = new JPanel(new BorderLayout());
+
+        JPanel transItemsContainer = new JPanel();
+        transItemsContainer.setLayout(new BoxLayout(transItemsContainer, BoxLayout.Y_AXIS));
+        transItemsContainer.setBackground(Color.WHITE);
+        transItemsContainer.setOpaque(false);
+
+        // 2. Create the JScrollPane and wrap the container inside it
+        JScrollPane transScroll = new JScrollPane(transItemsContainer);
+        transScroll.setBounds(380, 360, 280, 350); // Positioned under the "Transactions" header
+        transScroll.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        transScroll.getVerticalScrollBar().setUnitIncrement(16); 
+        transScroll.setOpaque(false);// Makes the "wheel" scroll smoothly
+        salespanel.add(transScroll);
+
+        // 3. Fetch data and build the rows
+        List<String[]> history = DatabaseManager.getTransactionHistory();
+
+        for (String[] entry : history) {
+            JPanel row = new JPanel(new BorderLayout());
+            row.setMaximumSize(new Dimension(Short.MAX_VALUE, 50)); // Fixed row height
+            row.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+            row.setBackground(Color.WHITE);
+
+            // Left Side: Item Name
+            JLabel nameLabel = new JLabel(" " + entry[0]); 
+            nameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+
+            // Right Side: Qty, Price, and Date
+            // Using HTML to stack the price and date neatly
+            JLabel detailsLabel = new JLabel("<html><div style='text-align: right; padding-right: 5px;'>" +
+                                            "Qty: " + entry[1] + " | <b>$" + entry[2] + "</b><br/>" +
+                                            "<font size='2' color='gray'>" + entry[3] + "</font></div></html>");
+            detailsLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+
+            row.add(nameLabel, BorderLayout.WEST);
+            row.add(detailsLabel, BorderLayout.EAST);
+
+            transItemsContainer.add(row);
+        }
+
+        // 4. Important: Add a vertical glue so items stay at the top
+        transItemsContainer.add(Box.createVerticalGlue());
+
         canvas.add(salespanel);
 
         //

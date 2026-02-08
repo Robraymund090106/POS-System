@@ -657,5 +657,103 @@ public static double getTotalSalesByPeriod(String username, String period) {
             System.err.println("Error adding stock: " + e.getMessage());
         }
     }
+
+    public static void changerole(String username, String newRole) {
+        String sql = "UPDATE User SET role = ? WHERE username = ?";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, newRole);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.err.println("Error changing role: " + e.getMessage());
+        }
+    }
+    
+    public static int numberofactivestaff() {
+        String sql = "SELECT COUNT(*) FROM User WHERE role = 'STAFF' AND isActive = 1";
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error counting active staff: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public static int numberofinactivestaff() {
+        String sql = "SELECT COUNT(*) FROM User WHERE role = 'STAFF' AND isActive = 0";
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error counting inactive staff: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public static double getTotalSalesbyPeriod(String period) {
+    double totalSales = 0.0;
+    String sql = "SELECT SUM(totalPrice) FROM Sales WHERE timestamp >= ";
+
+    switch (period.toLowerCase()) {
+        case "day":   sql += "date('now', 'start of day')"; break;
+        case "week":  sql += "date('now', '-7 days')"; break;
+        case "month": sql += "date('now', 'start of month')"; break;
+        default: return 0.0;
+    }
+
+    try (Connection conn = connect();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+        
+        if (rs.next()) {
+            totalSales = rs.getDouble(1);
+        }
+    } catch (SQLException e) {
+        System.err.println("Error calculating " + period + " sales: " + e.getMessage());
+    }
+    return totalSales;
+}
+
+    public static List<String[]> getTransactionHistory() {
+    List<String[]> history = new ArrayList<>();
+    
+    // We use SUM(si.quantity) and GROUP BY to merge identical items at the same time
+    String sql = "SELECT p.name, SUM(si.quantity) as totalQty, s.totalPrice, s.timestamp " +
+                 "FROM Sales s " +
+                 "JOIN SaleItems si ON s.saleId = si.saleId " +
+                 "JOIN Product p ON si.productId = p.productId " +
+                 "GROUP BY p.name, s.timestamp " + 
+                 "ORDER BY s.timestamp DESC";
+
+    try (Connection conn = connect();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+
+        while (rs.next()) {
+            history.add(new String[]{
+                rs.getString("name"),
+                String.valueOf(rs.getInt("totalQty")), // Using the summed alias
+                String.format("%.2f", rs.getDouble("totalPrice")),
+                rs.getString("timestamp")
+            });
+        }
+    } catch (SQLException e) {
+        System.err.println("Error fetching grouped history: " + e.getMessage());
+    }
+    return history;
+}
+        
 }
 
