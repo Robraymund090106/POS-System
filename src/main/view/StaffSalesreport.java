@@ -20,7 +20,7 @@ public class StaffSalesreport extends JFrame {
         mainPanel.setBackground(Color.WHITE);
 
         // --- 1. Top Header Label ---
-        JLabel titleLabel = new JLabel("STAFF SALES REPORT INFO", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("STAFF SALES DAILY REPORT ", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Monospaced", Font.BOLD, 22));
         titleLabel.setBounds(0, 20, 600, 40);
         Border dashedBorder = BorderFactory.createMatteBorder(1, 0, 1, 0, Color.BLACK);
@@ -74,9 +74,9 @@ public class StaffSalesreport extends JFrame {
 
         if (reportStatus.contains("PENDING")) {
                     JOptionPane.showMessageDialog(this, 
-                        selectedStaff + " hasn't submitted a report yet.", 
+                       selectedStaff + " hasn't submitted a report yet.", 
                         "System Notice", JOptionPane.WARNING_MESSAGE);
-                        return;
+                       return;
                 }
 
         // 1. CLEAR the mainPanel so we can show the new report
@@ -99,7 +99,7 @@ public class StaffSalesreport extends JFrame {
         styleTable(saletable);
 
         // Load data
-        List<String[]> staffdata = DatabaseManager.getDetailedTransactions(selectedUser);
+        List<String[]> staffdata = DatabaseManager.getDetailedTransactionHistoryByPeriod(selectedUser, "Daily");
         for (String[] row : staffdata) {
             salemodel.addRow(row);
         }

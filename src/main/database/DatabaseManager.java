@@ -712,6 +712,52 @@ public static List<String[]> getDetailedTransactions(int userId) {
     return transactions;
 }
 
+public static List<String[]> getDetailedTransactionHistoryByPeriod(int userId, String period) {
+    List<String[]> history = new ArrayList<>();
+    
+    // Base SQL identical to your previous method
+    String sql = "SELECT p.name, SUM(si.quantity) as totalQty, " +
+                 "strftime('%Y-%m-%d %H:%M', s.timestamp) as saleTime " +
+                 "FROM Sales s " +
+                 "JOIN SaleItems si ON s.saleId = si.saleId " +
+                 "JOIN Product p ON si.productId = p.productId " +
+                 "WHERE s.userId = ? ";
+
+    // Apply the date filter based on the period string
+    if (period.equalsIgnoreCase("Daily")) {
+        sql += "AND date(s.timestamp) = date('now') ";
+    } else if (period.equalsIgnoreCase("Weekly")) {
+        sql += "AND date(s.timestamp) >= date('now', '-7 days') ";
+    } else if (period.equalsIgnoreCase("Monthly")) {
+        sql += "AND date(s.timestamp) >= date('now', 'start of month') ";
+    }
+
+    sql += "GROUP BY p.name, saleTime ORDER BY s.timestamp DESC";
+
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, userId);
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            history.add(new String[]{
+                rs.getString("name"),
+                String.valueOf(rs.getInt("totalQty")),
+                rs.getString("saleTime")
+            });
+        }
+    } catch (SQLException e) {
+        System.err.println("Error fetching transaction history: " + e.getMessage());
+    }
+    return history;
+
+
+    
+
+}
+    
+
     public static boolean updateUserRole(int userId, String newRole) {
     String sql = "UPDATE User SET role = ? WHERE userId = ?";
     try (Connection conn = connect();
