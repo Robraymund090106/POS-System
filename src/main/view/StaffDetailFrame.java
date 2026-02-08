@@ -208,7 +208,7 @@ public class StaffDetailFrame extends JFrame {
                 
                 String newPassword = new String(passField.getPassword());
                 user.setRole(selectedPosition);
-                DatabaseManager.updateUserRole(user.getUserId(), selectedPosition);
+                DatabaseManager.updateUserRole(user.getUserId(), selectedPosition.toUpperCase());
             }
         });
           

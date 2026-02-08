@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Map;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -1466,6 +1468,24 @@ JTextField searchField1 = new JTextField() {
         totalActivestaff.setBounds(85, 166, 300, 30);
         salespanel.add(totalActivestaff);
 
+        JButton viewsalesreport = new JButton("View Report");
+        viewsalesreport.setSize(100, 50);
+        viewsalesreport.setBackground(new Color(165, 215, 155));
+        viewsalesreport.setForeground(Color.WHITE);
+        viewsalesreport.setFont(new Font("Arial", Font.BOLD, 10));
+        viewsalesreport.setBounds(220, 230, 100, 30);
+        viewsalesreport.setFocusPainted(false);
+        salespanel.add(viewsalesreport);
+
+        viewsalesreport.addActionListener(e -> {
+            new StaffSalesreport();
+        });
+            
+
+
+
+
+
         JLabel onlinestafflabel = new JLabel("Inactive Staff");
         onlinestafflabel.setFont(new Font("Arial", Font.BOLD, 25));
         onlinestafflabel.setForeground(Color.BLACK);
@@ -1483,6 +1503,65 @@ JTextField searchField1 = new JTextField() {
         totalsaleslabel.setForeground(Color.BLACK);
         totalsaleslabel.setBounds(781, 113, 300, 70);
         salespanel.add(totalsaleslabel);
+
+        JPanel bestsellingpanel = new JPanel();
+        bestsellingpanel.setLayout(new BoxLayout(bestsellingpanel, BoxLayout.Y_AXIS));
+        //bestsellingpanel.setBackground(Color.WHITE);
+        bestsellingpanel.setOpaque(false);
+
+        JScrollPane scrollPanebestselling = new JScrollPane(bestsellingpanel);
+        scrollPanebestselling.setBounds(725, 200, 280, 1000); // Matches your layout
+        scrollPanebestselling.setBorder(null); // Optional: makes it look cleaner
+        scrollPanebestselling.setOpaque(false);
+        scrollPanebestselling.getViewport().setOpaque(false);
+
+        // Fetch the Top 10
+        Map<String, Integer> top10 = DatabaseManager.getTop10Bestsellers();
+
+        int rank = 1;
+for (Map.Entry<String, Integer> entry : top10.entrySet()) {
+    JPanel row = new JPanel(new BorderLayout());
+    
+    // --- STEP 1: Increase Row Height ---
+    // Increased height from 100 (which was likely being squashed) to a consistent 60
+    row.setPreferredSize(new Dimension(280, 30)); 
+    row.setMaximumSize(new Dimension(280, 30)); 
+    
+    row.setBackground(Color.WHITE);
+    row.setOpaque(false);
+    
+    // Bottom border for separation
+    row.setBorder(BorderFactory.createCompoundBorder(
+        BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY),
+        BorderFactory.createEmptyBorder(5, 10, 5, 10) // Added padding: top, left, bottom, right
+    ));
+
+    // --- STEP 2: Larger Fonts for Visibility ---
+    String rankText = (rank == 1) ? "🏆 " + rank : String.valueOf(rank);
+    JLabel nameLabel = new JLabel(rankText + ". " + entry.getKey());
+    
+    // Make the font larger (Size 18 or 20)
+    nameLabel.setFont(new Font("SansSerif", rank <= 3 ? Font.BOLD : Font.PLAIN, 18));
+    
+    // Styling the Quantity
+    JLabel qtyLabel = new JLabel(entry.getValue() + " sold");
+    qtyLabel.setFont(new Font("SansSerif", Font.BOLD, 16)); // Increased from 14
+    qtyLabel.setForeground(new Color(34, 139, 34)); 
+
+    row.add(nameLabel, BorderLayout.WEST);
+    row.add(qtyLabel, BorderLayout.EAST);
+    
+    // Add spacing between rows
+    bestsellingpanel.add(row);
+    bestsellingpanel.add(Box.createRigidArea(new Dimension(0, 10))); // Extra 10px gap
+    
+    rank++;
+}
+        bestsellingpanel.add(Box.createVerticalGlue()); 
+        
+        salespanel.add(scrollPanebestselling);
+
+        // Pushes items to the top
 
         
 

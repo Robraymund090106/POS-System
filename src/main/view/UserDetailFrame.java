@@ -5,10 +5,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import main.backend.*;
 import main.model.*;
+import main.database.DatabaseManager;
 
 public class UserDetailFrame extends JFrame {
 
     private User user;
+
+    private int activeShiftId = -1;
 
     public UserDetailFrame(User user) {
         this.user = user;
@@ -127,6 +130,73 @@ public class UserDetailFrame extends JFrame {
         changePassBtn.addActionListener(e -> new ChangePasswordFrame(user));
 
         mainContent.add(detailCard);
+
+        JButton startshift = createStyledButton("Start Shift");
+        startshift.setBounds(50, 400, 120, 40);
+        startshift.setBackground(new Color(100, 200, 100));
+        startshift.setForeground(Color.WHITE);
+        mainContent.add(startshift);
+
+        startshift.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(this, "Start your shift now?", "Start Shift", JOptionPane.YES_NO_OPTION);
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+            if (activeShiftId != -1) {
+        JOptionPane.showMessageDialog(null, "You already have an active shift!", "Warning", JOptionPane.WARNING_MESSAGE);
+        return;
+            }
+
+            // Call the database method we wrote
+            activeShiftId = DatabaseManager.startShift(user.getUserId());
+
+            if (activeShiftId != -1) {
+                startshift.setEnabled(false); // Disable to prevent double-clicking
+                JOptionPane.showMessageDialog(null, "Shift started successfully at " + java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("hh:mm a")));
+            } else {
+                JOptionPane.showMessageDialog(null, "Error: Could not connect to database.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }); 
+            
+
+        JButton endshift = createStyledButton("End Shift");
+        endshift.setBounds(200, 400, 120, 40);
+        endshift.setBackground(new Color(200, 100, 100));
+        endshift.setForeground(Color.WHITE);
+        mainContent.add(endshift);
+
+        endshift.addActionListener(e -> {
+                int confirm = JOptionPane.showConfirmDialog(this, "End your shift now?", "End Shift", JOptionPane.YES_NO_OPTION);
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            String password = JOptionPane.showInputDialog(this, "Please enter your password to confirm:", "Confirm Password", JOptionPane.PLAIN_MESSAGE);
+
+            if (activeShiftId == -1) {
+                JOptionPane.showMessageDialog(null, "No active shift found!");
+                return;
+            }
+
+            if (!password.equals(user.getPassword())) {
+                JOptionPane.showMessageDialog(null, "Incorrect password!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            DatabaseManager.endShift(activeShiftId);
+            String duration = DatabaseManager.getLastShiftDuration(activeShiftId);
+            
+ 
+            String message = "Thank you, #" + user.getRole().toLowerCase() + 
+                            " your total working hours is " + duration + "Shift started at: " + DatabaseManager.getLastShiftStartTime(activeShiftId) + " and ended at: " + DatabaseManager.getLastShiftEndTime(activeShiftId) + ".";
+            
+            JOptionPane.showMessageDialog(null, message, "Shift Summary", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Reset for next time
+            activeShiftId = -1;
+            startshift.setEnabled(true); 
+        });
+
 
         add(sidebar, BorderLayout.WEST);
         add(mainContent, BorderLayout.CENTER);

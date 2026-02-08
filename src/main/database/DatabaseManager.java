@@ -98,6 +98,27 @@ public class DatabaseManager {
                                     "FOREIGN KEY(productId) REFERENCES Product(productId))";
             stmt.execute(saleItemsTable);
 
+            String shiftTable = "CREATE TABLE IF NOT EXISTS Shifts (" +
+                    "shiftId INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "userId INTEGER NOT NULL, " +
+                    "startTime DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+                    "endTime DATETIME, " +
+                    "totalMinutes INTEGER, " +
+                    "FOREIGN KEY(userId) REFERENCES User(userId))";
+            stmt.execute(shiftTable);
+
+            String reportsTable = "CREATE TABLE IF NOT EXISTS StaffReports (" +
+                      "reportId INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                      "userId INTEGER NOT NULL, " +
+                      "shiftId INTEGER, " +
+                      "submissionDate DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+                      "isFinalized INTEGER DEFAULT 0, " +
+                      "notes TEXT, " +
+                      "FOREIGN KEY(userId) REFERENCES User(userId), " +
+                      "FOREIGN KEY(shiftId) REFERENCES Shifts(shiftId))";
+            stmt.execute(reportsTable);
+
+            
 
             
             System.out.println("Database checked/created successfully.");
@@ -106,6 +127,32 @@ public class DatabaseManager {
             System.err.println("Database Init Error: " + e.getMessage());
         }
     }   
+
+    public static List<Object[]> getStaffReportInfo() {
+        List<Object[]> reports = new ArrayList<>();
+        // This LEFT JOIN finds all staff and checks if they have an entry in StaffReports for today
+        String sql = "SELECT u.username, 'ACTIVE' as status, " +
+                 "CASE WHEN r.reportId IS NOT NULL THEN 'SUBMITTED 🔔' ELSE 'PENDING' END as reportStatus " +
+                 "FROM User u " +
+                 "LEFT JOIN StaffReports r ON u.userId = r.userId AND date(r.submissionDate) = date('now') " +
+                 "WHERE u.role = 'STAFF' AND u.isActive = 1";
+
+        try (Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                reports.add(new Object[]{
+                    rs.getString("username"),
+                    rs.getString("status"),
+                    rs.getString("reportStatus")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reports;
+    }
 
     public static boolean existsByUsername(String username) {
     String sql = "SELECT COUNT(*) FROM User WHERE username = ?";
@@ -125,6 +172,116 @@ public class DatabaseManager {
     }
     return false;
     }
+
+    public static int getuseridonusername(String username) {
+        String sql = "SELECT userId FROM User WHERE username = ?";
+
+        try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, username);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            return rs.getInt("userId");
+        }
+    } catch (SQLException e) {
+        System.err.println("Error fetching userId: " + e.getMessage());
+    }
+    return -1; // Return -1 if user doesn't exist or database fails
+
+    }
+    
+
+    // Starts a shift and returns the shiftId so we can update it later
+public static int startShift(int userId) {
+    String sql = "INSERT INTO Shifts (userId, startTime) VALUES (?, CURRENT_TIMESTAMP)";
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        
+        pstmt.setInt(1, userId);
+        pstmt.executeUpdate();
+        
+        ResultSet rs = pstmt.getGeneratedKeys();
+        if (rs.next()) {
+            return rs.getInt(1); // Return the ID of the new shift
+        }
+    } catch (SQLException e) {
+        System.err.println("Start Shift Error: " + e.getMessage());
+    }
+    return -1;
+}
+
+// Ends the shift and calculates the duration in minutes
+public static void endShift(int shiftId) {
+    // SQL calculates the difference in minutes between startTime and the current time
+    String sql = "UPDATE Shifts SET endTime = CURRENT_TIMESTAMP, " +
+                 "totalMinutes = (strftime('%s', 'now') - strftime('%s', startTime)) / 60 " +
+                 "WHERE shiftId = ?";
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, shiftId);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        System.err.println("End Shift Error: " + e.getMessage());
+    }
+}
+
+// Fetches the duration of the last shift to show in your popup
+public static String getLastShiftDuration(int shiftId) {
+    String sql = "SELECT totalMinutes FROM Shifts WHERE shiftId = ?";
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, shiftId);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            int totalMinutes = rs.getInt("totalMinutes");
+            int hours = totalMinutes / 60;
+            int minutes = totalMinutes % 60;
+            return hours + "hrs and " + minutes + " min";
+        }
+    } catch (SQLException e) {
+        System.err.println("Fetch Duration Error: " + e.getMessage());
+    }
+    return "0hrs and 0 min";
+}
+
+public static String getLastShiftStartTime(int shiftId) {
+    String sql = "SELECT startTime FROM Shifts WHERE shiftId = ?";
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, shiftId);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            String startTime = rs.getString("startTime");
+            return java.time.LocalDateTime.parse(startTime.replace(" ", "T")).format(java.time.format.DateTimeFormatter.ofPattern("hh:mm a"));
+        }
+    } catch (SQLException e) {
+        System.err.println("Fetch Start Time Error: " + e.getMessage());
+    }
+    return "0hrs and 0 min";
+}
+
+public static String getLastShiftEndTime(int shiftId) {
+    String sql = "SELECT endTime FROM Shifts WHERE shiftId = ?";
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, shiftId);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            String endTime = rs.getString("endTime");
+            return java.time.LocalDateTime.parse(endTime.replace(" ", "T")).format(java.time.format.DateTimeFormatter.ofPattern("hh:mm a"));
+        }
+    } catch (SQLException e) {
+        System.err.println("Fetch End Time Error: " + e.getMessage());
+    }
+    return "0hrs and 0 min";
+}
+
 
     
 

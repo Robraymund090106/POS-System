@@ -13,7 +13,8 @@ public class Main {
         
     
         DatabaseManager.initializeDatabase();
-        DatabaseManager.changerole("Gojo_Satoru", "Staff");
+
+  
         new LoginFrame();
 
     }
