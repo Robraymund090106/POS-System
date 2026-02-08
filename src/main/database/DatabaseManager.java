@@ -644,6 +644,18 @@ public static double getTotalSalesByPeriod(String username, String period) {
     }
     return totalSales;
 }
-    
+     public static void addstock(String productName, int additionalStock) {
+        String sql = "UPDATE Product SET stock = stock + ? WHERE name = ?";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, additionalStock);
+            pstmt.setString(2, productName);
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.err.println("Error adding stock: " + e.getMessage());
+        }
+    }
 }
 
