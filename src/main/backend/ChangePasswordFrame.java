@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import main.model.User;
 import main.view.DB_Staff;
+import main.view.LoginFrame;
 import main.database.DatabaseManager;
 
 public class ChangePasswordFrame extends JFrame {
@@ -146,7 +147,12 @@ public class ChangePasswordFrame extends JFrame {
             dispose();
             JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-            
+            for (Window window : Window.getWindows()) {
+                window.dispose();
+            }
+
+            // 2. Launch the login frame
+            new LoginFrame();
         });
 
         JButton cancelButton = new JButton("Cancel");

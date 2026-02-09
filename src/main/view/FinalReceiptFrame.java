@@ -1,6 +1,7 @@
 package main.view;
 
 import java.awt.*;
+import java.awt.print.*;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -75,6 +76,35 @@ public class FinalReceiptFrame extends JFrame {
 
         // Buttons
         JPanel btnPanel = new JPanel();
+        JButton printBtn = new JButton("PRINT AS PDF");
+        printBtn.setBackground(Color.BLACK);
+        printBtn.setForeground(Color.WHITE);
+        printBtn.addActionListener(e -> {
+            PrinterJob job = PrinterJob.getPrinterJob();
+            job.setJobName("Receipt_" + saleId);
+            job.setPrintable(new Printable() {
+                public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+                    if (pageIndex > 0) return Printable.NO_SUCH_PAGE;
+                    Graphics2D g2 = (Graphics2D) graphics;
+                    g2.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+                    double scaleX = pageFormat.getImageableWidth() / paper.getWidth();
+                    double scaleY = pageFormat.getImageableHeight() / paper.getHeight();
+                    double scale = Math.min(scaleX, scaleY);
+                    g2.scale(scale, scale);
+                    paper.printAll(g2);
+                    return Printable.PAGE_EXISTS;
+                }
+            });
+            boolean doPrint = job.printDialog();
+            if (doPrint) {
+                try {
+                    job.print();
+                } catch (PrinterException ex) {
+                    JOptionPane.showMessageDialog(FinalReceiptFrame.this, "Print failed: " + ex.getMessage());
+                }
+            }
+        });
+
         JButton closeBtn = new JButton("New Transaction");
         closeBtn.addActionListener(e -> {
             if (parentFrame != null) {
@@ -83,6 +113,7 @@ public class FinalReceiptFrame extends JFrame {
             this.dispose(); 
             new DB_Staff(user);
         });
+        btnPanel.add(printBtn);
         btnPanel.add(closeBtn);
 
         add(paper, BorderLayout.CENTER);

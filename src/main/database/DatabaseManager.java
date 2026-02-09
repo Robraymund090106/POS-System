@@ -199,30 +199,62 @@ public static String getStaffNotes(int userId) {
 }
 
     public static List<Object[]> getStaffReportInfo() {
-        List<Object[]> reports = new ArrayList<>();
-        // This LEFT JOIN finds all staff and checks if they have an entry in StaffReports for today
-        String sql = "SELECT u.username, 'ACTIVE' as status, " +
-                 "CASE WHEN r.reportId IS NOT NULL THEN 'SUBMITTED 🔔' ELSE 'PENDING' END as reportStatus " +
+    List<Object[]> reports = new ArrayList<>();
+    String sql = "SELECT u.username, 'ACTIVE' as status, " +
+                 "CASE WHEN COUNT(r.reportId) > 0 THEN 'SUBMITTED 🔔' ELSE 'PENDING' END as reportStatus " +
                  "FROM User u " +
-                 "LEFT JOIN StaffReports r ON u.userId = r.userId AND date(r.submissionDate) = date('now') " +
-                 "WHERE u.role = 'STAFF' AND u.isActive = 1";
+                 "LEFT JOIN StaffReports r ON u.userId = r.userId " +
+                 // CRITICAL FIX: Convert stored UTC time to localtime before comparing
+                 "AND date(r.submissionDate, 'localtime') = date('now', 'localtime') " + 
+                 "WHERE u.role = 'STAFF' AND u.isActive = 1 " +
+                 "GROUP BY u.userId";
 
-        try (Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
-            
-            while (rs.next()) {
-                reports.add(new Object[]{
-                    rs.getString("username"),
-                    rs.getString("status"),
-                    rs.getString("reportStatus")
-                });
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    try (Connection conn = connect();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+        
+        while (rs.next()) {
+            reports.add(new Object[]{
+                rs.getString("username"),
+                rs.getString("status"),
+                rs.getString("reportStatus")
+            });
         }
-        return reports;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return reports;
+}
+
+public static String[] getLastClosedShiftDetails(int userId) {
+    // Fetches the most recently closed shift for the user
+    // Calculates duration as 'HH:MM:SS' using SQLite time functions
+    String sql = "SELECT " +
+                 "datetime(startTime, 'localtime') as start, " +
+                 "datetime(endTime, 'localtime') as end, " +
+                 "time(strftime('%s', endTime) - strftime('%s', startTime), 'unixepoch') as duration " +
+                 "FROM Shifts " +
+                 "WHERE userId = ? AND endTime IS NOT NULL " +
+                 "ORDER BY shiftId DESC LIMIT 1";
+
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setInt(1, userId);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            return new String[] {
+                rs.getString("start"),
+                rs.getString("end"),
+                rs.getString("duration")
+            };
+        }
+    } catch (SQLException e) {
+        System.err.println("Error fetching shift details: " + e.getMessage());
+    }
+    return null;
+}
 
     public static boolean existsByUsername(String username) {
     String sql = "SELECT COUNT(*) FROM User WHERE username = ?";

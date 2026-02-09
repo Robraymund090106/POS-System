@@ -1008,7 +1008,7 @@ JOptionPane.showMessageDialog(null, "Error generating report: " + ex.getMessage(
 
         addstaff.add(changeStatus);
 
-        String[] usercolumnname = {"Username", "First Name", "Last Name", "Gender","Status"};
+        String[] usercolumnname = {"", "", "", "",""};
         Object[][] userdatalist = {};
 
         DefaultTableModel usermodel = new DefaultTableModel(userdatalist,usercolumnname) {

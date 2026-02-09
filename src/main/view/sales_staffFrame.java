@@ -337,41 +337,46 @@ submitbutton.addActionListener(e -> {
         JOptionPane.WARNING_MESSAGE
     );
 
-    if (warning != JOptionPane.YES_OPTION) {
-        return;
-    }
+    if (warning != JOptionPane.YES_OPTION) return;
 
-    // 1. Create a JTextArea for the popup
     JTextArea notesArea = new JTextArea(5, 20);
     notesArea.setLineWrap(true);
     notesArea.setWrapStyleWord(true);
-    
-    // 2. Wrap it in a JScrollPane so it handles long text
     JScrollPane scrollPane1 = new JScrollPane(notesArea);
     
-    // 3. Show the JOptionPane with the scrollPane as the message
     int result = JOptionPane.showConfirmDialog(null, scrollPane1, 
             "Enter Staff Report Notes", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-    // 4. If user clicks OK
     if (result == JOptionPane.OK_OPTION) {
         String notes = notesArea.getText().trim();
-        
-        // Validate notes are not empty
         if (notes.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Submission failed: Notes cannot be empty.");
             return;
         }
 
-        // 5. Call your DatabaseManager method
+        // 1. Submit the report and finalize shift in DB
         boolean success = DatabaseManager.submitStaffReport(user.getUserId(), notes);
 
         if (success) {
-            JOptionPane.showMessageDialog(null, "Report submitted and shift finalized!");
+            // 2. Fetch the shift details we just closed to show the summary
+            String[] shiftDetails = DatabaseManager.getLastClosedShiftDetails(user.getUserId());
+            
+            if (shiftDetails != null) {
+                String summary = String.format(
+                    "📊 SHIFT SUMMARY\n\n" +
+                    "Start Time: %s\n" +
+                    "End Time:   %s\n" +
+                    "Total Time: %s",
+                    shiftDetails[0], shiftDetails[1], shiftDetails[2]
+                );
+                
+                JOptionPane.showMessageDialog(null, summary, "Shift Finalized", JOptionPane.INFORMATION_MESSAGE);
+            }
+
             submitbutton.setEnabled(false);
-            submitbutton.setBackground(Color.GRAY); // Visual cue that it's done
+            submitbutton.setBackground(Color.GRAY);
         } else {
-            JOptionPane.showMessageDialog(null, "Error: No active shift found for this user.");
+            JOptionPane.showMessageDialog(null, "Error: No active shift found or database error.");
         }
     }
 });
