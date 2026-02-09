@@ -69,38 +69,34 @@ public class StaffSalesreport extends JFrame {
 
     if (selectedRow != -1) {
         String selectedStaff = table.getValueAt(selectedRow, 0).toString();
-        int selectedUser = DatabaseManager.getuseridonusername(selectedStaff);
+        int selectedUserId = DatabaseManager.getuseridonusername(selectedStaff);
         String reportStatus = table.getValueAt(selectedRow, 2).toString();
-        
 
         if (reportStatus.contains("PENDING")) {
-                    JOptionPane.showMessageDialog(this, 
-                       selectedStaff + " hasn't submitted a report yet.", 
-                        "System Notice", JOptionPane.WARNING_MESSAGE);
-                       return;
-                }
+            JOptionPane.showMessageDialog(this, selectedStaff + " hasn't submitted a report yet.");
+            return;
+        }
 
-        // 1. CLEAR the mainPanel so we can show the new report
         mainPanel.removeAll(); 
 
-        // 2. Setup the Detail Panel
+        // Setup the Detail Panel
         JPanel salereport = new JPanel(new BorderLayout());
         salereport.setBounds(20, 80, 545, 600);
         salereport.setBackground(Color.WHITE);
         salereport.setBorder(dashedBorder);
 
-        JLabel nameLabel = new JLabel(selectedStaff + "'s Sales Report", SwingConstants.CENTER);
+        JLabel nameLabel = new JLabel(selectedStaff.toUpperCase() + "'S SALES REPORT", SwingConstants.CENTER);
         nameLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
+        nameLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         salereport.add(nameLabel, BorderLayout.NORTH);
 
-        // 3. Setup the Detailed Table
+        // Table Setup
         String[] salecolumns = {"Product Name", "Qty", "Timestamp"};
         DefaultTableModel salemodel = new DefaultTableModel(salecolumns, 0);
         JTable saletable = new JTable(salemodel);
         styleTable(saletable);
 
-        // Load data
-        List<String[]> staffdata = DatabaseManager.getDetailedTransactionHistoryByPeriod(selectedUser, "Daily");
+        List<String[]> staffdata = DatabaseManager.getDetailedTransactionHistoryByPeriod(selectedUserId, "Daily");
         for (String[] row : staffdata) {
             salemodel.addRow(row);
         }
@@ -109,25 +105,40 @@ public class StaffSalesreport extends JFrame {
         salescroll.getViewport().setBackground(Color.WHITE);
         salereport.add(salescroll, BorderLayout.CENTER);
 
-        // 4. Add a "Back" button so the Admin can return to the list
+        // --- NEW: STAFF NOTES SECTION ---
+        JPanel notesPanel = new JPanel(new BorderLayout());
+        notesPanel.setBackground(new Color(245, 245, 245)); // Light gray background for contrast
+        notesPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), "STAFF NOTES"));
+
+        String notesText = DatabaseManager.getStaffNotes(selectedUserId);
+        JTextArea notesArea = new JTextArea(notesText);
+        notesArea.setEditable(false);
+        notesArea.setLineWrap(true);
+        notesArea.setWrapStyleWord(true);
+        notesArea.setFont(new Font("Monospaced", Font.ITALIC, 13));
+        notesArea.setBackground(new Color(245, 245, 245));
+
+        notesPanel.add(new JScrollPane(notesArea), BorderLayout.CENTER);
+        notesPanel.setPreferredSize(new Dimension(545, 120)); // Set height for notes area
+
+        salereport.add(notesPanel, BorderLayout.SOUTH); // Add notes to bottom of report
+        // --------------------------------
+
         JButton backBtn = new JButton("BACK TO LIST");
         backBtn.setBounds(200, 700, 200, 40);
-        backBtn.setBackground(Color.GRAY);
+        backBtn.setBackground(Color.BLACK);
         backBtn.setForeground(Color.WHITE);
         backBtn.addActionListener(backEvt -> {
-            new StaffSalesreport(); // Re-open fresh or reset panel
             this.dispose();
+            new StaffSalesreport(); 
         });
 
-        // Add everything back to mainPanel
-        mainPanel.add(titleLabel); // Keep the header
+        mainPanel.add(titleLabel);
         mainPanel.add(salereport);
         mainPanel.add(backBtn);
 
-        // 5. REPAINT the panel to show changes
         mainPanel.revalidate();
         mainPanel.repaint();
-
     } else {
         JOptionPane.showMessageDialog(this, "Please select a staff member from the list.");
     }

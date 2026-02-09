@@ -609,45 +609,47 @@ searchField.addKeyListener(new KeyAdapter() {
 
     // 4. Correct the listener logic
     powLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-            
-            if (OrderName.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Order is empty!", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-            double totalSum = OrderPrice.stream().mapToDouble(Double::doubleValue).sum();
-        
-            StringBuilder orderDetails = new StringBuilder("Items to Finalize:\n");
-            for (int i = 0; i < OrderName.size(); i++) {
-                orderDetails.append("- ").append(OrderName.get(i)).append(" (₱").append(OrderPrice.get(i)).append(")\n");
-            }
-            orderDetails.append("\nTOTAL AMOUNT: ₱").append(String.format("%.2f", totalSum));
-
-        // 3. Create the Finalize Dialog
-            String message = orderDetails.toString();
-            
-
-            int option = JOptionPane.showConfirmDialog(null, message, "Finalize Order", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-        
-            if(option == JOptionPane.OK_OPTION && !OrderName.isEmpty()) {
-                
-                
-                
-                    new ReceiptFrame(user, totalSum,  OrderName,  OrderPrice);
-
-                    dispose();
-            } else{
-
-            }
-        }
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (counts.isEmpty()) { // Use counts map to check if empty
+            JOptionPane.showMessageDialog(null, "Order is empty!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            powLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        double totalSum = 0;
+        StringBuilder orderDetails = new StringBuilder("Items to Finalize:\n");
+        orderDetails.append("----------------------------\n");
+
+        // Iterate through the counts map to show stacked items
+        for (Map.Entry<String, Integer> entry : counts.entrySet()) {
+            String name = entry.getKey();
+            int qty = entry.getValue();
+            double unitP = unitprice.get(name);
+            double subtotal = unitP * qty;
+            totalSum += subtotal;
+
+            // Format: Product Name (xQty) : ₱Price
+            orderDetails.append(String.format("%-20s (x%d) : ₱%.2f\n", name, qty, subtotal));
         }
-    });
+
+        orderDetails.append("----------------------------\n");
+        orderDetails.append(String.format("TOTAL AMOUNT: ₱%.2f", totalSum));
+
+        int option = JOptionPane.showConfirmDialog(null, orderDetails.toString(), 
+                "Finalize Order", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            // Pass the data to the receipt frame
+            new ReceiptFrame(user, totalSum, OrderName, OrderPrice);
+            dispose();
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        powLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
+});
     canvas.add(bottomorderJPanel);
     bottomorderJPanel.add(powLabel);
     bottomorderJPanel.add(totalText);

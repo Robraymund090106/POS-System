@@ -22,6 +22,7 @@ public class ReceiptFrame extends JFrame {
     private List<Double> orderPrices;
     private JPanel detailsPanel;
     private JPanel receiptContent;
+    private double finall;
 
 
 
@@ -331,15 +332,35 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
         if (result != JOptionPane.OK_OPTION) return;
 
         // Apply Discount Logic
-        if (seniorCheck.isSelected()) {
-            ReceiptFrame.this.totalprice *= 0.8;
-            total.setText("Total Amount: " + String.format("%.2f", totalprice));
-            TotalPrice.setText(String.format("%.2f", totalprice));
+        double finalTotal = totalprice; 
+        double discountAmount = 0;
+
+        if (seniorCheck.isSelected() && !orderPrices.isEmpty()) {
+            // Find the single highest priced item
+            double maxPrice = 0;
+            for (double p : orderPrices) {
+                if (p > maxPrice) {
+                    maxPrice = p;
+                }
+            }
+            
+            // Calculate 20% of only THAT one item
+            discountAmount = maxPrice * 0.20;
+            finalTotal = totalprice - discountAmount;
+            
+            // Update UI for this specific transaction
+            total.setText("Total Amount: ₱" + String.format("%.2f", finalTotal));
+            TotalPrice.setText(String.format("%.2f", finalTotal));
+            
+            JOptionPane.showMessageDialog(null, 
+                "Discount Applied: ₱" + String.format("%.2f", discountAmount) + 
+                "\n(Applied to 1x item priced at ₱" + maxPrice + ")");
         }
-
-        String paymentMethod = (String) methodCombo.getSelectedItem();
-        String referenceNumber = "N/A"; // Default for Cash
-
+                String paymentMethod = (String) methodCombo.getSelectedItem();
+                String referenceNumber = "N/A"; // Default for Cash
+                
+        finall = finalTotal;
+        
         // NEW: Check for GCash or Maya Number
         if (paymentMethod.equals("GCash") || paymentMethod.equals("Maya")) {
             referenceNumber = JOptionPane.showInputDialog(null, 
@@ -363,7 +384,7 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
                 return;
             }
 
-            double changeAmount = cashAmountInput - totalprice;
+            double changeAmount = cashAmountInput - finalTotal;
             
             // Show Success with Method Details
             String successMsg = String.format("Payment Successful!\nMethod: %s\nRef: %s\nChange: ₱%.2f", 
@@ -371,7 +392,7 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
             JOptionPane.showMessageDialog(null, successMsg);
 
             // Record to Database (Pass referenceNumber if your recordSale method supports it)
-            int saleId = DatabaseManager.recordSale(user.getUserId(), totalprice, cashAmountInput, (cashAmountInput - totalprice), orderItems, orderPrices, "Cash");
+            int saleId = DatabaseManager.recordSale(user.getUserId(), finalTotal, cashAmountInput, (cashAmountInput - finalTotal), orderItems, orderPrices, "Cash");
 
             if (saleId != -1) {
         // 1. Update stock
@@ -380,8 +401,8 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
         }
 
         // 2. Open the NEW Frame
-        new FinalReceiptFrame(ReceiptFrame.this, user, saleId, totalprice, cashAmountInput, 
-                            (cashAmountInput - totalprice), paymentMethod, orderItems, orderPrices);
+        new FinalReceiptFrame(ReceiptFrame.this, user, saleId, finall, cashAmountInput, 
+                            (cashAmountInput - finall), paymentMethod, orderItems, orderPrices);
         
     
         

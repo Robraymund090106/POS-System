@@ -1646,6 +1646,62 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         saleschartlabel.setBounds(440, 317, 300, 30);
         salespanel.add(saleschartlabel);
 
+        JLabel dailyTransaction = new JLabel("Today's Transactions" );
+        dailyTransaction.setFont(new Font("Arial", Font.BOLD, 25));
+        dailyTransaction.setForeground(Color.BLACK);
+        dailyTransaction.setBounds(400, 375, 300, 30);
+        salespanel.add(dailyTransaction);
+
+        JButton viewDailyTransactions = new JButton("View");
+        viewDailyTransactions.setSize(100, 50);
+        viewDailyTransactions.setBackground(new Color(165, 215, 155));
+        viewDailyTransactions.setForeground(Color.WHITE);
+        viewDailyTransactions.setFont(new Font("Arial", Font.BOLD, 15));
+        viewDailyTransactions.setBounds(520, 430, 100, 30);
+        viewDailyTransactions.setFocusPainted(false);
+        viewDailyTransactions.addActionListener(e -> {
+            new TransactionHistoryFrame("Daily");
+        });
+        salespanel.add(viewDailyTransactions);
+
+        JLabel weeklyTransaction = new JLabel("Weekly Transactions" );
+        weeklyTransaction.setFont(new Font("Arial", Font.BOLD, 25));
+        weeklyTransaction.setForeground(Color.BLACK);
+        weeklyTransaction.setBounds(400, 475, 300, 30);
+        salespanel.add(weeklyTransaction);
+
+        JButton viewWeeklyTransaction = new JButton("View");
+        viewWeeklyTransaction.setSize(100, 50);
+        viewWeeklyTransaction.setBackground(new Color(165, 215, 155));
+        viewWeeklyTransaction.setForeground(Color.WHITE);
+        viewWeeklyTransaction.setFont(new Font("Arial", Font.BOLD, 15));
+        viewWeeklyTransaction.setBounds(520, 530, 100, 30);
+        viewWeeklyTransaction.setFocusPainted(false);
+        viewWeeklyTransaction.addActionListener(e -> {
+            new TransactionHistoryFrame("Weekly");
+        });
+        salespanel.add(viewWeeklyTransaction);
+
+        JLabel monthlyTransactions = new JLabel("Monthly Transaction ");
+        monthlyTransactions.setFont(new Font("Arial", Font.BOLD, 25));
+        monthlyTransactions.setForeground(Color.BLACK);
+        monthlyTransactions.setBounds(400, 575, 300, 30);
+        salespanel.add(monthlyTransactions);
+
+        JButton viewMonthlyTranstion = new JButton("View");
+        viewMonthlyTranstion.setSize(100, 50);
+        viewMonthlyTranstion.setBackground(new Color(165, 215, 155));
+        viewMonthlyTranstion.setForeground(Color.WHITE);
+        viewMonthlyTranstion.setFont(new Font("Arial", Font.BOLD, 15));
+        viewMonthlyTranstion.setBounds(520, 630, 100, 30);
+        viewMonthlyTranstion.setFocusPainted(false);
+        viewMonthlyTranstion.addActionListener(e -> {
+            new TransactionHistoryFrame("Monthly");
+        });
+        salespanel.add(viewMonthlyTranstion);
+
+
+
         
 
         canvas.add(salespanel);

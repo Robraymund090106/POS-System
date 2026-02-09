@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TransactionHistoryFrame",
+            "request": "launch",
+            "mainClass": "main.view.TransactionHistoryFrame",
+            "projectName": "POS system_6d0aafbc"
+        },
+        {
+            "type": "java",
             "name": "salesReportByPeriodFrame",
             "request": "launch",
             "mainClass": "main.view.salesReportByPeriodFrame",

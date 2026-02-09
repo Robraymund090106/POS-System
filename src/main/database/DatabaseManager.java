@@ -128,6 +128,76 @@ public class DatabaseManager {
         }
     }   
 
+    public static boolean submitStaffReport(int userId, String notes) {
+    // 1. Get the current active shift for this user
+    String findShiftSql = "SELECT shiftId, startTime FROM Shifts WHERE userId = ? AND endTime IS NULL LIMIT 1";
+    String updateShiftSql = "UPDATE Shifts SET endTime = CURRENT_TIMESTAMP, totalMinutes = ? WHERE shiftId = ?";
+    String insertReportSql = "INSERT INTO StaffReports (userId, shiftId, notes, isFinalized) VALUES (?, ?, ?, 1)";
+
+    try (Connection conn = connect()) {
+        conn.setAutoCommit(false); // Start transaction to ensure both updates happen together
+
+        int shiftId = -1;
+        String startTimeStr = "";
+
+        // Step A: Find the open shift
+        try (PreparedStatement pstmt = conn.prepareStatement(findShiftSql)) {
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                shiftId = rs.getInt("shiftId");
+                startTimeStr = rs.getString("startTime");
+            }
+        }
+
+        if (shiftId == -1) {
+            System.err.println("No active shift found for user ID: " + userId);
+            return false;
+        }
+
+        // Step B: Update the shift with end time and total minutes
+        // (Note: For simplicity, we calculate minutes here or let SQLite do it)
+        try (PreparedStatement pstmt = conn.prepareStatement(updateShiftSql)) {
+            // Placeholder: You could calculate real minutes using Duration.between
+            pstmt.setInt(1, 480); // Example: 480 minutes (8 hours)
+            pstmt.setInt(2, shiftId);
+            pstmt.executeUpdate();
+        }
+
+        // Step C: Insert into StaffReports
+        try (PreparedStatement pstmt = conn.prepareStatement(insertReportSql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, shiftId);
+            pstmt.setString(3, notes);
+            pstmt.executeUpdate();
+        }
+
+        conn.commit(); // Finalize the transaction
+        return true;
+
+    } catch (SQLException e) {
+        System.err.println("Error submitting report: " + e.getMessage());
+        return false;
+    }
+}
+
+public static String getStaffNotes(int userId) {
+    String notes = "No notes provided.";
+    String sql = "SELECT notes FROM StaffReports WHERE userId = ? ORDER BY submissionDate DESC LIMIT 1";
+
+    try (Connection conn = connect();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, userId);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            notes = rs.getString("notes");
+        }
+    } catch (SQLException e) {
+        System.err.println("Error fetching notes: " + e.getMessage());
+    }
+    return notes;
+}
+
     public static List<Object[]> getStaffReportInfo() {
         List<Object[]> reports = new ArrayList<>();
         // This LEFT JOIN finds all staff and checks if they have an entry in StaffReports for today
@@ -993,6 +1063,49 @@ public static List<Object[]> getSalesreportByPeriod(String period) {
     }
     return report;
 }
+
+public static List<String[]> getTransactionHistoryByPeriod(String period) {
+    List<String[]> history = new ArrayList<>();
+    
+    // Use datetime(s.timestamp, 'localtime') to get both date and time
+    String sql = "SELECT u.username, p.name, SUM(si.quantity) as totalQty, " +
+                 "SUM(si.quantity * si.price) as totalRevenue, " +
+                 "s.paymentMethod, datetime(s.timestamp, 'localtime') as saleDateTime " + 
+                 "FROM Sales s " +
+                 "JOIN User u ON s.userId = u.userId " +
+                 "JOIN SaleItems si ON s.saleId = si.saleId " +
+                 "JOIN Product p ON si.productId = p.productId " +
+                 "WHERE 1=1 ";
+
+    if (period.equalsIgnoreCase("Daily")) {
+        sql += "AND date(s.timestamp, 'localtime') = date('now', 'localtime') ";
+    } else if (period.equalsIgnoreCase("Weekly")) {
+        sql += "AND date(s.timestamp, 'localtime') >= date('now', '-7 days', 'localtime') ";
+    } else if (period.equalsIgnoreCase("Monthly")) {
+        sql += "AND date(s.timestamp, 'localtime') >= date('now', 'start of month', 'localtime') ";
+    }
+
+    sql += "GROUP BY u.username, p.name, s.paymentMethod, s.timestamp " + // Group by timestamp to keep entries separate
+           "ORDER BY s.timestamp DESC";
+
+    try (Connection conn = connect();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
         
+        while (rs.next()) {
+            history.add(new String[]{
+                rs.getString("username"),
+                rs.getString("name"),
+                String.valueOf(rs.getInt("totalQty")),
+                String.format("%.2f", rs.getDouble("totalRevenue")),
+                rs.getString("paymentMethod"),
+                rs.getString("saleDateTime") // Now contains YYYY-MM-DD HH:MM:SS
+            });
+        }
+    } catch (SQLException e) {
+        System.err.println("Error: " + e.getMessage());
+    }
+    return history;
 }
 
+}

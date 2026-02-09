@@ -14,7 +14,7 @@ public class FinalReceiptFrame extends JFrame {
         setTitle("Official Receipt #" + saleId);
         setSize(450, 700);
         setLocationRelativeTo(null);
-        setUndecorated(true); // Matches your sleek UI style
+        setUndecorated(true); 
         
         JPanel paper = new JPanel();
         paper.setLayout(new BoxLayout(paper, BoxLayout.Y_AXIS));
@@ -54,11 +54,20 @@ public class FinalReceiptFrame extends JFrame {
             paper.add(itemLabel);
         }
 
+        // --- REFERENCE NUMBER LOGIC ---
+        String refRow = "";
+        if (method.equalsIgnoreCase("GCash") || method.equalsIgnoreCase("Maya")) {
+            // Generates a random 9-digit number
+            long randomRef = (long) (Math.random() * 900_000_000L) + 100_000_000L;
+            refRow = "<br>Ref Num: " + randomRef;
+        }
+
         // Summary Section
         paper.add(new JLabel("------------------------------------------------------------"));
         String summary = String.format("<html><div style='text-align: right; padding-right: 20px;'>" +
-                "<b>Total: ₱%.2f</b><br>Cash: ₱%.2f<br>Change: ₱%.2f<br>Method: %s</div></html>", 
-                total, cash, change, method);
+                "<b>Total: ₱%.2f</b><br>Cash: ₱%.2f<br>Change: ₱%.2f<br>Method: %s%s</div></html>", 
+                total, cash, change, method, refRow);
+        
         JLabel summaryLabel = new JLabel(summary);
         summaryLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         paper.add(summaryLabel);
@@ -70,11 +79,7 @@ public class FinalReceiptFrame extends JFrame {
             if (parentFrame != null) {
                 parentFrame.dispose();
             }
-            
-            // 2. Dispose this receipt frame
             this.dispose(); 
-            
-            // 3. Return to the dashboard
             new DB_Staff(user);
         });
         btnPanel.add(closeBtn);

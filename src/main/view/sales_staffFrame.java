@@ -313,6 +313,63 @@ monthsalesText.setForeground(Color.BLACK);
 monthsalesText.setBounds(790, 470, 700, 50);
 dashpanel.add(monthsalesText);
 
+JButton submitbutton = new JButton("Submit");
+submitbutton.setFont(new Font("Arial", Font.BOLD, 14));
+submitbutton.setBackground(new Color(165, 215, 155));
+submitbutton.setForeground(Color.WHITE);
+submitbutton.setBounds(1000, 600, 100, 50);
+
+submitbutton.addActionListener(e -> {
+    int warning = JOptionPane.showConfirmDialog(
+        null, 
+        "Submitting your report will end your shift. Do you still wish to continue?", 
+        "End Shift Warning", 
+        JOptionPane.YES_NO_OPTION, 
+        JOptionPane.WARNING_MESSAGE
+    );
+
+    if (warning != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    // 1. Create a JTextArea for the popup
+    JTextArea notesArea = new JTextArea(5, 20);
+    notesArea.setLineWrap(true);
+    notesArea.setWrapStyleWord(true);
+    
+    // 2. Wrap it in a JScrollPane so it handles long text
+    JScrollPane scrollPane1 = new JScrollPane(notesArea);
+    
+    // 3. Show the JOptionPane with the scrollPane as the message
+    int result = JOptionPane.showConfirmDialog(null, scrollPane1, 
+            "Enter Staff Report Notes", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+    // 4. If user clicks OK
+    if (result == JOptionPane.OK_OPTION) {
+        String notes = notesArea.getText().trim();
+        
+        // Validate notes are not empty
+        if (notes.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Submission failed: Notes cannot be empty.");
+            return;
+        }
+
+        // 5. Call your DatabaseManager method
+        boolean success = DatabaseManager.submitStaffReport(user.getUserId(), notes);
+
+        if (success) {
+            JOptionPane.showMessageDialog(null, "Report submitted and shift finalized!");
+            submitbutton.setEnabled(false);
+            submitbutton.setBackground(Color.GRAY); // Visual cue that it's done
+        } else {
+            JOptionPane.showMessageDialog(null, "Error: No active shift found for this user.");
+        }
+    }
+});
+dashpanel.add(submitbutton);
+
+
+
 
 
       
