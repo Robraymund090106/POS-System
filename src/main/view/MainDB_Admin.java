@@ -20,7 +20,8 @@ public class MainDB_Admin extends JFrame {
     JPanel addstaff;
     JPanel transactionpanel;
     JPanel salespanel;
-    JComboBox<String> CategCombo;
+    JComboBox<String> CategCombo, MeasCombo;
+
     private List<Product> allproducts;
     private List<User> allusers;
 
@@ -617,6 +618,19 @@ JTextField searchField1 = new JTextField() {
         cnfm.setBounds(1000, 260, 100, 50);
         cnfm.setFocusPainted(false);
         cnfm.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+         JLabel ItemMeasLabel = new JLabel("Item Measurement");
+        ItemMeasLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        ItemMeasLabel.setForeground(Color.BLACK);
+        ItemMeasLabel.setBounds(410, 330, 200, 30); 
+        addmenuitem.add(ItemMeasLabel); 
+
+        String[] ItemMeas = {"Per Piece", "Per Pack"}; 
+        MeasCombo = new JComboBox<>(ItemMeas);
+        MeasCombo.setFont(new Font("Arial", Font.PLAIN, 17));
+        MeasCombo.setBounds(410, 360, 250, 48);
+        MeasCombo.setForeground(Color.BLACK);
+        addmenuitem.add(MeasCombo);
         
         
 

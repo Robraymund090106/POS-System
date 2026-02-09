@@ -102,13 +102,13 @@ public class StaffDetailFrame extends JFrame {
 
   
         JLabel genderLabel = new JLabel("Gender");
-        genderLabel.setBounds(320, 450, 150, 30); 
+        genderLabel.setBounds(520, 450, 150, 30); 
         genderLabel.setFont(new Font("Arial", Font.BOLD, 20));
         genderLabel.setForeground(Color.BLACK);
         backgroundPanel.add(genderLabel);
 
         JLabel genderField = new JLabel(user.getgender()); 
-        genderField.setBounds(320, 490, 250, 50);
+        genderField.setBounds(520, 490, 200, 50);
         genderField.setFont(new Font("Arial", Font.PLAIN, 18));
         genderField.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
         backgroundPanel.add(genderField);
@@ -138,7 +138,7 @@ public class StaffDetailFrame extends JFrame {
         backgroundPanel.add(bdayField);
 
         JLabel statsLabel = new JLabel("Status");
-        statsLabel.setBounds(640, 450, 150, 30);
+        statsLabel.setBounds(840, 450, 150, 30);
         statsLabel.setFont(new Font("Arial ", Font.BOLD, 20));
         statsLabel.setForeground(Color.BLACK);
         backgroundPanel.add(statsLabel);
@@ -146,38 +146,10 @@ public class StaffDetailFrame extends JFrame {
         String status = user.isActive() ? "Active" : "Inactive";
 
         JLabel statsField = new JLabel(status);
-        statsField.setBounds(640, 490, 250, 50);
+        statsField.setBounds(840, 490, 200, 50);
         statsField.setFont(new Font("Arial", Font.PLAIN, 18));
         statsField.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
         backgroundPanel.add(statsField);
-
-        JLabel passLabel = new JLabel("Password");
-        passLabel.setBounds(950, 450, 150, 30); 
-        passLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        passLabel.setForeground(Color.BLACK);
-        backgroundPanel.add(passLabel);
-        
-        JPasswordField passField = new JPasswordField();
-        passField.setBounds(950, 490, 250, 50);
-        passField.setFont(new Font("Arial", Font.PLAIN, 18));
-        passField.setBorder(BorderFactory.createLineBorder(new Color(65, 85, 160)));
-        backgroundPanel.add(passField);
-        
-        JCheckBox cnshowPass = new JCheckBox("Show Password");
-        cnshowPass.setSize(200, 30);
-        cnshowPass.setBounds(950, 550, 200, 30);
-        cnshowPass.setOpaque(false);
-        cnshowPass.setFont(new Font("Arial", Font.PLAIN, 14));
-        cnshowPass.setForeground(Color.BLACK);
-
-        cnshowPass.addActionListener(e -> {
-            if (cnshowPass.isSelected()) {
-                passField.setEchoChar((char) 0);
-            } else {
-                passField.setEchoChar('•');
-            }
-        });
-        backgroundPanel.add(cnshowPass);
 
         JButton cnfm = new JButton("Confirm Changes");
         cnfm.setBounds(840, 640, 240, 60);
@@ -206,7 +178,6 @@ public class StaffDetailFrame extends JFrame {
                 String selectedPosition = (String) positionCombo.getSelectedItem();
                 selectedPosition.toUpperCase();
                 
-                String newPassword = new String(passField.getPassword());
                 user.setRole(selectedPosition);
                 DatabaseManager.updateUserRole(user.getUserId(), selectedPosition.toUpperCase());
             }
