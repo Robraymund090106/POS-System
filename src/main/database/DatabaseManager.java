@@ -957,6 +957,42 @@ public static double getTotalSalesByPeriod(String username, String period) {
     }
     return history;
 }
+
+public static List<Object[]> getSalesreportByPeriod(String period) {
+    List<Object[]> report = new ArrayList<>();
+    
+    // Base SQL joining User and Sales
+    String sql = "SELECT u.username, SUM(s.totalPrice) as totalRevenue " +
+                 "FROM User u " +
+                 "JOIN Sales s ON u.userId = s.userId " +
+                 "WHERE UPPER(u.role) = 'STAFF' ";
+
+    // Filter based on the period
+    if (period.equalsIgnoreCase("Daily")) {
+        sql += "AND date(s.timestamp) = date('now') ";
+    } else if (period.equalsIgnoreCase("Weekly")) {
+        sql += "AND date(s.timestamp) >= date('now', '-7 days') ";
+    } else if (period.equalsIgnoreCase("Monthly")) {
+        sql += "AND date(s.timestamp) >= date('now', 'start of month') ";
+    }
+
+    sql += "GROUP BY u.username ORDER BY totalRevenue DESC";
+
+    try (Connection conn = connect();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+        
+        while (rs.next()) {
+            report.add(new Object[]{
+                rs.getString("username"),
+                String.format("%.2f", rs.getDouble("totalRevenue")) // Formats as 0.00
+            });
+        }
+    } catch (SQLException e) {
+        System.err.println("Error generating period sales report: " + e.getMessage());
+    }
+    return report;
+}
         
 }
 

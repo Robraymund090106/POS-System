@@ -1592,11 +1592,35 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         totaldailysales.setBounds(70, 375, 300, 30);
         salespanel.add(totaldailysales);
 
+        JButton viewDailySales = new JButton("View");
+        viewDailySales.setSize(100, 50);
+        viewDailySales.setBackground(new Color(165, 215, 155));
+        viewDailySales.setForeground(Color.WHITE);
+        viewDailySales.setFont(new Font("Arial", Font.BOLD, 15));
+        viewDailySales.setBounds(220, 430, 100, 30);
+        viewDailySales.setFocusPainted(false);
+        viewDailySales.addActionListener(e -> {
+            new salesReportByPeriodFrame("Today");
+        });
+        salespanel.add(viewDailySales);
+
         JLabel totalweeklysales = new JLabel("Weekly Sales: " + String.valueOf(DatabaseManager.getTotalSalesbyPeriod("week")));
         totalweeklysales.setFont(new Font("Arial", Font.BOLD, 25));
         totalweeklysales.setForeground(Color.BLACK);
         totalweeklysales.setBounds(70, 475, 300, 30);
         salespanel.add(totalweeklysales);
+
+        JButton viewWeeklySales = new JButton("View");
+        viewWeeklySales.setSize(100, 50);
+        viewWeeklySales.setBackground(new Color(165, 215, 155));
+        viewWeeklySales.setForeground(Color.WHITE);
+        viewWeeklySales.setFont(new Font("Arial", Font.BOLD, 15));
+        viewWeeklySales.setBounds(220, 530, 100, 30);
+        viewWeeklySales.setFocusPainted(false);
+        viewWeeklySales.addActionListener(e -> {
+            new salesReportByPeriodFrame("Weekly");
+        });
+        salespanel.add(viewWeeklySales);
 
         JLabel totalmonthlysales = new JLabel("Monthly Sales: " + String.valueOf(DatabaseManager.getTotalSalesbyPeriod("month")));
         totalmonthlysales.setFont(new Font("Arial", Font.BOLD, 25));
@@ -1604,55 +1628,25 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         totalmonthlysales.setBounds(70, 575, 300, 30);
         salespanel.add(totalmonthlysales);
 
+        JButton viewMonthlySales = new JButton("View");
+        viewMonthlySales.setSize(100, 50);
+        viewMonthlySales.setBackground(new Color(165, 215, 155));
+        viewMonthlySales.setForeground(Color.WHITE);
+        viewMonthlySales.setFont(new Font("Arial", Font.BOLD, 15));
+        viewMonthlySales.setBounds(220, 630, 100, 30);
+        viewMonthlySales.setFocusPainted(false);
+        viewMonthlySales.addActionListener(e -> {
+            new salesReportByPeriodFrame("Monthly");
+        });
+        salespanel.add(viewMonthlySales);
+
         JLabel saleschartlabel = new JLabel("Transactions");
         saleschartlabel.setFont(new Font("Arial", Font.BOLD, 26));
         saleschartlabel.setForeground(Color.BLACK);
         saleschartlabel.setBounds(440, 317, 300, 30);
         salespanel.add(saleschartlabel);
 
-        JPanel transactionList = new JPanel(new BorderLayout());
-
-        JPanel transItemsContainer = new JPanel();
-        transItemsContainer.setLayout(new BoxLayout(transItemsContainer, BoxLayout.Y_AXIS));
-        transItemsContainer.setBackground(Color.WHITE);
-        transItemsContainer.setOpaque(false);
-
-        // 2. Create the JScrollPane and wrap the container inside it
-        JScrollPane transScroll = new JScrollPane(transItemsContainer);
-        transScroll.setBounds(380, 360, 280, 350); // Positioned under the "Transactions" header
-        transScroll.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        transScroll.getVerticalScrollBar().setUnitIncrement(16); 
-        transScroll.setOpaque(false);// Makes the "wheel" scroll smoothly
-        salespanel.add(transScroll);
-
-        // 3. Fetch data and build the rows
-        List<String[]> history = DatabaseManager.getTransactionHistory();
-
-        for (String[] entry : history) {
-            JPanel row = new JPanel(new BorderLayout());
-            row.setMaximumSize(new Dimension(Short.MAX_VALUE, 50)); // Fixed row height
-            row.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
-            row.setBackground(Color.WHITE);
-
-            // Left Side: Item Name
-            JLabel nameLabel = new JLabel(" " + entry[0]); 
-            nameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-
-            // Right Side: Qty, Price, and Date
-            // Using HTML to stack the price and date neatly
-            JLabel detailsLabel = new JLabel("<html><div style='text-align: right; padding-right: 5px;'>" +
-                                            "Qty: " + entry[1] + " | <b>$" + entry[2] + "</b><br/>" +
-                                            "<font size='2' color='gray'>" + entry[3] + "</font></div></html>");
-            detailsLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-
-            row.add(nameLabel, BorderLayout.WEST);
-            row.add(detailsLabel, BorderLayout.EAST);
-
-            transItemsContainer.add(row);
-        }
-
-        // 4. Important: Add a vertical glue so items stay at the top
-        transItemsContainer.add(Box.createVerticalGlue());
+        
 
         canvas.add(salespanel);
 

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "salesReportByPeriodFrame",
+            "request": "launch",
+            "mainClass": "main.view.salesReportByPeriodFrame",
+            "projectName": "POS system_6d0aafbc"
+        },
+        {
+            "type": "java",
             "name": "StaffSalesreport",
             "request": "launch",
             "mainClass": "main.view.StaffSalesreport",

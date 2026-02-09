@@ -14,6 +14,7 @@ public class StaffSalesreport extends JFrame {
         setSize(600, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(null);
