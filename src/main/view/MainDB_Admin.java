@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -68,18 +67,25 @@ public class MainDB_Admin extends JFrame {
         canvas.setOpaque(false);
 
         // --- PANEL 1: HEADER 
-        JPanel header = new JPanel(null);
-        header.setBackground(Color.BLUE);
-        header.setBounds(30, 32, 1500, 90);
+         JPanel header = new JPanel(null);
+        header.setBounds(30, 2, 1500, 150);
         header.setOpaque(false);
         canvas.add(header);
 
-        //Company Name
-        JLabel companyName = new JLabel("Company name");
-        companyName.setFont(new Font("SansSerif", Font.BOLD, 35));
+        JLabel companyName = new JLabel("N.U.C.M.S.");
+        companyName.setFont(new Font("SansSerif", Font.BOLD, 50));
         companyName.setForeground(new Color(255, 204, 0));
-        companyName.setBounds(20, 20, 350, 50); 
+        companyName.setBounds(12, 50, 350, 50);
         header.add(companyName);
+        
+      //logo
+     ImageIcon originalIcon = new ImageIcon("src/main/image/logo.png");
+     Image scaledImage = originalIcon.getImage().getScaledInstance(150, 100, Image.SCALE_SMOOTH);
+     ImageIcon finalIcon = new ImageIcon(scaledImage);
+     JLabel adjustableImage = new JLabel(finalIcon);
+     adjustableImage.setBounds(289, 0, 147, 130);
+
+       header.add(adjustableImage);
 
         // staff logo (image)
         ImageIcon rawIcon = new ImageIcon("src/main/image/stafflogo.png"); 
@@ -88,7 +94,7 @@ public class MainDB_Admin extends JFrame {
         ImageIcon staffLogoIcon = new ImageIcon(scaledImg);
 
         JLabel staffLogo = new JLabel("", staffLogoIcon, JLabel.LEFT);
-        staffLogo.setBounds(1238, 25, 180, 50); 
+        staffLogo.setBounds(1238, 60, 180, 50); 
 
         staffLogo.setHorizontalTextPosition(JLabel.RIGHT); 
         staffLogo.setIconTextGap(12); 
@@ -119,7 +125,7 @@ public class MainDB_Admin extends JFrame {
         JLabel staffText = new JLabel("ADMIN");
         staffText.setFont(new Font("SansSerif", Font.BOLD, 26));
         staffText.setForeground(new Color(255, 204, 0));
-        staffText.setBounds(1300, 25, 400, 50);
+        staffText.setBounds(1300, 60, 400, 50);
         staffText.setCursor(new Cursor(Cursor.HAND_CURSOR));
         staffText.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -321,46 +327,44 @@ JTextField searchField1 = new JTextField() {
     itemListPDF.setCursor(new Cursor(Cursor.HAND_CURSOR));
     itemListPDF.addActionListener(e -> {
 
-        JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Save Item List as PDF");
-            fileChooser.setSelectedFile(new java.io.File("ItemList.pdf"));
+   JFileChooser fileChooser = new JFileChooser();
+   fileChooser.setDialogTitle("Save Item List as PDF");
+   fileChooser.setSelectedFile(new java.io.File("ItemList.pdf"));
 
-            int userSelection = fileChooser.showSaveDialog(null);
+   int userSelection = fileChooser.showSaveDialog(null);
 
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                //JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Save Item List as PDF");
-            
-            // Set a default file name
-            fileChooser.setSelectedFile(new java.io.File("ItemList.pdf"));
+  if (userSelection == JFileChooser.APPROVE_OPTION) {
+   //JFileChooser fileChooser = new JFileChooser();
+   fileChooser.setDialogTitle("Save Item List as PDF");
 
-            //int userSelection = fileChooser.showSaveDialog(null);
+   // Set a default file name
+   fileChooser.setSelectedFile(new java.io.File("ItemList.pdf"));
 
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                java.io.File fileToSave = fileChooser.getSelectedFile();
-                
-                try {
-                    
-                    MessageFormat headerr = new MessageFormat("NUCMS - Item List");
-                    MessageFormat footer = new MessageFormat("Page {0,number,integer}");
-                    
-                    boolean complete = table.print(JTable.PrintMode.FIT_WIDTH, headerr, footer);
-                    
-                    if (complete) {
-                        JOptionPane.showMessageDialog(null, "Report generated successfully!");
-                    }
-                    
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Error generating report: " + ex.getMessage());
-                }
-            }
-            }
-    });
-        
-    listpanelitem.add(itemListPDF);
+    //int userSelection = fileChooser.showSaveDialog(null);
 
+   if (userSelection == JFileChooser.APPROVE_OPTION) {
+   java.io.File fileToSave = fileChooser.getSelectedFile();
 
+   try {
+
+   MessageFormat headerr = new MessageFormat("NUCMS - Item List");
+   MessageFormat footer = new MessageFormat("Page {0,number,integer}");
+
+   boolean complete = table.print(JTable.PrintMode.FIT_WIDTH, headerr, footer);
+
+    if (complete) {
+   JOptionPane.showMessageDialog(null, "Report generated successfully!");
+   }
+
+   } catch (Exception ex) {
+JOptionPane.showMessageDialog(null, "Error generating report: " + ex.getMessage());
+}
+   }}
+});
+
+   listpanelitem.add(itemListPDF);
    sbarr.add(searchField1);
+   
 
    // #endregion
 
@@ -615,20 +619,20 @@ JTextField searchField1 = new JTextField() {
         cnfm.setFont(new Font("Arial", Font.BOLD, 17));
         cnfm.setBackground(new Color(165, 215, 155));
         cnfm.setForeground(Color.WHITE);
-        cnfm.setBounds(1000, 260, 100, 50);
+        cnfm.setBounds(483, 420, 100, 50);
         cnfm.setFocusPainted(false);
         cnfm.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
          JLabel ItemMeasLabel = new JLabel("Item Measurement");
         ItemMeasLabel.setFont(new Font("Arial", Font.BOLD, 20));
         ItemMeasLabel.setForeground(Color.BLACK);
-        ItemMeasLabel.setBounds(410, 330, 200, 30); 
+        ItemMeasLabel.setBounds(410, 310, 200, 30); 
         addmenuitem.add(ItemMeasLabel); 
 
         String[] ItemMeas = {"Per Piece", "Per Pack"}; 
         MeasCombo = new JComboBox<>(ItemMeas);
         MeasCombo.setFont(new Font("Arial", Font.PLAIN, 17));
-        MeasCombo.setBounds(410, 360, 250, 48);
+        MeasCombo.setBounds(410, 343, 250, 48);
         MeasCombo.setForeground(Color.BLACK);
         addmenuitem.add(MeasCombo);
         
@@ -830,7 +834,7 @@ JTextField searchField1 = new JTextField() {
         //#endregion
         //#region ADD STAFF SETUP
 
-        //kulang pa since nakita ko rin na may scrollbar, kapag gagawin ko baka mag ka conflict -que
+       
 
             addstaff = new JPanel(null) {
         private Image addStaffBg = new ImageIcon("src/main/image/ActStaffLst.png").getImage();
@@ -1133,7 +1137,7 @@ JTextField searchField1 = new JTextField() {
             }
         });
 
-        JButton printstafftable = new JButton("Print");
+        JButton printstafftable = new JButton("View Receipt");
         printstafftable.setBounds(50, 600, 150, 40);
         printstafftable.setBackground(new Color(165, 215, 155));
         printstafftable.setForeground(Color.WHITE);
@@ -1148,7 +1152,7 @@ JTextField searchField1 = new JTextField() {
         });
 
         JButton downloadstaffpdf = new JButton("Download PDF");
-        downloadstaffpdf.setBounds(250, 600, 150, 40);
+        downloadstaffpdf.setBounds(240, 600, 150, 40);
         downloadstaffpdf.setBackground(new Color(165, 215, 155));
         downloadstaffpdf.setForeground(Color.WHITE);
         downloadstaffpdf.setFont(new Font("Arial", Font.BOLD, 15));
@@ -1192,11 +1196,6 @@ JTextField searchField1 = new JTextField() {
         
         addstaff.add(downloadstaffpdf);
         addstaff.add(printstafftable);
-
-
-
-        
-
 
         canvas.add(addstaff);
 
@@ -1486,8 +1485,8 @@ JTextField searchField1 = new JTextField() {
         viewsalesreport.setSize(100, 50);
         viewsalesreport.setBackground(new Color(165, 215, 155));
         viewsalesreport.setForeground(Color.WHITE);
-        viewsalesreport.setFont(new Font("Arial", Font.BOLD, 10));
-        viewsalesreport.setBounds(220, 230, 100, 30);
+        viewsalesreport.setFont(new Font("Arial", Font.BOLD, 15));
+        viewsalesreport.setBounds(139, 230, 140, 40);
         viewsalesreport.setFocusPainted(false);
         salespanel.add(viewsalesreport);
 
@@ -1597,7 +1596,7 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         viewDailySales.setBackground(new Color(165, 215, 155));
         viewDailySales.setForeground(Color.WHITE);
         viewDailySales.setFont(new Font("Arial", Font.BOLD, 15));
-        viewDailySales.setBounds(220, 430, 100, 30);
+        viewDailySales.setBounds(158, 430, 100, 30);
         viewDailySales.setFocusPainted(false);
         viewDailySales.addActionListener(e -> {
             new salesReportByPeriodFrame("Today");
@@ -1615,7 +1614,7 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         viewWeeklySales.setBackground(new Color(165, 215, 155));
         viewWeeklySales.setForeground(Color.WHITE);
         viewWeeklySales.setFont(new Font("Arial", Font.BOLD, 15));
-        viewWeeklySales.setBounds(220, 530, 100, 30);
+        viewWeeklySales.setBounds(158, 530, 100, 30);
         viewWeeklySales.setFocusPainted(false);
         viewWeeklySales.addActionListener(e -> {
             new salesReportByPeriodFrame("Weekly");
@@ -1633,7 +1632,7 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         viewMonthlySales.setBackground(new Color(165, 215, 155));
         viewMonthlySales.setForeground(Color.WHITE);
         viewMonthlySales.setFont(new Font("Arial", Font.BOLD, 15));
-        viewMonthlySales.setBounds(220, 630, 100, 30);
+        viewMonthlySales.setBounds(158, 630, 100, 30);
         viewMonthlySales.setFocusPainted(false);
         viewMonthlySales.addActionListener(e -> {
             new salesReportByPeriodFrame("Monthly");
@@ -1649,7 +1648,7 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         JLabel dailyTransaction = new JLabel("Today's Transactions" );
         dailyTransaction.setFont(new Font("Arial", Font.BOLD, 25));
         dailyTransaction.setForeground(Color.BLACK);
-        dailyTransaction.setBounds(400, 375, 300, 30);
+        dailyTransaction.setBounds(392, 375, 300, 30);
         salespanel.add(dailyTransaction);
 
         JButton viewDailyTransactions = new JButton("View");
@@ -1657,7 +1656,7 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         viewDailyTransactions.setBackground(new Color(165, 215, 155));
         viewDailyTransactions.setForeground(Color.WHITE);
         viewDailyTransactions.setFont(new Font("Arial", Font.BOLD, 15));
-        viewDailyTransactions.setBounds(520, 430, 100, 30);
+        viewDailyTransactions.setBounds(475, 430, 100, 30);
         viewDailyTransactions.setFocusPainted(false);
         viewDailyTransactions.addActionListener(e -> {
             new TransactionHistoryFrame("Daily");
@@ -1667,7 +1666,7 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         JLabel weeklyTransaction = new JLabel("Weekly Transactions" );
         weeklyTransaction.setFont(new Font("Arial", Font.BOLD, 25));
         weeklyTransaction.setForeground(Color.BLACK);
-        weeklyTransaction.setBounds(400, 475, 300, 30);
+        weeklyTransaction.setBounds(392, 475, 300, 30);
         salespanel.add(weeklyTransaction);
 
         JButton viewWeeklyTransaction = new JButton("View");
@@ -1675,7 +1674,7 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         viewWeeklyTransaction.setBackground(new Color(165, 215, 155));
         viewWeeklyTransaction.setForeground(Color.WHITE);
         viewWeeklyTransaction.setFont(new Font("Arial", Font.BOLD, 15));
-        viewWeeklyTransaction.setBounds(520, 530, 100, 30);
+        viewWeeklyTransaction.setBounds(475, 530, 100, 30);
         viewWeeklyTransaction.setFocusPainted(false);
         viewWeeklyTransaction.addActionListener(e -> {
             new TransactionHistoryFrame("Weekly");
@@ -1685,7 +1684,7 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         JLabel monthlyTransactions = new JLabel("Monthly Transaction ");
         monthlyTransactions.setFont(new Font("Arial", Font.BOLD, 25));
         monthlyTransactions.setForeground(Color.BLACK);
-        monthlyTransactions.setBounds(400, 575, 300, 30);
+        monthlyTransactions.setBounds(392, 575, 300, 30);
         salespanel.add(monthlyTransactions);
 
         JButton viewMonthlyTranstion = new JButton("View");
@@ -1693,7 +1692,7 @@ for (Map.Entry<String, Integer> entry : top10.entrySet()) {
         viewMonthlyTranstion.setBackground(new Color(165, 215, 155));
         viewMonthlyTranstion.setForeground(Color.WHITE);
         viewMonthlyTranstion.setFont(new Font("Arial", Font.BOLD, 15));
-        viewMonthlyTranstion.setBounds(520, 630, 100, 30);
+        viewMonthlyTranstion.setBounds(475, 630, 100, 30);
         viewMonthlyTranstion.setFocusPainted(false);
         viewMonthlyTranstion.addActionListener(e -> {
             new TransactionHistoryFrame("Monthly");

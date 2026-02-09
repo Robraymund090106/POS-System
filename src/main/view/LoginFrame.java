@@ -30,13 +30,13 @@ public class LoginFrame extends JFrame {
         backgroundPanel.setLayout(null); 
         this.setContentPane(backgroundPanel); 
 
-        ImageIcon originalIcon = new ImageIcon("src\\main\\image\\nu_logo.png");
+        ImageIcon originalIcon = new ImageIcon("src\\main\\image\\logo.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
         JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
         logoLabel.setSize(180, 180);
         backgroundPanel.add(logoLabel);
 
-        JLabel title = new JLabel("POS System", SwingConstants.CENTER);
+        JLabel title = new JLabel("N.U.C.M.S", SwingConstants.CENTER);
         title.setSize(500, 60);
         title.setFont(new Font("Arial", Font.BOLD, 45)); 
 

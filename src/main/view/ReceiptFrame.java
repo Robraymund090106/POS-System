@@ -81,10 +81,10 @@ this.setVisible(true);
         header.setBounds(30, 30, 780, 90);
         header.setOpaque(false);
         
-        JLabel companyName = new JLabel("Company name");
+        JLabel companyName = new JLabel("N.U.C.M.S.");
         companyName.setFont(new Font("SansSerif", Font.BOLD, 35));
         companyName.setForeground(new Color(58, 83, 155));
-        companyName.setBounds(55, 29, 343, 50); 
+        companyName.setBounds(55, 34, 343, 50); 
         header.add(companyName);
         canvas.add(header);
 

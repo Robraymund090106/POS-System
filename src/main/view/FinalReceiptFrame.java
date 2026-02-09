@@ -1,9 +1,9 @@
 package main.view;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import javax.swing.*;
 import main.model.User;
 
 public class FinalReceiptFrame extends JFrame {
@@ -23,7 +23,8 @@ public class FinalReceiptFrame extends JFrame {
 
         // Header Section
         JLabel title = new JLabel("TRANSACTION COMPLETE");
-        title.setFont(new Font("SansSerif", Font.BOLD, 22));
+        title.setFont(new Font("SansSerif", Font.BOLD, 18));
+        title.setBounds(0, 50, 900, 40);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         JLabel idLabel = new JLabel("Receipt No: " + String.format("%05d", saleId));

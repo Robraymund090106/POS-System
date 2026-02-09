@@ -4,8 +4,8 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import main.backend.*;
-import main.model.*;
 import main.database.DatabaseManager;
+import main.model.*;
 
 public class UserDetailFrame extends JFrame {
 
@@ -132,7 +132,7 @@ public class UserDetailFrame extends JFrame {
         mainContent.add(detailCard);
 
         JButton startshift = createStyledButton("Start Shift");
-        startshift.setBounds(50, 400, 120, 40);
+        startshift.setBounds(180, 400, 120, 40);
         startshift.setBackground(new Color(100, 200, 100));
         startshift.setForeground(Color.WHITE);
         mainContent.add(startshift);
@@ -159,43 +159,43 @@ public class UserDetailFrame extends JFrame {
         }); 
             
 
-        JButton endshift = createStyledButton("End Shift");
-        endshift.setBounds(200, 400, 120, 40);
-        endshift.setBackground(new Color(200, 100, 100));
-        endshift.setForeground(Color.WHITE);
-        mainContent.add(endshift);
+       // JButton endshift = createStyledButton("End Shift");
+       // endshift.setBounds(200, 400, 120, 40);
+       // endshift.setBackground(new Color(200, 100, 100));
+       // endshift.setForeground(Color.WHITE);
+       // mainContent.add(endshift);
 
-        endshift.addActionListener(e -> {
-                int confirm = JOptionPane.showConfirmDialog(this, "End your shift now?", "End Shift", JOptionPane.YES_NO_OPTION);
-            if (confirm != JOptionPane.YES_OPTION) {
-                return;
-            }
+        //endshift.addActionListener(e -> {
+           //     int confirm = JOptionPane.showConfirmDialog(this, "End your shift now?", "End Shift", JOptionPane.YES_NO_OPTION);
+          //  if (confirm != JOptionPane.YES_OPTION) {
+               // return;
+        //    }
 
-            String password = JOptionPane.showInputDialog(this, "Please enter your password to confirm:", "Confirm Password", JOptionPane.PLAIN_MESSAGE);
+       //     String password = JOptionPane.showInputDialog(this, "Please enter your password to confirm:", "Confirm Password", JOptionPane.PLAIN_MESSAGE);
 
-            if (activeShiftId == -1) {
-                JOptionPane.showMessageDialog(null, "No active shift found!");
-                return;
-            }
+          //  if (activeShiftId == -1) {
+         //       JOptionPane.showMessageDialog(null, "No active shift found!");
+           //     return;
+        //    }
 
-            if (!password.equals(user.getPassword())) {
-                JOptionPane.showMessageDialog(null, "Incorrect password!", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+         //   if (!password.equals(user.getPassword())) {
+           //     JOptionPane.showMessageDialog(null, "Incorrect password!", "Error", JOptionPane.ERROR_MESSAGE);
+         //       return;
+         //   }
 
-            DatabaseManager.endShift(activeShiftId);
-            String duration = DatabaseManager.getLastShiftDuration(activeShiftId);
+          //  DatabaseManager.endShift(activeShiftId);
+          //  String duration = DatabaseManager.getLastShiftDuration(activeShiftId);
             
  
-            String message = "Thank you, #" + user.getRole().toLowerCase() + 
-                            " your total working hours is " + duration + "Shift started at: " + DatabaseManager.getLastShiftStartTime(activeShiftId) + " and ended at: " + DatabaseManager.getLastShiftEndTime(activeShiftId) + ".";
+           // String message = "Thank you, #" + user.getRole().toLowerCase() + 
+                  // ADD THIS SA SUMBIT SALES          " your total working hours is " + duration + "Shift started at: " + DatabaseManager.getLastShiftStartTime(activeShiftId) + " and ended at: " + DatabaseManager.getLastShiftEndTime(activeShiftId) + ".";
             
-            JOptionPane.showMessageDialog(null, message, "Shift Summary", JOptionPane.INFORMATION_MESSAGE);
+           // JOptionPane.showMessageDialog(null, message, "Shift Summary", JOptionPane.INFORMATION_MESSAGE);
             
             // Reset for next time
-            activeShiftId = -1;
-            startshift.setEnabled(true); 
-        });
+          //  activeShiftId = -1;
+         //   startshift.setEnabled(true); 
+      //  });
 
 
         add(sidebar, BorderLayout.WEST);

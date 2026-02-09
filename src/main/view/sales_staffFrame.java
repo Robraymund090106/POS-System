@@ -64,15 +64,24 @@ public class sales_staffFrame extends JFrame {
         //  HEADER 
 
         JPanel header = new JPanel(null);
-        header.setBounds(30, 32, 1500, 90);
+        header.setBounds(30, 2, 1500, 150);
         header.setOpaque(false);
         canvas.add(header);
 
-        JLabel companyName = new JLabel("Company Name");
-        companyName.setFont(new Font("SansSerif", Font.BOLD, 35));
+        JLabel companyName = new JLabel("N.U.C.M.S.");
+        companyName.setFont(new Font("SansSerif", Font.BOLD, 50));
         companyName.setForeground(new Color(255, 204, 0));
-        companyName.setBounds(20, 20, 350, 50);
+        companyName.setBounds(12, 50, 350, 50);
         header.add(companyName);
+
+      //logo
+     ImageIcon originalIcon = new ImageIcon("src/main/image/logo.png");
+     Image scaledImage = originalIcon.getImage().getScaledInstance(150, 100, Image.SCALE_SMOOTH);
+     ImageIcon finalIcon = new ImageIcon(scaledImage);
+     JLabel adjustableImage = new JLabel(finalIcon);
+     adjustableImage.setBounds(289, 0, 147, 130);
+
+       header.add(adjustableImage);
 
        // staff logo (image)
         ImageIcon rawIcon = new ImageIcon("src/main/image/stafflogo.png"); 
@@ -81,7 +90,7 @@ public class sales_staffFrame extends JFrame {
         ImageIcon staffLogoIcon = new ImageIcon(scaledImg);
 
         JLabel staffLogo = new JLabel("", staffLogoIcon, JLabel.LEFT);
-        staffLogo.setBounds(1238, 25, 180, 50); 
+        staffLogo.setBounds(1238, 60, 180, 50); 
 
         staffLogo.setHorizontalTextPosition(JLabel.RIGHT); 
         staffLogo.setIconTextGap(12); 
@@ -112,7 +121,7 @@ public class sales_staffFrame extends JFrame {
         JLabel staffText = new JLabel("STAFF");
         staffText.setFont(new Font("SansSerif", Font.BOLD, 26));
         staffText.setForeground(new Color(255, 204, 0));
-        staffText.setBounds(1300, 25, 400, 50);
+        staffText.setBounds(1300, 60, 400, 50);
         staffText.setCursor(new Cursor(Cursor.HAND_CURSOR));
         staffText.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -313,11 +322,11 @@ monthsalesText.setForeground(Color.BLACK);
 monthsalesText.setBounds(790, 470, 700, 50);
 dashpanel.add(monthsalesText);
 
-JButton submitbutton = new JButton("Submit");
-submitbutton.setFont(new Font("Arial", Font.BOLD, 14));
+JButton submitbutton = new JButton("Submit Sales");
+submitbutton.setFont(new Font("Arial", Font.BOLD, 20));
 submitbutton.setBackground(new Color(165, 215, 155));
 submitbutton.setForeground(Color.WHITE);
-submitbutton.setBounds(1000, 600, 100, 50);
+submitbutton.setBounds(849, 600, 200, 50);
 
 submitbutton.addActionListener(e -> {
     int warning = JOptionPane.showConfirmDialog(

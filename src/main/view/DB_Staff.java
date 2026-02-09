@@ -68,17 +68,26 @@ public class DB_Staff extends JFrame {
   // --- PANEL 1: HEADER (Blue) ---
         JPanel header = new JPanel(null);
         header.setBackground(Color.MAGENTA); 
-        header.setBounds(30, 30, 950, 90);
+        header.setBounds(30, 2, 950, 150);
         header.setOpaque(false);
 
 
         canvas.add(header);
 
-        JLabel companyName = new JLabel("Company name");
-        companyName.setFont(new Font("SansSerif", Font.BOLD, 35));
+        JLabel companyName = new JLabel("N.U.C.M.S.");
+        companyName.setFont(new Font("SansSerif", Font.BOLD, 50));
         companyName.setForeground(new Color(255, 204, 0));
-        companyName.setBounds(20, 20, 350, 50); 
+        companyName.setBounds(8, 50, 350, 50); 
         header.add(companyName);
+
+     //logo
+   ImageIcon originalIcon = new ImageIcon("src/main/image/logo.png");
+   Image scaledImage = originalIcon.getImage().getScaledInstance(150, 100, Image.SCALE_SMOOTH);
+   ImageIcon finalIcon = new ImageIcon(scaledImage);
+   JLabel adjustableImage = new JLabel(finalIcon);
+   adjustableImage.setBounds(280, 0, 147, 130);
+
+    header.add(adjustableImage);
 
 
       // staff logo (image)
@@ -92,7 +101,7 @@ ImageIcon staffLogoIcon = new ImageIcon(scaledImg);
 JLabel staffLogo = new JLabel("", staffLogoIcon, JLabel.LEFT);
 
 
-staffLogo.setBounds(743, 30, 180, 50); 
+staffLogo.setBounds(743, 60, 180, 50); 
 
 
 staffLogo.setHorizontalTextPosition(JLabel.RIGHT); 
@@ -128,7 +137,7 @@ header.add(staffLogo);
         JLabel staffText = new JLabel("STAFF");
         staffText.setFont(new Font("SansSerif", Font.BOLD, 26));
         staffText.setForeground(new Color(255, 204, 0));
-        staffText.setBounds(810, 30, 400, 50);
+        staffText.setBounds(810, 60, 400, 50);
         staffText.setCursor(new Cursor(Cursor.HAND_CURSOR));
         staffText.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
