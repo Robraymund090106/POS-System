@@ -197,6 +197,10 @@ public class UserDetailFrame extends JFrame {
          //   startshift.setEnabled(true); 
       //  });
 
+      if(user.getRole().equalsIgnoreCase("ADMIN")){
+        startshift.setVisible(false);
+      }
+
 
         add(sidebar, BorderLayout.WEST);
         add(mainContent, BorderLayout.CENTER);
