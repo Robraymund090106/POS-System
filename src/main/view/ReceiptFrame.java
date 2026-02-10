@@ -364,13 +364,13 @@ payBtnLabel.setBounds((420 - payIconWidth) / 2, (120 - payIconHeight) / 2, payIc
         // NEW: Check for GCash or Maya Number
         if (paymentMethod.equals("GCash") || paymentMethod.equals("Maya")) {
             referenceNumber = JOptionPane.showInputDialog(null, 
-                "Enter " + paymentMethod + " Phone Number (11-digits):", 
+                "Enter " + paymentMethod + "Reference number  (12 digit code):", 
                 paymentMethod + " Verification", 
                 JOptionPane.QUESTION_MESSAGE);
 
             // Validation for the number
             if (referenceNumber == null || referenceNumber.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Transaction cancelled. Mobile number is required for " + paymentMethod, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Transaction cancelled. reference number is required for " + paymentMethod, "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
