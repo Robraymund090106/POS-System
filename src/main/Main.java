@@ -13,8 +13,6 @@ public class Main {
         
     
         DatabaseManager.initializeDatabase();
-        DatabaseManager.changerole("kdjx123", "STAFF");
-                DatabaseManager.changerole("Elijang", "STAFF");
 
 
 

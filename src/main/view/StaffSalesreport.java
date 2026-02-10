@@ -29,6 +29,11 @@ public class StaffSalesreport extends JFrame {
         mainPanel.add(titleLabel);
 
         // --- 2. Table and Model Setup ---
+      
+
+        
+
+
         String[] columns = {"STAFF", "STATUS", "SALES REPORT"};
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
@@ -40,12 +45,23 @@ public class StaffSalesreport extends JFrame {
         JTable table = new JTable(model);
         styleTable(table);
 
-
+        // --- FIXED DATA LOADING LOGIC ---
         List<Object[]> reportData = DatabaseManager.getStaffReportInfo();
+
         for (Object[] row : reportData) {
+            String staffName = row[0].toString();
+            int userId = DatabaseManager.getuseridonusername(staffName);
+            
+            // Fetch transactions for today
+            List<String[]> staffTransactions = DatabaseManager.getDetailedTransactionHistoryByPeriod(userId, "Daily");
+
+            // If they have 0 sales, force status to PENDING regardless of submission
+            if (staffTransactions == null || staffTransactions.isEmpty()) {
+                row[2] = "PENDING"; 
+            }
+
             model.addRow(row);
         }
-
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(20, 80, 545, 600); 
@@ -105,6 +121,8 @@ public class StaffSalesreport extends JFrame {
         salescroll.getViewport().setBackground(Color.WHITE);
         salereport.add(salescroll, BorderLayout.CENTER);
 
+        
+
         // --- NEW: STAFF NOTES SECTION ---
         JPanel notesPanel = new JPanel(new BorderLayout());
         notesPanel.setBackground(new Color(245, 245, 245)); // Light gray background for contrast
@@ -122,6 +140,8 @@ public class StaffSalesreport extends JFrame {
         notesPanel.setPreferredSize(new Dimension(545, 120)); // Set height for notes area
 
         salereport.add(notesPanel, BorderLayout.SOUTH); // Add notes to bottom of report
+
+        
         // --------------------------------
 
         JButton backBtn = new JButton("BACK TO LIST");
